@@ -17,10 +17,8 @@ int		ft_env(char **env)
 	int		i;
 
 	i = 0;
-	while (env[i + 1][0] != '_')
-	{
-		ft_printf("%s\n", env[i]);
-		i++;
-	}
+	while (env[i][0] != '_')
+		ft_printf("%s\n", env[i++]);
+	ft_printf("%s\n", env[i]);
 	return (0);
 }

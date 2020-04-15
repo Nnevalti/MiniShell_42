@@ -50,20 +50,6 @@ int		ft_atoi(const char *str)
 	return (value * sign);
 }
 
-int		ft_strchr(char *str, char c)
-{
-	int i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 int		ft_isdigit(int c)
 {
 	return (c >= '0' && c <= '9');

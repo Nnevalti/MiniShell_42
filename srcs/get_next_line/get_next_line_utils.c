@@ -79,14 +79,3 @@ char	*ft_strdup(const char *s1)
 	s2[i] = '\0';
 	return (s2);
 }
-
-int		ft_strchr(const char *s, int c)
-{
-	while (*s || c == '\0')
-	{
-		if (*s == c)
-			return (1);
-		s++;
-	}
-	return (0);
-}

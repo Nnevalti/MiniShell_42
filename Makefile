@@ -14,9 +14,9 @@ INC			=	-I $(INC_DIR)
 # SOURCES
 SRC_DIR		=	./srcs
 SRC			=	main.c \
-					get_next_line.c \
-					get_next_line_utils.c \
-					builtins.c
+				builtins.c \
+				get_next_line/get_next_line.c \
+				get_next_line/get_next_line_utils.c
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
@@ -47,7 +47,7 @@ $(PRINTF)	:
 				@make -C $(PRINT_DIR)
 
 $(NAME)		:	$(OBJS)
-				$(CC) $(CFLAGS) $(INC) $(FT_INC) $(PRINT_INC) $(addprefix $(SRC_DIR)/, $(SRC)) $(FT_LNK) $(PRINT_LNK) -o $(NAME)
+				$(CC) $(CFLAGS) $(FT_INC) $(PRINT_INC) $(INC) $(addprefix $(SRC_DIR)/, $(SRC)) $(FT_LNK) $(PRINT_LNK) -o $(NAME)
 
 clean		:
 				@rm -rf $(OBJS)

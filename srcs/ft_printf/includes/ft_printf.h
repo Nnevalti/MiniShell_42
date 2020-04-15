@@ -17,6 +17,8 @@
 # include <stdlib.h>
 # include <stdarg.h>
 
+# include "../../libft/libft.h"
+
 typedef struct	s_flags
 {
 	int			zero;
@@ -39,11 +41,9 @@ int				ft_print_arg(const char *format, t_flags *flags,
 								va_list parameters);
 int				ft_atoi(const char *str);
 int				ft_isdigit(int c);
-int				ft_strchr(char *str, char c);
 int				ft_putnstr(char c, int n);
 int				ft_putc(char c, t_flags *flags, va_list parameters);
 int				ft_puts(t_flags *flags, va_list parameters);
-int				ft_strlen(char *str);
 int				ft_prints(char *str, t_flags *flags, int len);
 int				ft_putn(t_flags *flags, va_list parameters);
 int				ft_nbrlen(int nbr);
