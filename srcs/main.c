@@ -16,14 +16,31 @@ int		main(int argc, char **argv, char **env)
 {
 	int		i;
 	char	*command;
-
-	ft_env(env);
+	char 	**splitted;
+	char	buffer[4096];
 
 	while (42)
 	{
-		ft_putstr("prompt> ");
+		getcwd(buffer, 4096);
+		ft_printf("\e[1m\e[94mtomfevrier@nnevalti:%s $> ", buffer);
 		get_next_line(0, &command);
-		ft_printf("Command: %s\n", command);
+		splitted = ft_split(command, ' ');
+		// parser la commande par rapport au espacccce et vérifier avec strcmp ?
+		if (!ft_strcmp(splitted[0], "echo"))
+		{
+			i = 1;
+			while (splitted[i])
+				ft_printf("%s ", splitted[i++]);
+			ft_printf("\n");
+		}
+		else if (!ft_strcmp(splitted[0], "env"))
+			ft_env(env);
+		else if (!ft_strcmp(splitted[0], "exit"))
+			exit(0);
 		free(command);
+		i = 0;
+		while (splitted[i])
+			free(splitted[i++]);
+		free(splitted);
 	}
 }
