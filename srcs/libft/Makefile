@@ -43,9 +43,8 @@ SRCS = 	ft_memset.c \
 		ft_putchar_fd.c \
 		ft_putstr_fd.c \
 		ft_putendl_fd.c \
-		ft_putnbr_fd.c
-
-BONUS =	ft_lstnew_bonus.c \
+		ft_putnbr_fd.c \
+		ft_lstnew_bonus.c \
 		ft_lstadd_front_bonus.c \
 		ft_lstsize_bonus.c \
 		ft_lstlast_bonus.c \
@@ -63,12 +62,8 @@ $(NAME):
 		gcc -Wall -Wextra -Werror -c $(SRCS)
 		ar rc $(NAME) $(OBJS)
 
-bonus:
-		gcc -Wall -Wextra -Werror -c $(SRCS) $(BONUS)
-		ar rc $(NAME) $(OBJS) $(BONUS:.c=.o)
-
 clean:
-		/bin/rm -rf $(OBJS) $(BONUS:.c=.o)
+		/bin/rm -rf $(OBJS)
 
 fclean: clean
 		/bin/rm -f $(NAME)
