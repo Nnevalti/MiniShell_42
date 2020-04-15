@@ -9,8 +9,7 @@ $(CFLAGS)	:
 
 # HEADER
 INC_DIR		=	./include
-INC_NAME	=	minishell.h
-INC			=	-I $(addprefix $(INC_DIR)/, $INC_NAME)
+INC			=	-I $(INC_DIR)
 
 # SOURCES
 SRC_DIR		=	./srcs
@@ -25,7 +24,7 @@ OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))
 # FT_PRINTF
 PRINT_DIR		=	$(addprefix $(SRC_DIR)/, ft_printf)
 PRINT_INC		=	-I $(PRINT_DIR)
-PRINT_LNK		=	-L $(PRINT_DIR) -lft
+PRINT_LNK		=	-L $(PRINT_DIR) -lftprintf
 PRINTF		=	$(addprefix $(PRINT_DIR)/, libftprintf.a)
 
 # LIBFT LIB
