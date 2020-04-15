@@ -6,11 +6,11 @@
 /*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/15 15:30:21 by tfevrier          #+#    #+#             */
-/*   Updated: 2020/04/15 15:30:23 by tfevrier         ###   ########.fr       */
+/*   Updated: 2020/04/15 16:04:22 by tfevrier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int		ft_env(char **env)
 {

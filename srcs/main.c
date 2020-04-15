@@ -6,11 +6,11 @@
 /*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/15 15:00:05 by tfevrier          #+#    #+#             */
-/*   Updated: 2020/04/15 15:00:12 by tfevrier         ###   ########.fr       */
+/*   Updated: 2020/04/15 16:03:54 by tfevrier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int		main(int argc, char **argv, char **env)
 {
