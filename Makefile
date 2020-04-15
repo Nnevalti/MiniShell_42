@@ -14,6 +14,8 @@ INC			=	-I $(INC_DIR)
 # SOURCES
 SRC_DIR		=	./srcs
 SRC			=	main.c \
+					get_next_line.c \
+					get_next_line_utils.c \
 					builtins.c
 
 # OBJETS
