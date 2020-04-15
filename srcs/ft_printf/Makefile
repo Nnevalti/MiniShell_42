@@ -19,7 +19,8 @@ CFLAGS		=	-Wall -Werror -Wextra -I $(INCLUDES)
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS) $(INCLUDES) 
+$(NAME)		:
+				gcc	-Wall -Werror -Wextra -c $(SRCS)
 				ar rc $(NAME) $(OBJS)
 
 clean		:
