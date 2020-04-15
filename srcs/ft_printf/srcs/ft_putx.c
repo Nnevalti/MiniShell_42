@@ -31,8 +31,6 @@ int		ft_hexlen(long nb)
 
 void	ft_putnbrbase(unsigned int nb, char *base, int *i)
 {
-	if (nb < 0)
-		nb = nb * -1;
 	if (nb % 16 != nb)
 	{
 		ft_putnbrbase(nb / 16, base, i);
