@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include <stdio.h>
+# include "../srcs/ft_printf/includes/ft_printf.h"
 
 int		ft_env(char **env);
 
