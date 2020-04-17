@@ -14,9 +14,11 @@
 # define MINISHELL_H
 
 # include <stdio.h>
-# include "../srcs/ft_printf/includes/ft_printf.h"
-# include "../srcs/libft/libft.h"
-# include "../srcs/get_next_line/get_next_line.h"
+# include <signal.h>
+
+# include "ft_printf.h"
+# include "libft.h"
+# include "get_next_line.h"
 
 int		ft_env(char **env);
 int		ft_indexof(char *str, char c);

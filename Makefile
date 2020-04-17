@@ -37,6 +37,9 @@ FT_INC		=	-I $(FT_DIR)
 FT_LNK		=	-L $(FT_DIR) -lft
 LIBFT		=	$(addprefix $(FT_DIR), libft.a)
 
+GNL_DIR		=	$(addprefix $(SRC_DIR)/, get_next_line)
+GNL_INC		=	-I $(GNL_DIR)
+
 # RULES
 all			:	$(LIBFT) $(PRINTF) $(NAME)
 
@@ -49,7 +52,8 @@ $(PRINTF)	:
 				@make -C $(PRINT_DIR)
 
 $(NAME)		:
-				$(CC) $(CFLAGS) $(FT_INC) $(PRINT_INC) $(INC) $(addprefix $(SRC_DIR)/, $(SRC)) $(FT_LNK) $(PRINT_LNK) -o $(NAME)
+				$(CC) $(CFLAGS) $(FT_INC) $(PRINT_INC) $(GNL_INC) $(INC) \
+				$(addprefix $(SRC_DIR)/, $(SRC)) $(FT_LNK) $(PRINT_LNK) -o $(NAME)
 
 clean		:
 				@rm -rf $(OBJS)

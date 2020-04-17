@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_printf.h"
+#include "../ft_printf.h"
 
 int		ft_putc(char c, t_flags *flags, va_list parameters)
 {
