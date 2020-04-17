@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int		main(int argc, char **argv, char **env)
 {
@@ -22,9 +22,11 @@ int		main(int argc, char **argv, char **env)
 	while (42)
 	{
 		getcwd(buffer, 4096);
-		ft_printf("\e[1m\e[94mtomfevrier@nnevalti:%s $> ", buffer);
+		ft_printf("\e[1m\e[94mtomfevrier@nnevalti:%s $> \e[0m", buffer);
 		get_next_line(0, &command);
 		splitted = ft_split(command, ' ');
+		ft_printf("%s\n", get_env_var(env, "PATH"));
+		ft_printf("%s\n", get_env_var(env, "USERNAME"));
 		// parser la commande par rapport au espacccce et vérifier avec strcmp ?
 		if (!ft_strcmp(splitted[0], "echo"))
 		{

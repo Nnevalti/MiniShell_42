@@ -15,6 +15,8 @@ INC			=	-I $(INC_DIR)
 SRC_DIR		=	./srcs
 SRC			=	main.c \
 				builtins.c \
+				env.c \
+				utils.c \
 				get_next_line/get_next_line.c \
 				get_next_line/get_next_line_utils.c
 
@@ -46,7 +48,7 @@ $(PRINTF)	:
 				@echo "\nCompiling $(PRINT_DIR)..."
 				@make -C $(PRINT_DIR)
 
-$(NAME)		:	$(OBJS)
+$(NAME)		:
 				$(CC) $(CFLAGS) $(FT_INC) $(PRINT_INC) $(INC) $(addprefix $(SRC_DIR)/, $(SRC)) $(FT_LNK) $(PRINT_LNK) -o $(NAME)
 
 clean		:
