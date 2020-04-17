@@ -26,13 +26,16 @@ void	run_command(char *command, char **argv, char **env)
 {
 	char	**paths;
 	int		i;
+	int		status;
 	char	*tmp;
 	char	*str;
 
 	if (!access(command, X_OK))
 	{
-		// if (fork() == 0)
+		if (fork() == 0)
 			execve(command, argv, env);
+		else
+			wait(&status);
 	}
 	else
 	{
@@ -44,8 +47,14 @@ void	run_command(char *command, char **argv, char **env)
 			str = ft_strjoin(tmp, command);
 			free(tmp);
 			if (!access(str, X_OK))
-				execve(str, argv, env);
+			{
+				if (fork() == 0)
+					execve(str, argv, env);
+				else
+					wait(&status);
+				}
 			free(str);
+			i++;
 		}
 	}
 }
