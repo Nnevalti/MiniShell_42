@@ -22,6 +22,21 @@ void	prompt(char **env)
 	ft_printf("\e[94m%s \e[39m$> \e[0m", buffer);
 }
 
+void ft_echo(char** splitted)
+{
+	int	i;
+
+	i = 1;
+	while (splitted[i])
+	{
+		if (ft_strcmp(splitted[i], "-n"))
+			ft_printf("%s ", splitted[i]);
+		i++;
+	}
+	if (ft_strcmp(splitted[1], "-n"))
+		ft_printf("\n");
+}
+
 int		main(int argc, char **argv, char **env)
 {
 	int		i;
@@ -36,14 +51,14 @@ int		main(int argc, char **argv, char **env)
 		splitted = ft_split(command, ' ');
 		// parser la commande par rapport au espacccce et vérifier avec strcmp ?
 		if (!ft_strcmp(splitted[0], "echo"))
-		{
-			i = 1;
-			while (splitted[i])
-				ft_printf("%s ", splitted[i++]);
-			ft_printf("\n");
-		}
+			ft_echo(splitted);
 		else if (!ft_strcmp(splitted[0], "env"))
 			ft_env(env);
+		else if (!ft_strcmp(splitted[0], "cd"))
+		{
+			ft_printf("ok");
+			chdir(splitted[1]);
+		}
 		else if (!ft_strcmp(splitted[0], "exit"))
 			exit(0);
 		free(command);
