@@ -22,3 +22,18 @@ int		ft_env(char **env)
 	ft_printf("%s\n", env[i]);
 	return (0);
 }
+
+void	ft_echo(char** splitted)
+{
+	int	i;
+
+	i = 1;
+	while (splitted[i])
+	{
+		if (ft_strcmp(splitted[i], "-n"))
+			ft_printf("%s ", splitted[i]);
+		i++;
+	}
+	if (ft_strcmp(splitted[1], "-n"))
+		ft_printf("\n");
+}

@@ -22,19 +22,32 @@ void	prompt(char **env)
 	ft_printf("\e[94m%s \e[39m$> \e[0m", buffer);
 }
 
-void ft_echo(char** splitted)
+void	run_command(char *command, char **argv, char **env)
 {
-	int	i;
+	char	**paths;
+	int		i;
+	char	*tmp;
+	char	*str;
 
-	i = 1;
-	while (splitted[i])
+	if (!access(command, X_OK))
 	{
-		if (ft_strcmp(splitted[i], "-n"))
-			ft_printf("%s ", splitted[i]);
-		i++;
+		// if (fork() == 0)
+			execve(command, argv, env);
 	}
-	if (ft_strcmp(splitted[1], "-n"))
-		ft_printf("\n");
+	else
+	{
+		paths = ft_split(get_env_var(env, "PATH"), ':');
+		i = 0;
+		while (paths[i])
+		{
+			tmp = ft_strjoin(paths[i], "/");
+			str = ft_strjoin(tmp, command);
+			free(tmp);
+			if (!access(str, X_OK))
+				execve(str, argv, env);
+			free(str);
+		}
+	}
 }
 
 int		main(int argc, char **argv, char **env)
@@ -55,12 +68,11 @@ int		main(int argc, char **argv, char **env)
 		else if (!ft_strcmp(splitted[0], "env"))
 			ft_env(env);
 		else if (!ft_strcmp(splitted[0], "cd"))
-		{
-			ft_printf("ok");
 			chdir(splitted[1]);
-		}
 		else if (!ft_strcmp(splitted[0], "exit"))
 			exit(0);
+		else
+			run_command(splitted[0], splitted, env);
 		free(command);
 		i = 0;
 		while (splitted[i])
