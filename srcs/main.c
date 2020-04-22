@@ -18,7 +18,7 @@ void	prompt(char **env)
 
 	getcwd(buffer, 4096);
 	ft_printf("\e[1m\e[32m");
-	ft_printf("%s@minishell:", get_env_var(env, "USERNAME"));
+	ft_printf("%s@minishell:", get_env_var(env, "USER"));
 	ft_printf("\e[94m%s \e[39m$> \e[0m", buffer);
 }
 
@@ -52,7 +52,7 @@ void	run_command(char *command, char **argv, char **env)
 					execve(str, argv, env);
 				else
 					wait(&status);
-				}
+			}
 			free(str);
 			i++;
 		}
@@ -62,8 +62,11 @@ void	run_command(char *command, char **argv, char **env)
 int		main(int argc, char **argv, char **env)
 {
 	int		i;
+	char	**my_env;
 	char	*command;
 	char 	**splitted;
+
+	my_env = get_env(env);
 
 	// signal(SIGINT, SIG_IGN);
 	while (42)
@@ -75,15 +78,18 @@ int		main(int argc, char **argv, char **env)
 		if (!ft_strcmp(splitted[0], "echo"))
 			ft_echo(splitted);
 		else if (!ft_strcmp(splitted[0], "env"))
-			ft_env(env);
+			ft_env(my_env);
 		else if (!ft_strcmp(splitted[0], "cd"))
 			chdir(splitted[1]);
 		else if (!ft_strcmp(splitted[0], "pwd"))
 			ft_pwd(env);
 		else if (!ft_strcmp(splitted[0], "exit"))
+		{
+			free_env(my_env);
 			exit(0);
+		}
 		else
-			run_command(splitted[0], splitted, env);
+			run_command(splitted[0], splitted, my_env);
 		free(command);
 		i = 0;
 		while (splitted[i])
