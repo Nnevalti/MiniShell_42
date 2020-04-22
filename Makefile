@@ -18,7 +18,8 @@ SRC			=	main.c \
 				env.c \
 				utils.c \
 				get_next_line/get_next_line.c \
-				get_next_line/get_next_line_utils.c
+				get_next_line/get_next_line_utils.c \
+				ft_split_command_line.c
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
