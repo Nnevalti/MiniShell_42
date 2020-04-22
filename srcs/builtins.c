@@ -55,14 +55,19 @@ void	ft_export(char ***env, char **splitted)
 	int		i;
 	int		j;
 	int		nb_vars;
+	char	*name;
 	char	**new_env;
 
 	i = 1;
 	while (splitted[i])
 	{
 		if (ft_indexof(splitted[i], '=') < 0)
+		{
+			i++;
 			continue;
-		if (!set_env_var(*env, ft_substr(splitted[i], 0, ft_indexof(splitted[i], '=')), splitted[i]))
+		}
+		name = ft_substr(splitted[i], 0, ft_indexof(splitted[i], '='));
+		if (!set_env_var(*env, name, splitted[i]))
 		{
 			nb_vars = 0;
 			while ((*env)[nb_vars])
@@ -77,6 +82,41 @@ void	ft_export(char ***env, char **splitted)
 			}
 			new_env[j] = ft_strdup(splitted[i]);
 			new_env[j + 1] = NULL;
+			*env = new_env;
+		}
+		free(name);
+		i++;
+	}
+}
+
+void	ft_unset(char ***env, char **splitted)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		nb_vars;
+	char	**new_env;
+
+	i = 1;
+	while (splitted[i])
+	{
+		if (get_env_var(*env, splitted[i]))
+		{
+			nb_vars = 0;
+			while ((*env)[nb_vars])
+				nb_vars++;
+			if (!(new_env = malloc(nb_vars * sizeof(char *))))
+				return ;
+			j = 0;
+			k = 0;
+			while (j < nb_vars)
+			{
+				if (ft_strncmp((*env)[j], splitted[i], ft_strlen(splitted[i])) != 0)
+					new_env[k++] = ft_strdup((*env)[j]);
+
+				j++;
+			}
+			new_env[k + 1] = NULL;
 			*env = new_env;
 		}
 		i++;

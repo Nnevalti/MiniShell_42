@@ -85,6 +85,8 @@ int		main(int argc, char **argv, char **env)
 			ft_pwd();
 		else if (!ft_strcmp(splitted[0], "export"))
 			ft_export(&my_env, splitted);
+		else if (!ft_strcmp(splitted[0], "unset"))
+			ft_unset(&my_env, splitted);
 		else if (!ft_strcmp(splitted[0], "exit"))
 		{
 			free_env(my_env);
