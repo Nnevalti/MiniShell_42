@@ -14,9 +14,9 @@
 
 void	prompt(char **env)
 {
-	char	buffer[4096];
+	char	buffer[MAX_PATH_LENGTH];
 
-	getcwd(buffer, 4096);
+	getcwd(buffer, MAX_PATH_LENGTH);
 	ft_printf("\e[1m\e[32m");
 	ft_printf("%s@minishell:", get_env_var(env, "USER"));
 	ft_printf("\e[94m%s \e[39m$> \e[0m", buffer);
@@ -80,9 +80,11 @@ int		main(int argc, char **argv, char **env)
 		else if (!ft_strcmp(splitted[0], "env"))
 			ft_env(my_env);
 		else if (!ft_strcmp(splitted[0], "cd"))
-			chdir(splitted[1]);
+			ft_cd(splitted[1]);
 		else if (!ft_strcmp(splitted[0], "pwd"))
-			ft_pwd(env);
+			ft_pwd();
+		else if (!ft_strcmp(splitted[0], "export"))
+			ft_export(&my_env, splitted);
 		else if (!ft_strcmp(splitted[0], "exit"))
 		{
 			free_env(my_env);

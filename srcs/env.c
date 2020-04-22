@@ -46,7 +46,7 @@ void	free_env(char **env)
 char 	*get_env_var(char **env, char *name)
 {
 	int		i;
-	int	index;
+	int		index;
 
 	i = 0;
 	while (env[i])
@@ -57,4 +57,24 @@ char 	*get_env_var(char **env, char *name)
 		i++;
 	}
 	return (NULL);
+}
+
+t_bool	set_env_var(char **env, char *name, char *variable)
+{
+	int		i;
+	int		index;
+
+	i = 0;
+	while (env[i])
+	{
+		index = ft_indexof(env[i], '=');
+		if (ft_strlen(name) == index && !ft_strncmp(env[i], name, index - 1))
+		{
+			free(env[i]);
+			env[i] = ft_strdup(variable);
+			return (TRUE);
+		}
+		i++;
+	}
+	return (FALSE);
 }

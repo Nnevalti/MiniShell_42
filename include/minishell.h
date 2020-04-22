@@ -23,13 +23,24 @@
 # include "libft.h"
 # include "get_next_line.h"
 
-int		ft_env(char **env);
-void	ft_pwd(char **env);
-void	ft_echo(char** splitted);
-int		ft_indexof(char *str, char c);
+# define MAX_PATH_LENGTH 4096
 
-char	**get_env(char **env);
-void	free_env(char **env);
-char 	*get_env_var(char **env, char *name);
+# define TRUE 1
+# define FALSE 0
+
+typedef int		t_bool;
+
+int				ft_env(char **env);
+void			ft_pwd(void);
+void			ft_echo(char **splitted);
+void			ft_cd(char *path);
+void			ft_export(char ***env, char **splitted);
+
+int				ft_indexof(char *str, char c);
+
+char			**get_env(char **env);
+void			free_env(char **env);
+char 			*get_env_var(char **env, char *name);
+t_bool			set_env_var(char **env, char *name, char *variable);
 
 #endif
