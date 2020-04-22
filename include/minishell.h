@@ -24,6 +24,7 @@
 # include "get_next_line.h"
 
 int		ft_env(char **env);
+void	ft_pwd(char **env);
 void	ft_echo(char** splitted);
 int		ft_indexof(char *str, char c);
 char 	*get_env_var(char **env, char *name);

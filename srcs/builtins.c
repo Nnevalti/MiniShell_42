@@ -23,6 +23,14 @@ int		ft_env(char **env)
 	return (0);
 }
 
+void ft_pwd(char **env)
+{
+	char	buffer[4096];
+
+	getcwd(buffer, 4096);
+	ft_printf("%s\n", buffer);
+}
+
 void	ft_echo(char** splitted)
 {
 	int	i;

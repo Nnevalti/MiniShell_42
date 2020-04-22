@@ -78,6 +78,8 @@ int		main(int argc, char **argv, char **env)
 			ft_env(env);
 		else if (!ft_strcmp(splitted[0], "cd"))
 			chdir(splitted[1]);
+		else if (!ft_strcmp(splitted[0], "pwd"))
+			ft_pwd(env);
 		else if (!ft_strcmp(splitted[0], "exit"))
 			exit(0);
 		else
