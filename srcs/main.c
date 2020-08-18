@@ -22,6 +22,11 @@ void	prompt(char **env)
 	ft_printf("\e[94m%s \e[39m$> \e[0m", buffer);
 }
 
+void	handle_exit(int signo)
+{
+	exit(1);
+}
+
 void	run_command(char *command, char **argv, char **env)
 {
 	char	**paths;
@@ -33,9 +38,16 @@ void	run_command(char *command, char **argv, char **env)
 	if (!access(command, X_OK))
 	{
 		if (fork() == 0)
+		{
 			execve(command, argv, env);
+		}
 		else
+		{
+			signal(SIGINT, SIG_IGN);
 			wait(&status);
+			signal(SIGINT, &handle_exit);
+		}
+
 	}
 	else
 	{
@@ -49,9 +61,16 @@ void	run_command(char *command, char **argv, char **env)
 			if (!access(str, X_OK))
 			{
 				if (fork() == 0)
+				{
 					execve(str, argv, env);
+				}
 				else
+				{
+					signal(SIGINT, SIG_IGN);
 					wait(&status);
+					signal(SIGINT, &handle_exit);
+				}
+
 			}
 			free(str);
 			i++;
@@ -69,8 +88,7 @@ int		main(int argc, char **argv, char **env)
 	char	**commands;
 
 	my_env = get_env(env);
-
-	// signal(SIGINT, SIG_IGN);
+	signal(SIGINT, &handle_exit);
 	while (42)
 	{
 		j = 0;
