@@ -39,11 +39,23 @@ void	ft_echo(char **env, char **splitted)
 {
 	int		i;
 	char	*env_var;
+	char	*str;
+
+	// NE PAS OUBLIER DE TRIM !
 
 	i = 1;
 	while (splitted[i])
 	{
-		if (splitted[i][0] == '$') {
+		if ((splitted[i][0] == '"'
+			&& splitted[i][ft_strlen(splitted[i]) - 1] == '"') ||
+			(splitted[i][0] == '\''
+				&& splitted[i][ft_strlen(splitted[i]) - 1] == '\''))
+		{
+			str = ft_substr(splitted[i], 1, ft_strlen(splitted[i]) - 2);
+			ft_printf("%s ", str);
+			free(str);
+		}
+		else if (splitted[i][0] == '$') {
 			env_var = get_env_var(env, splitted[i] + 1);
 			if (env) ft_printf("%s ", env_var);
 		}

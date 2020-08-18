@@ -62,42 +62,55 @@ void	run_command(char *command, char **argv, char **env)
 int		main(int argc, char **argv, char **env)
 {
 	int		i;
+	int		j;
 	char	**my_env;
 	char	*command;
 	char 	**splitted;
+	char	**commands;
 
 	my_env = get_env(env);
 
 	// signal(SIGINT, SIG_IGN);
 	while (42)
 	{
+		j = 0;
 		prompt(env);
 		get_next_line(0, &command);
-		splitted = ft_split(command, ' ');
-		// parser la commande par rapport au espacccce et vérifier avec strcmp ?
-		if (!ft_strcmp(splitted[0], "echo"))
-			ft_echo(my_env, splitted);
-		else if (!ft_strcmp(splitted[0], "env"))
-			ft_env(my_env);
-		else if (!ft_strcmp(splitted[0], "cd"))
-			ft_cd(splitted[1]);
-		else if (!ft_strcmp(splitted[0], "pwd"))
-			ft_pwd();
-		else if (!ft_strcmp(splitted[0], "export"))
-			ft_export(&my_env, splitted);
-		else if (!ft_strcmp(splitted[0], "unset"))
-			ft_unset(&my_env, splitted);
-		else if (!ft_strcmp(splitted[0], "exit"))
+		commands = ft_split_command_line(command);
+		while (commands[j])
 		{
-			free_env(my_env);
-			exit(0);
+			// ft_printf("commands[%d] = %s\n", j, commands[j]);
+			splitted = ft_split(commands[j], ' ');
+			// parser la commande par rapport au espacccce et vérifier avec strcmp ?
+			if (!ft_strcmp(splitted[0], "echo"))
+				ft_echo(my_env, splitted);
+			else if (!ft_strcmp(splitted[0], "env"))
+				ft_env(my_env);
+			else if (!ft_strcmp(splitted[0], "cd"))
+				ft_cd(splitted[1]);
+			else if (!ft_strcmp(splitted[0], "pwd"))
+				ft_pwd();
+			else if (!ft_strcmp(splitted[0], "export"))
+				ft_export(&my_env, splitted);
+			else if (!ft_strcmp(splitted[0], "unset"))
+				ft_unset(&my_env, splitted);
+			else if (!ft_strcmp(splitted[0], "exit"))
+			{
+				free_env(my_env);
+				exit(0);
+			}
+			else
+				run_command(splitted[0], splitted, my_env);
+			j++;
 		}
-		else
-			run_command(splitted[0], splitted, my_env);
 		free(command);
 		i = 0;
 		while (splitted[i])
 			free(splitted[i++]);
 		free(splitted);
+		i = 0;
+		while (commands[i])
+			free(commands[i++]);
+		free(commands);
 	}
 }
