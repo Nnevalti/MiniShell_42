@@ -27,9 +27,9 @@ OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))
 
 
 # FT_PRINTF
-PRINT_DIR		=	$(addprefix $(SRC_DIR)/, ft_printf)
-PRINT_INC		=	-I $(PRINT_DIR)
-PRINT_LNK		=	-L $(PRINT_DIR) -lftprintf
+PRINT_DIR	=	$(addprefix $(SRC_DIR)/, ft_printf)
+PRINT_INC	=	-I $(PRINT_DIR)
+PRINT_LNK	=	-L $(PRINT_DIR) -lftprintf
 PRINTF		=	$(addprefix $(PRINT_DIR)/, libftprintf.a)
 
 # LIBFT LIB
@@ -68,3 +68,6 @@ fclean		:	clean
 				make fclean -C $(PRINT_DIR)
 
 re			:	fclean all
+
+run			:	re
+				./Minishell

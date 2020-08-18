@@ -35,14 +35,19 @@ void	ft_cd(char *path)
 	chdir(path);
 }
 
-void	ft_echo(char **splitted)
+void	ft_echo(char **env, char **splitted)
 {
 	int		i;
+	char	*env_var;
 
 	i = 1;
 	while (splitted[i])
 	{
-		if (ft_strcmp(splitted[i], "-n"))
+		if (splitted[i][0] == '$') {
+			env_var = get_env_var(env, splitted[i] + 1);
+			if (env) ft_printf("%s ", env_var);
+		}
+		else if (ft_strcmp(splitted[i], "-n"))
 			ft_printf("%s ", splitted[i]);
 		i++;
 	}

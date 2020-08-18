@@ -52,7 +52,7 @@ char 	*get_env_var(char **env, char *name)
 	while (env[i])
 	{
 		index = ft_indexof(env[i], '=');
-		if (!ft_strncmp(env[i], name, index - 1))
+		if (!ft_strncmp(env[i], name, index))
 			return (env[i] + index + 1);
 		i++;
 	}

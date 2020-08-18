@@ -76,7 +76,7 @@ int		main(int argc, char **argv, char **env)
 		splitted = ft_split(command, ' ');
 		// parser la commande par rapport au espacccce et vérifier avec strcmp ?
 		if (!ft_strcmp(splitted[0], "echo"))
-			ft_echo(splitted);
+			ft_echo(my_env, splitted);
 		else if (!ft_strcmp(splitted[0], "env"))
 			ft_env(my_env);
 		else if (!ft_strcmp(splitted[0], "cd"))

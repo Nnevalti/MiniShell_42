@@ -32,7 +32,7 @@ typedef int		t_bool;
 
 int				ft_env(char **env);
 void			ft_pwd(void);
-void			ft_echo(char **splitted);
+void			ft_echo(char **env, char **splitted);
 void			ft_cd(char *path);
 void			ft_export(char ***env, char **splitted);
 void			ft_unset(char ***env, char **splitted);
