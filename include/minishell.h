@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <signal.h>
+# include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 
@@ -27,6 +28,8 @@
 
 # define TRUE 1
 # define FALSE 0
+
+int				EXIT_CODE;
 
 typedef int		t_bool;
 
@@ -41,8 +44,9 @@ int				ft_indexof(char *str, char c);
 char			**ft_split_command_line(char const *commands);
 
 char			**get_env(char **env);
-void			free_env(char **env);
 char 			*get_env_var(char **env, char *name);
 t_bool			set_env_var(char **env, char *name, char *variable);
+
+void			free_tab_str(char **tab);
 
 #endif

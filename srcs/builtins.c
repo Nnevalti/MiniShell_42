@@ -56,8 +56,14 @@ void	ft_echo(char **env, char **splitted)
 			free(str);
 		}
 		else if (splitted[i][0] == '$') {
-			env_var = get_env_var(env, splitted[i] + 1);
-			if (env) ft_printf("%s ", env_var);
+			if (splitted[i][1] == '?')
+				ft_printf("%d", EXIT_CODE);
+			else
+			{
+				env_var = get_env_var(env, splitted[i] + 1);
+				if (env) ft_printf("%s ", env_var);
+			}
+
 		}
 		else if (ft_strcmp(splitted[i], "-n"))
 			ft_printf("%s ", splitted[i]);
@@ -99,6 +105,7 @@ void	ft_export(char ***env, char **splitted)
 			}
 			new_env[j] = ft_strdup(splitted[i]);
 			new_env[j + 1] = NULL;
+			free_tab_str(*env);
 			*env = new_env;
 		}
 		free(name);
@@ -134,6 +141,7 @@ void	ft_unset(char ***env, char **splitted)
 				j++;
 			}
 			new_env[k + 1] = NULL;
+			free_tab_str(*env);
 			*env = new_env;
 		}
 		i++;

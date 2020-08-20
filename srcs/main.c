@@ -24,10 +24,11 @@ void	prompt(char **env)
 
 void	handle_exit(int signo)
 {
+	EXIT_CODE = 130;
 	exit(1);
 }
 
-void	run_command(char *command, char **argv, char **env)
+void	run_exec(char *command, char **argv, char **env)
 {
 	char	**paths;
 	int		i;
@@ -38,13 +39,12 @@ void	run_command(char *command, char **argv, char **env)
 	if (!access(command, X_OK))
 	{
 		if (fork() == 0)
-		{
 			execve(command, argv, env);
-		}
 		else
 		{
 			signal(SIGINT, SIG_IGN);
 			wait(&status);
+			EXIT_CODE = WEXITSTATUS(status);
 			signal(SIGINT, &handle_exit);
 		}
 
@@ -62,20 +62,82 @@ void	run_command(char *command, char **argv, char **env)
 			{
 				if (fork() == 0)
 				{
+					// printf("CHILD: %d\n", EXIT_CODE);
 					execve(str, argv, env);
 				}
 				else
 				{
 					signal(SIGINT, SIG_IGN);
 					wait(&status);
+					EXIT_CODE = WEXITSTATUS(status);
+					// ft_printf("status : %d, %d\n", status, WEXITSTATUS(status));
+					// printf("PARENT: %d\n", EXIT_CODE);
 					signal(SIGINT, &handle_exit);
 				}
-
+				return ;
 			}
+			else
+				EXIT_CODE = 126;
 			free(str);
 			i++;
 		}
+		ft_printf("command not found: %s\n", command);
+		EXIT_CODE = 127;
 	}
+}
+
+int		run_command(char *command, char ***env)
+{
+	char	**splitted;
+	char	**tokens;
+	int		fd;
+	char	*str;
+	int		saved_stdout;
+
+	if (ft_indexof(command, '>') >= 0)
+	{
+		tokens = ft_split(command, '>');
+		// printf("%s | %s\n", tokens[0], tokens[1]);
+		str = ft_strtrim(tokens[1], " ");
+		fd = open(str, O_WRONLY | O_CREAT, 0777);
+		free(str);
+		saved_stdout = dup(1);
+		dup2(fd, 1);
+		close(fd);
+		splitted = ft_split(tokens[0], ' ');
+	}
+	else
+		splitted = ft_split(command, ' ');
+
+	// parser la commande par rapport au espacccce et vérifier avec strcmp ?
+	if (!ft_strcmp(splitted[0], "echo"))
+		ft_echo(*env, splitted);
+	else if (!ft_strcmp(splitted[0], "env"))
+		ft_env(*env);
+	else if (!ft_strcmp(splitted[0], "cd"))
+		ft_cd(splitted[1]);
+	else if (!ft_strcmp(splitted[0], "pwd"))
+		ft_pwd();
+	else if (!ft_strcmp(splitted[0], "export"))
+		ft_export(env, splitted);
+	else if (!ft_strcmp(splitted[0], "unset"))
+		ft_unset(env, splitted);
+	else if (!ft_strcmp(splitted[0], "exit"))
+	{
+		free_tab_str(*env);
+		free_tab_str(splitted);
+		exit(0);
+	}
+	else
+		run_exec(splitted[0], splitted, *env);
+	free_tab_str(splitted);
+	if (ft_indexof(command, '>') >= 0)
+	{
+		ft_printf("test\n");
+		dup2(saved_stdout, 1);
+		close(saved_stdout);
+	}
+	return (1);
 }
 
 int		main(int argc, char **argv, char **env)
@@ -98,37 +160,10 @@ int		main(int argc, char **argv, char **env)
 		while (commands[j])
 		{
 			// ft_printf("commands[%d] = %s\n", j, commands[j]);
-			splitted = ft_split(commands[j], ' ');
-			// parser la commande par rapport au espacccce et vérifier avec strcmp ?
-			if (!ft_strcmp(splitted[0], "echo"))
-				ft_echo(my_env, splitted);
-			else if (!ft_strcmp(splitted[0], "env"))
-				ft_env(my_env);
-			else if (!ft_strcmp(splitted[0], "cd"))
-				ft_cd(splitted[1]);
-			else if (!ft_strcmp(splitted[0], "pwd"))
-				ft_pwd();
-			else if (!ft_strcmp(splitted[0], "export"))
-				ft_export(&my_env, splitted);
-			else if (!ft_strcmp(splitted[0], "unset"))
-				ft_unset(&my_env, splitted);
-			else if (!ft_strcmp(splitted[0], "exit"))
-			{
-				free_env(my_env);
-				exit(0);
-			}
-			else
-				run_command(splitted[0], splitted, my_env);
+			run_command(commands[j], &my_env);
 			j++;
 		}
 		free(command);
-		i = 0;
-		while (splitted[i])
-			free(splitted[i++]);
-		free(splitted);
-		i = 0;
-		while (commands[i])
-			free(commands[i++]);
-		free(commands);
+		free_tab_str(commands);
 	}
 }
