@@ -62,10 +62,15 @@ char			**get_env(char **env);
 char 			*get_env_var(char **env, char *name);
 t_bool			set_env_var(char **env, char *name, char *variable);
 
+int				tab_str_len(char **tab);
 void			free_tab_str(char **tab);
 
 t_redirection	**set_redirections(char *command);
 void			reset_redirections(t_redirection **redirections);
+
+int 			*init_pipes(char **tokens);
+void			pipe_io(int *pipes, int index);
+void			close_pipes(int *pipes);
 
 
 #endif

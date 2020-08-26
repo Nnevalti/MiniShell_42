@@ -33,16 +33,6 @@ char	**get_env(char **env)
 	return (my_env);
 }
 
-void	free_tab_str(char **tab)
-{
-	int		i;
-
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
-}
-
 char 	*get_env_var(char **env, char *name)
 {
 	int		i;

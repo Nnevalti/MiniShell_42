@@ -44,10 +44,10 @@ void	ft_echo(char **env, char *command)
 	t_redirection	**redirections;
 
 	// NE PAS OUBLIER DE TRIM !
-	redirections = set_redirections(command);
-	splitted = ft_split(redirections[0]->str, ' ');
-	// splitted = ft_split(command, ' ');
-	i = 0;
+	// redirections = set_redirections(command);
+	// splitted = ft_split(redirections[0]->str, ' ');
+	splitted = ft_split(command, ' ');
+	i = 1;
 	while (splitted[i])
 	{
 		if ((splitted[i][0] == '"'
@@ -76,7 +76,7 @@ void	ft_echo(char **env, char *command)
 	if (ft_strcmp(splitted[1], "-n"))
 		ft_printf("\n");
 	free_tab_str(splitted);
-	reset_redirections(redirections);
+	// reset_redirections(redirections);
 }
 
 // void	ft_echo(char **env, char *splitted)

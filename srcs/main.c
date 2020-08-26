@@ -28,7 +28,7 @@ void	handle_exit(int signo)
 	exit(1);
 }
 
-void	run_exec(char *command, char **argv, char **env)
+void	run_exec(char *command, char **argv, char **env, int *pipes, int index)
 {
 	char	**paths;
 	int		i;
@@ -39,7 +39,24 @@ void	run_exec(char *command, char **argv, char **env)
 	if (!access(command, X_OK))
 	{
 		if (fork() == 0)
+		{
+			ft_printf("pipe(pipes + %d);\n", 2 * index);
+			// pipe(pipes + 2 * index);
+
+			if (index > 0)
+			{
+				ft_printf("dup2(pipes[%d], 0);\n", 2 * (index - 1));
+				dup2(pipes[2 * (index - 1)], 0);
+			}
+
+			if (pipes[index + 1])
+			{
+				ft_printf("dup2(pipes[%d], 1);\n", 1 + 2 * index);
+				dup2(pipes[1 + 2 * index], 1);
+
+			}
 			execve(command, argv, env);
+		}
 		else
 		{
 			signal(SIGINT, SIG_IGN);
@@ -62,12 +79,13 @@ void	run_exec(char *command, char **argv, char **env)
 			{
 				if (fork() == 0)
 				{
-					// printf("CHILD: %d\n", EXIT_CODE);
+					pipe_io(pipes, index);
 					execve(str, argv, env);
 				}
 				else
 				{
 					signal(SIGINT, SIG_IGN);
+					// close_pipes(pipes);
 					wait(&status);
 					EXIT_CODE = WEXITSTATUS(status);
 					// ft_printf("status : %d, %d\n", status, WEXITSTATUS(status));
@@ -88,34 +106,50 @@ void	run_exec(char *command, char **argv, char **env)
 
 int		run_command(char *command, char ***env)
 {
+	char	**tokens;
 	char	**splitted;
-	int		fd;
-	char	*str;
-	int		saved_stdout;
+	int		*pipes;
+	int		i;
 
-	splitted = ft_split(command, ' ');
-
-	if (!ft_strcmp(splitted[0], "echo"))
-		ft_echo(*env, command);
-	else if (!ft_strcmp(splitted[0], "env"))
-		ft_env(*env);
-	else if (!ft_strcmp(splitted[0], "cd"))
-		ft_cd(splitted[1]);
-	else if (!ft_strcmp(splitted[0], "pwd"))
-		ft_pwd();
-	else if (!ft_strcmp(splitted[0], "export"))
-		ft_export(env, splitted);
-	else if (!ft_strcmp(splitted[0], "unset"))
-		ft_unset(env, splitted);
-	else if (!ft_strcmp(splitted[0], "exit"))
+	tokens = ft_split(command, '|');
+	pipes = init_pipes(tokens);
+	i = 0;
+	while (tokens[i])
 	{
-		free_tab_str(*env);
+		// close(pipes[0]);
+		// close(pipes[1]);
+		// close(pipes[2]);
+		// close(pipes[3]);
+		// printf("%d: %s\n", i, tokens[i]);
+		splitted = ft_split(tokens[i], ' ');
+
+		if (!ft_strcmp(splitted[0], "echo"))
+			ft_echo(*env, tokens[i]);
+		else if (!ft_strcmp(splitted[0], "env"))
+			ft_env(*env);
+		else if (!ft_strcmp(splitted[0], "cd"))
+			ft_cd(splitted[1]);
+		else if (!ft_strcmp(splitted[0], "pwd"))
+			ft_pwd();
+		else if (!ft_strcmp(splitted[0], "export"))
+			ft_export(env, splitted);
+		else if (!ft_strcmp(splitted[0], "unset"))
+			ft_unset(env, splitted);
+		else if (!ft_strcmp(splitted[0], "exit"))
+		{
+			free_tab_str(*env);
+			free_tab_str(splitted);
+			free_tab_str(tokens);
+			exit(0);
+		}
+		else
+			run_exec(splitted[0], splitted, *env, pipes, i);
 		free_tab_str(splitted);
-		exit(0);
+		i++;
 	}
-	else
-		run_exec(splitted[0], splitted, *env);
-	free_tab_str(splitted);
+	ft_printf("prout\n");
+	free(pipes);
+	free_tab_str(tokens);
 	return (TRUE);
 }
 

@@ -82,3 +82,13 @@ void	reset_redirections(t_redirection **redirections)
 	}
 	free(redirections);
 }
+
+int		tab_str_len(char **tab)
+{
+	int		i;
+
+	i = 0;
+	while (tab[i])
+		i++;
+	return (i);
+}

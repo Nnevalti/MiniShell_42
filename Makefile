@@ -16,10 +16,12 @@ SRC_DIR		=	./srcs
 SRC			=	main.c \
 				builtins.c \
 				env.c \
+				pipe.c \
 				utils.c \
+				free.c \
+				ft_split_command_line.c \
 				get_next_line/get_next_line.c \
-				get_next_line/get_next_line_utils.c \
-				ft_split_command_line.c
+				get_next_line/get_next_line_utils.c
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
