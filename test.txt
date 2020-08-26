@@ -1,3 +1,0 @@
-test
-ntm 
-[1m[32mvdescham@minishell:[94m/Users/vdescham/Documents/MiniShell_42 [39m$> [0mfdf | (null)

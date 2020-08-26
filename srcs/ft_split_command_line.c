@@ -30,7 +30,8 @@ static int	ft_nb_tokens(char const *str, char c)
 			}
 			i++;
 		}
-		i++;
+		if (str[i])
+			i++;
 		nb_tokens++;
 	}
 	return (nb_tokens);
@@ -56,7 +57,8 @@ int			fill_result(const char *str, char c)
 			while (str[i] && str[i] != '\'')
 				i++;
 		}
-		i++;
+		if (str[i])
+			i++;
 	}
 	return (i);
 }

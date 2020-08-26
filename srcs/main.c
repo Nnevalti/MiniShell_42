@@ -89,29 +89,14 @@ void	run_exec(char *command, char **argv, char **env)
 int		run_command(char *command, char ***env)
 {
 	char	**splitted;
-	char	**tokens;
 	int		fd;
 	char	*str;
 	int		saved_stdout;
 
-	if (ft_indexof(command, '>') >= 0)
-	{
-		tokens = ft_split(command, '>');
-		// printf("%s | %s\n", tokens[0], tokens[1]);
-		str = ft_strtrim(tokens[1], " ");
-		fd = open(str, O_WRONLY | O_CREAT, 0777);
-		free(str);
-		saved_stdout = dup(1);
-		dup2(fd, 1);
-		close(fd);
-		splitted = ft_split(tokens[0], ' ');
-	}
-	else
-		splitted = ft_split(command, ' ');
+	splitted = ft_split(command, ' ');
 
-	// parser la commande par rapport au espacccce et vérifier avec strcmp ?
 	if (!ft_strcmp(splitted[0], "echo"))
-		ft_echo(*env, splitted);
+		ft_echo(*env, command);
 	else if (!ft_strcmp(splitted[0], "env"))
 		ft_env(*env);
 	else if (!ft_strcmp(splitted[0], "cd"))
@@ -131,37 +116,31 @@ int		run_command(char *command, char ***env)
 	else
 		run_exec(splitted[0], splitted, *env);
 	free_tab_str(splitted);
-	if (ft_indexof(command, '>') >= 0)
-	{
-		ft_printf("test\n");
-		dup2(saved_stdout, 1);
-		close(saved_stdout);
-	}
-	return (1);
+	return (TRUE);
 }
 
 int		main(int argc, char **argv, char **env)
 {
 	int		i;
-	int		j;
 	char	**my_env;
 	char	*command;
-	char 	**splitted;
 	char	**commands;
 
 	my_env = get_env(env);
 	signal(SIGINT, &handle_exit);
 	while (42)
 	{
-		j = 0;
 		prompt(env);
 		get_next_line(0, &command);
-		commands = ft_split_command_line(command);
-		while (commands[j])
+		// ft_printf("%s\n", command);
+		commands = ft_split_command_line(command); // split by ;
+		// ft_printf("prout %s\n", commands[0]);
+		i = 0;
+		while (commands[i]) // execute every command
 		{
-			// ft_printf("commands[%d] = %s\n", j, commands[j]);
-			run_command(commands[j], &my_env);
-			j++;
+			// ft_printf("commands[%d] = %s\n", i, commands[i]);
+			run_command(commands[i], &my_env);
+			i++;
 		}
 		free(command);
 		free_tab_str(commands);

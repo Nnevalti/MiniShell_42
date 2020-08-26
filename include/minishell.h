@@ -33,9 +33,24 @@ int				EXIT_CODE;
 
 typedef int		t_bool;
 
+typedef enum	e_redir_type
+{
+	NONE,
+	REDIRECT_STDOUT,
+	APPEND_STDOUT,
+	REDIRECT_STDIN
+}				t_redir_type;
+
+typedef	struct	s_redirection
+{
+	char			*str;
+	t_redir_type	type;
+	int				saved_stdout;
+}				t_redirection;
+
 int				ft_env(char **env);
 void			ft_pwd(void);
-void			ft_echo(char **env, char **splitted);
+void			ft_echo(char **env, char *command);
 void			ft_cd(char *path);
 void			ft_export(char ***env, char **splitted);
 void			ft_unset(char ***env, char **splitted);
@@ -48,5 +63,9 @@ char 			*get_env_var(char **env, char *name);
 t_bool			set_env_var(char **env, char *name, char *variable);
 
 void			free_tab_str(char **tab);
+
+t_redirection	**set_redirections(char *command);
+void			reset_redirections(t_redirection **redirections);
+
 
 #endif
