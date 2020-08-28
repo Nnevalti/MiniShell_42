@@ -34,17 +34,15 @@ int 	*init_pipes(char **tokens)
 
 void	pipe_io(int *pipes, int index)
 {
-
-
 	if (index > 0)
 	{
 		ft_printf("dup2(pipes[%d], 0);\n", 2 * (index - 1));
 		dup2(pipes[2 * (index - 1)], 0);
 	}
-	if (pipes[index + 1])
+	if (pipes[2 * index + 1])
 	{
-		ft_printf("dup2(pipes[%d], 1);\n", 1 + 2 * index);
-		dup2(pipes[1 + 2 * index], 1);
+		ft_printf("dup2(pipes[%d], 1);\n", 2 * index + 1);
+		dup2(pipes[2 * index + 1], 1);
 
 	}
 	close_pipes(pipes);

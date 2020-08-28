@@ -79,14 +79,16 @@ void	run_exec(char *command, char **argv, char **env, int *pipes, int index)
 			{
 				if (fork() == 0)
 				{
+					ft_printf("Index: %d\n", index);
 					pipe_io(pipes, index);
 					execve(str, argv, env);
 				}
 				else
 				{
-					signal(SIGINT, SIG_IGN);
 					// close_pipes(pipes);
+					signal(SIGINT, SIG_IGN);
 					wait(&status);
+					ft_printf("Index %d finished\n", index);
 					EXIT_CODE = WEXITSTATUS(status);
 					// ft_printf("status : %d, %d\n", status, WEXITSTATUS(status));
 					// printf("PARENT: %d\n", EXIT_CODE);
@@ -120,7 +122,7 @@ int		run_command(char *command, char ***env)
 		// close(pipes[1]);
 		// close(pipes[2]);
 		// close(pipes[3]);
-		// printf("%d: %s\n", i, tokens[i]);
+		printf("%d: %s\n", i, tokens[i]);
 		splitted = ft_split(tokens[i], ' ');
 
 		if (!ft_strcmp(splitted[0], "echo"))
