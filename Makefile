@@ -55,8 +55,8 @@ $(PRINTF)	:
 				@make -C $(PRINT_DIR)
 
 $(NAME)		:
-				$(CC) $(CFLAGS) $(FT_INC) $(PRINT_INC) $(GNL_INC) $(INC) \
-				$(addprefix $(SRC_DIR)/, $(SRC)) $(FT_LNK) $(PRINT_LNK) -o $(NAME)
+				$(CC) $(CFLAGS) $(GNL_INC) $(INC) \
+				$(addprefix $(SRC_DIR)/, $(SRC)) srcs/ft_printf/libftprintf.a srcs/libft/libft.a -o $(NAME)
 
 clean		:
 				@rm -rf $(OBJS)
