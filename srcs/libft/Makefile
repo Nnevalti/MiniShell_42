@@ -54,19 +54,21 @@ SRCS = 	ft_memset.c \
 		ft_lstiter_bonus.c \
 		ft_lstmap_bonus.c
 
+DIR  =	srcs/
 OBJS = 	$(SRCS:.c=.o)
 
 all: 	$(NAME)
 
 $(NAME):
-		gcc -Wall -Wextra -Werror -c $(SRCS)
+		gcc -Wall -Wextra -Werror -c $(addprefix $(DIR), $(SRCS))
 		ar rc $(NAME) $(OBJS)
+		@mv $(OBJS) objs
 
 clean:
-		/bin/rm -rf $(OBJS)
+		@/bin/rm -rf $(addprefix objs/, $(OBJS))
 
 fclean: clean
-		/bin/rm -f $(NAME)
+		@/bin/rm -f $(NAME)
 
 
 re: 	fclean all
