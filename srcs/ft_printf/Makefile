@@ -23,9 +23,11 @@ all			:	$(NAME)
 $(NAME)		:
 				gcc	-Wall -Werror -Wextra -c $(addprefix $(DIR), $(SRCS))
 				ar rc $(NAME) $(OBJS)
+				@mkdir -p objs
+				@mv $(OBJS) objs
 
 clean		:
-				rm -rf $(OBJS)
+				rm -rf $(addprefix objs/, $(OBJS))
 
 fclean		:	clean
 				rm -f $(NAME)
