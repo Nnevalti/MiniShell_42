@@ -18,7 +18,7 @@ int		ft_env(char **env)
 
 	i = 0;
 	while (env[i])
-		ft_printf("%s\n", env[i++]);
+		printf("%s\n", env[i++]);
 	return (0);
 }
 
@@ -27,7 +27,7 @@ void	ft_pwd(void)
 	char	buffer[MAX_PATH_LENGTH];
 
 	getcwd(buffer, MAX_PATH_LENGTH);
-	ft_printf("%s\n", buffer);
+	printf("%s\n", buffer);
 }
 
 void	ft_cd(char *path)
@@ -56,25 +56,25 @@ void	ft_echo(char **env, char *command)
 				&& splitted[i][ft_strlen(splitted[i]) - 1] == '\''))
 		{
 			str = ft_substr(splitted[i], 1, ft_strlen(splitted[i]) - 2);
-			ft_printf("%s ", str);
+			printf("%s ", str);
 			free(str);
 		}
 		else if (splitted[i][0] == '$') {
 			if (splitted[i][1] == '?')
-				ft_printf("%d", EXIT_CODE);
+				printf("%d", EXIT_CODE);
 			else
 			{
 				env_var = get_env_var(env, splitted[i] + 1);
-				if (env) ft_printf("%s ", env_var);
+				if (env) printf("%s ", env_var);
 			}
 
 		}
 		else if (ft_strcmp(splitted[i], "-n"))
-			ft_printf("%s ", splitted[i]);
+			printf("%s ", splitted[i]);
 		i++;
 	}
 	if (ft_strcmp(splitted[1], "-n"))
-		ft_printf("\n");
+		printf("\n");
 	free_tab_str(splitted);
 	// reset_redirections(redirections);
 }
@@ -96,25 +96,25 @@ void	ft_echo(char **env, char *command)
 // 				&& splitted[i][ft_strlen(splitted[i]) - 1] == '\''))
 // 		{
 // 			str = ft_substr(splitted[i], 1, ft_strlen(splitted[i]) - 2);
-// 			ft_printf("%s ", str);
+// 			printf("%s ", str);
 // 			free(str);
 // 		}
 // 		else if (splitted[i][0] == '$') {
 // 			if (splitted[i][1] == '?')
-// 				ft_printf("%d", EXIT_CODE);
+// 				printf("%d", EXIT_CODE);
 // 			else
 // 			{
 // 				env_var = get_env_var(env, splitted[i] + 1);
-// 				if (env) ft_printf("%s ", env_var);
+// 				if (env) printf("%s ", env_var);
 // 			}
 //
 // 		}
 // 		else if (ft_strcmp(splitted[i], "-n"))
-// 			ft_printf("%s ", splitted[i]);
+// 			printf("%s ", splitted[i]);
 // 		i++;
 // 	}
 // 	if (ft_strcmp(splitted[1], "-n"))
-// 		ft_printf("\n");
+// 		printf("\n");
 // }
 
 void	ft_export(char ***env, char **splitted)

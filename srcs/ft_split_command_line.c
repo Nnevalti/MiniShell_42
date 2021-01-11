@@ -13,7 +13,7 @@ static int	ft_nb_tokens(char const *str, char c)
 		{
 			if (str[i] == c && str[i + 1] == c)
 			{
-				ft_printf("error parsing");
+				printf("error parsing");
 				return(-1);
 			}
 			if (str[i] == '"')

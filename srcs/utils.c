@@ -48,7 +48,7 @@ t_redirection	**set_redirections(char *command)
 		redirections[i] = malloc(sizeof(t_redirection));
 		if (i == 0) redirections[i]->saved_stdout = dup(1);
 		redirections[i]->str = ft_strtrim(tokens[i], " ");
-		ft_printf("redirections[%d] = %s\n", i, redirections[i]->str);
+		printf("redirections[%d] = %s\n", i, redirections[i]->str);
 		redirections[i]->type = (i == 0) ? NONE : REDIRECT_STDOUT;
 
 		if (redirections[i]->type == REDIRECT_STDOUT)

@@ -17,9 +17,13 @@ void	prompt(char **env)
 	char	buffer[MAX_PATH_LENGTH];
 
 	getcwd(buffer, MAX_PATH_LENGTH);
-	ft_printf("\e[1m\e[32m");
-	ft_printf("%s@minishell:", get_env_var(env, "USER"));
-	ft_printf("\e[94m%s \e[39m$> \e[0m", buffer);
+	write(1, "\e[1m\e[32m", 9);
+	write(1, get_env_var(env, "USER"), ft_strlen(get_env_var(env, "USER")));
+	write(1, "@minishell:", 11);
+	write(1, "\e[94m", 5);
+	write(1, buffer, ft_strlen(buffer));
+	write(1, "\e[39m$> \e[0m", 12);
+
 }
 
 void	handle_exit(int signo)
@@ -40,18 +44,18 @@ void	run_exec(char *command, char **argv, char **env, int *pipes, int index)
 	{
 		if (fork() == 0)
 		{
-			ft_printf("pipe(pipes + %d);\n", 2 * index);
+			printf("pipe(pipes + %d);\n", 2 * index);
 			// pipe(pipes + 2 * index);
 
 			if (index > 0)
 			{
-				ft_printf("dup2(pipes[%d], 0);\n", 2 * (index - 1));
+				printf("dup2(pipes[%d], 0);\n", 2 * (index - 1));
 				dup2(pipes[2 * (index - 1)], 0);
 			}
 
 			if (pipes[index + 1])
 			{
-				ft_printf("dup2(pipes[%d], 1);\n", 1 + 2 * index);
+				printf("dup2(pipes[%d], 1);\n", 1 + 2 * index);
 				dup2(pipes[1 + 2 * index], 1);
 
 			}
@@ -79,7 +83,7 @@ void	run_exec(char *command, char **argv, char **env, int *pipes, int index)
 			{
 				if (fork() == 0)
 				{
-					ft_printf("Index: %d\n", index);
+					printf("Index: %d\n", index);
 					pipe_io(pipes, index);
 					execve(str, argv, env);
 				}
@@ -88,9 +92,9 @@ void	run_exec(char *command, char **argv, char **env, int *pipes, int index)
 					// close_pipes(pipes);
 					signal(SIGINT, SIG_IGN);
 					wait(&status);
-					ft_printf("Index %d finished\n", index);
+					printf("Index %d finished\n", index);
 					EXIT_CODE = WEXITSTATUS(status);
-					// ft_printf("status : %d, %d\n", status, WEXITSTATUS(status));
+					// printf("status : %d, %d\n", status, WEXITSTATUS(status));
 					// printf("PARENT: %d\n", EXIT_CODE);
 					signal(SIGINT, &handle_exit);
 				}
@@ -101,7 +105,7 @@ void	run_exec(char *command, char **argv, char **env, int *pipes, int index)
 			free(str);
 			i++;
 		}
-		ft_printf("command not found: %s\n", command);
+		printf("command not found: %s\n", command);
 		EXIT_CODE = 127;
 	}
 }
@@ -149,7 +153,7 @@ int		run_command(char *command, char ***env)
 		free_tab_str(splitted);
 		i++;
 	}
-	ft_printf("This is just a check, gotta delete it later (main)!\n");
+	printf("This is just a check, gotta delete it later (main)!\n");
 	free(pipes);
 	free_tab_str(tokens);
 	return (TRUE);
@@ -168,13 +172,13 @@ int		main(int argc, char **argv, char **env)
 	{
 		prompt(env);
 		get_next_line(0, &command);
-		// ft_printf("%s\n", command);
+		// printf("%s\n", command);
 		commands = ft_split_command_line(command); // split by ;
-		// ft_printf("prout %s\n", commands[0]);
+		// printf("prout %s\n", commands[0]);
 		i = 0;
 		while (commands[i]) // execute every command
 		{
-			// ft_printf("commands[%d] = %s\n", i, commands[i]);
+			// printf("commands[%d] = %s\n", i, commands[i]);
 			run_command(commands[i], &my_env);
 			i++;
 		}

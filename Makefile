@@ -27,7 +27,7 @@ OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))
 FT_DIR		=	./libft
 FT_INC		=	-I $(FT_DIR)
 FT_LNK		=	-L $(FT_DIR) -lft
-LIBFT		=	$(addprefix $(FT_DIR), libft.a)
+LIBFT		=	$(addprefix $(FT_DIR)/, libft.a)
 
 # RULES
 all			:	$(LIBFT) $(NAME)
