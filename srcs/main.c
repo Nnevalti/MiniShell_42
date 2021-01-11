@@ -122,7 +122,7 @@ int		run_command(char *command, char ***env)
 		// close(pipes[1]);
 		// close(pipes[2]);
 		// close(pipes[3]);
-		printf("%d: %s\n", i, tokens[i]);
+		printf("check (delete in main) : %d: %s\n", i, tokens[i]);
 		splitted = ft_split(tokens[i], ' ');
 
 		if (!ft_strcmp(splitted[0], "echo"))
@@ -149,7 +149,7 @@ int		run_command(char *command, char ***env)
 		free_tab_str(splitted);
 		i++;
 	}
-	ft_printf("prout\n");
+	ft_printf("This is just a check, gotta delete it later (main)!\n");
 	free(pipes);
 	free_tab_str(tokens);
 	return (TRUE);
