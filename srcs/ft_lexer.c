@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+int		pass_quotes(const char *str, char c, int i)
+{
+	i++;
+	while (str[i] && (str[i] != c || str[i - 1] == '\\'))
+		i++;
+	return (i);
+}
+
 static int	ft_nb_tokens(char const *str, char c)
 {
 	int		nb_tokens;
@@ -13,15 +21,11 @@ static int	ft_nb_tokens(char const *str, char c)
 		{
 			if (str[i] == '"')
 			{
-				i++;
-				while (str[i] && (str[i] != '"' || str[i - 1] == '\\'))
-					i++;
+				i = pass_quotes(str, '"', i);
 			}
 			if (str[i] == '\'')
 			{
-				i++;
-				while (str[i] && (str[i] != '\'' || str[i - 1] == '\\'))
-					i++;
+				i = pass_quotes(str, '\'', i);
 			}
 			i++;
 		}
@@ -39,7 +43,7 @@ int			string_count(const char *str, char c)
 
 	i = 0;
 	length = 0;
-	while (str[i] && (str[i] != c || str[i - 1] == '\\'))
+	while (str[i] && (str[i] != c || (str[i - 1] == '\\' && str[i - 2] != '\\')))
 	{
 		i++;
 		length++;
@@ -79,7 +83,7 @@ char		**ft_lexer(char const *str)
 	int		length;
 
 	nb_tokens = ft_nb_tokens(str, ' ');
-	// printf("nb tokens : %d\n", nb_tokens);
+	printf("nb tokens : %d\n", nb_tokens);
 	if (!(result = (char **)malloc((nb_tokens + 1) * sizeof(char *))))
 		return (NULL);
 	i = 0;
@@ -91,6 +95,8 @@ char		**ft_lexer(char const *str)
 			j++;
 		result[i] = ft_substr(str, j, length);
 		j += length + 1;
+		if (str[j] == ' ')
+			j++;
 		i++;
 	}
 	result[nb_tokens] = NULL;
