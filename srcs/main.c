@@ -172,9 +172,12 @@ int		main(int argc, char **argv, char **env)
 	{
 		prompt(env);
 		get_next_line(0, &command);
-		// printf("%s\n", command);
+		printf("command: %s\n", command);
+// LEXER
 		commands = ft_split_command_line(command); // split by ;
-		// printf("prout %s\n", commands[0]);
+		printf("commands %s\n", commands[0]);
+// PARSER
+
 		i = 0;
 		while (commands[i]) // execute every command
 		{
@@ -184,5 +187,7 @@ int		main(int argc, char **argv, char **env)
 		}
 		free(command);
 		free_tab_str(commands);
+// FREE LEXER
+// FREE PARSER
 	}
 }
