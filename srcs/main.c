@@ -176,7 +176,7 @@ int		main(int argc, char **argv, char **env)
 // LEXER
 		commands = ft_lexer(command);
 		for (int j = 0; commands[j]; j++)
-			printf("commands %d %s\n", j, commands[0]);
+			printf("commands %d %s\n", j, commands[j]);
 // PARSER
 
 		// i = 0;
