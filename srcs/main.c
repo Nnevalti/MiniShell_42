@@ -174,19 +174,20 @@ int		main(int argc, char **argv, char **env)
 		get_next_line(0, &command);
 		printf("command: %s\n", command);
 // LEXER
-		commands = ft_split_command_line(command); // split by ;
-		printf("commands %s\n", commands[0]);
+		commands = ft_lexer(command);
+		for (int j = 0; commands[j]; j++)
+			printf("commands %d %s\n", j, commands[0]);
 // PARSER
 
-		i = 0;
-		while (commands[i]) // execute every command
-		{
-			// printf("commands[%d] = %s\n", i, commands[i]);
-			run_command(commands[i], &my_env);
-			i++;
-		}
-		free(command);
-		free_tab_str(commands);
+		// i = 0;
+		// while (commands[i]) // execute every command
+		// {
+		// 	// printf("commands[%d] = %s\n", i, commands[i]);
+		// 	run_command(commands[i], &my_env);
+		// 	i++;
+		// }
+		// free(command);
+		// free_tab_str(commands);
 // FREE LEXER
 // FREE PARSER
 	}

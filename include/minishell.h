@@ -55,7 +55,7 @@ void			ft_export(char ***env, char **splitted);
 void			ft_unset(char ***env, char **splitted);
 
 int				ft_indexof(char *str, char c);
-char			**ft_split_command_line(char const *commands);
+char			**ft_lexer(char const *commands);
 
 char			**get_env(char **env);
 char 			*get_env_var(char **env, char *name);
