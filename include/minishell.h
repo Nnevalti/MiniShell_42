@@ -12,26 +12,17 @@
 
 typedef enum	e_type
 {
-	COMMAND,
-	AND,
+	DEFAULT,
 	SEMI_COLON,
+	AND,
+	PIPE,
 	REDIR_STDOUT,
 	APP_STDOUT,
 	REDIR_STDIN,
-	PIPE,
+	COMMAND,
 	FILE_R,
 	ENV_VAR
 }				t_type;
-
-// ls -l | sort && ls
-// ["ls", "-l", "|", "sort", "&&", "ls"]
-// echo "salut" && cat test.txt && ls
-// echo "salut" > test.txt && ls -l | sort
-
-
-// t_struct  *first;
-
-// Récurcivite : D'abord allez a gauche si possible, puis a droite
 
 typedef struct		s_struct
 {
@@ -42,38 +33,6 @@ typedef struct		s_struct
 	void		*left; //		|			ls -l
 	void		*right; //		ls			sort
 }					t_struct;
-
-// ls -l | sort && ls
-
-// type = &&
-// value = NULL option = NULL
-// RIght = |
-// left = ls
-
-// type = |
-// value = NULL
-// option = NULL
-// left = pointeur vers la structure de ls
-// right = pointeur vers la structure de sort
-
-// type = command
-// vlaue = ls
-// char **option = -l
-//left = NULL
-//right = NULL
-
-// > >> && | command enum ?
-// value = ls/sort/echo
-// option = -l ou -n
-// void *left indique quel commande / fichier va reidreger son output
-// void *right indique quel commande recoit en paramètres
-
-// nom de la commande (ls cat etc...)
-// option de la commande (-l etc...)
-
-// | = ouvrir un pipe entre ls et sort
-// left ls -l = programme cherche ls dans les dossiers path
-// right sort executer sort dans les dossiers paths
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -135,6 +94,7 @@ void			reset_redirections(t_redirection **redirections);
 int 			*init_pipes(char **tokens);
 void			pipe_io(int *pipes, int index);
 void			close_pipes(int *pipes);
-
+void			ast_exec(void);
+int				ft_parser(char **commands);
 
 #endif

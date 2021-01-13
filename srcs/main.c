@@ -172,11 +172,13 @@ int		main(int argc, char **argv, char **env)
 	{
 		prompt(env);
 		get_next_line(0, &command);
-		printf("command: %s\n", command);
+		// printf("command: %s\n", command);
 // LEXER
 		commands = ft_lexer(command);
-		for (int j = 0; commands[j]; j++)
-			printf("commands %d %s\n", j, commands[j]);
+		ast_exec();
+		ft_parser(commands);
+		// for (int j = 0; commands[j]; j++)
+		// 	printf("commands %d %s\n", j, commands[j]);
 // PARSER
 
 		// i = 0;

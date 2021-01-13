@@ -17,7 +17,9 @@ SRC			=	main.c \
 				pipe.c \
 				utils.c \
 				free.c \
-				ft_lexer.c
+				ft_lexer.c \
+				ast_exec.c \
+				ft_parser.c \
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
