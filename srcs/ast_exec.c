@@ -51,7 +51,7 @@ void	analyze_struct(t_struct *ptr)
 {
 	if (ptr->type == PIPE)
 	{
-		printf("ouverture du chemin de disucssion entre left et rigth\n");
+		printf("ouverture du chemin de disucssion entre left et right\n");
 	}
 	if (ptr->type == COMMAND)
 	{
@@ -76,7 +76,7 @@ void	analyze_end_struct(t_struct *ptr)
 {
 	if (ptr->type == PIPE)
 	{
-		printf("fermeture du chemin de disucssion entre left et rigth\n");
+		printf("fermeture du chemin de disucssion entre left et right\n");
 	}
 	if (ptr->type == REDIR_STDOUT)
 	{
@@ -108,6 +108,7 @@ void recursive(t_struct *ptr)
 		}
 	}
 	printf("\n");
+	// start
 	analyze_struct(ptr);
 	if (ptr->left != NULL)
 	{
@@ -124,12 +125,12 @@ void recursive(t_struct *ptr)
 	return ;
 }
 
-void ast_exec(void)
+void ast_exec(void) // devra prendre un t_struct *entry en paramètre
 {
 	t_struct *entry;
 
 	printf("\nIN AST_EXEC\n");
 	entry = test();
-	recursive(entry);
+	recursive(entry); // deviendra ast_exec par la suite
 	printf("WE LEAVE AST_EXEC\n\n");
 }

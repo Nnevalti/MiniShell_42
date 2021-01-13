@@ -164,7 +164,7 @@ int		main(int argc, char **argv, char **env)
 	int		i;
 	char	**my_env;
 	char	*command;
-	char	**commands;
+	char	**lexer;
 
 	my_env = get_env(env);
 	signal(SIGINT, &handle_exit);
@@ -172,25 +172,28 @@ int		main(int argc, char **argv, char **env)
 	{
 		prompt(env);
 		get_next_line(0, &command);
-		// printf("command: %s\n", command);
+		// printf("user command: %s\n", command);
+
 // LEXER
-		commands = ft_lexer(command);
-		ast_exec();
-		ft_parser(commands);
+		lexer = ft_lexer(command);
 		// for (int j = 0; commands[j]; j++)
 		// 	printf("commands %d %s\n", j, commands[j]);
-// PARSER
 
+// PARSER
+		ft_parser(commands);
 		// i = 0;
 		// while (commands[i]) // execute every command
 		// {
-		// 	// printf("commands[%d] = %s\n", i, commands[i]);
+		// 	printf("commands[%d] = %s\n", i, commands[i]);
 		// 	run_command(commands[i], &my_env);
 		// 	i++;
 		// }
-		// free(command);
-		// free_tab_str(commands);
+// EXECUTOR
+		ast_exec(); // call with t_struct *entry
+
 // FREE LEXER
+	// free(command);
+	// free_tab_str(commands);
 // FREE PARSER
 	}
 }
