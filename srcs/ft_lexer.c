@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int		pass_quotes(const char *str, char c, int i)
 {
