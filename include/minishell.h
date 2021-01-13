@@ -9,18 +9,20 @@
 /*   Updated: 2020/04/15 16:56:30 by tfevrier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 typedef enum	e_type
 {
+	COMMAND,
 	AND,
 	SEMI_COLON,
+	REDIR_STDOUT,
+	APP_STDOUT,
+	REDIR_STDIN,
 	PIPE,
-	REDIRECT_STDOUT,
-	APPEND_STDOUT,
-	REDIRECT_STDIN,
-	COMMAND,
-	FILE
+	FILE_R,
+	ENV_VAR
 }				t_type;
-//
+
 // ls -l | sort && ls
 // ["ls", "-l", "|", "sort", "&&", "ls"]
 // echo "salut" && cat test.txt && ls

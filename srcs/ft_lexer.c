@@ -83,7 +83,6 @@ char		**ft_lexer(char const *str)
 	int		length;
 
 	nb_tokens = ft_nb_tokens(str, ' ');
-	printf("nb tokens : %d\n", nb_tokens);
 	if (!(result = (char **)malloc((nb_tokens + 1) * sizeof(char *))))
 		return (NULL);
 	i = 0;
