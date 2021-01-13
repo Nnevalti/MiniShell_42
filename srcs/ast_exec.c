@@ -128,7 +128,8 @@ void ast_exec(void)
 {
 	t_struct *entry;
 
-	printf("in ast_exec\n");
+	printf("\nIN AST_EXEC\n");
 	entry = test();
 	recursive(entry);
+	printf("WE LEAVE AST_EXEC\n\n");
 }
