@@ -14,6 +14,42 @@ t_struct	*ft_init_struct(void)
 	return(test);
 }
 
+char		**ft_substr_array_left(char **array, int index)
+{
+	int		i;
+	char	**new_array;
+
+	new_array = malloc(sizeof(char *) * index);
+	i = 0;
+	while (i > index)
+	{
+			new_array[i] = ft_strdup(array[i]);
+			i++;
+	}
+	new_array[i] = "\0";
+	return (new_array);
+}
+
+char		**ft_substr_array_right(char **array, int index)
+{
+	int		len;
+	int		i;
+	char	**new_array;
+
+	len = 0;
+	while (array[index + len])
+		len++;
+	new_array = malloc(sizeof(char *) * len + 1);
+	i = 0;
+	while (array[index + i])
+	{
+			new_array[i] = ft_strdup(array[index + i]);
+			i++;
+	}
+	new_array[i] = "\0";
+	return (new_array);
+}
+
 int	ft_priority(char **commands, t_type *priotype)
 {
 	int i;
