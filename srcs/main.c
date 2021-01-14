@@ -11,9 +11,8 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-pid_t			g_signal_receiver_pid = 0;
 
-void	prompt(void)
+void	prompt(char *my_prompt)
 {
 	char	buffer[MAX_PATH_LENGTH];
 
@@ -159,29 +158,11 @@ int		run_command(char *command, char ***env)
 	return (TRUE);
 }
 
-void	signal_handler(int code)
-{
-	if (g_signal_receiver_pid == 0)
-	{
-		if (code == SIGQUIT)
-			ft_putstr_fd("\b\b  \b\b", 2);
-		else
-		{
-			EXIT_CODE = 130;
-			ft_putstr_fd("\n", 2);
-			prompt();
-		}
-	}
-	else
-		kill(g_signal_receiver_pid, code);
-	g_signal_receiver_pid = 0;
-}
-
-void	init_signal_handler(void)
-{
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
-}
+// void	init_signal_handler(void)
+// {
+// 	signal(SIGINT, signal_handler);
+// 	signal(SIGQUIT, signal_handler);
+// }
 
 int		main(int argc, char **argv, char **env)
 {
@@ -194,19 +175,26 @@ int		main(int argc, char **argv, char **env)
 	my_env = get_env(env);
 	while (42)
 	{
-		my_prompt = get_env_var(my_env, "USER");
 		// init_signal_handler();
-		prompt();
+		// prompt(get_env_var(my_env, "USER"));
+		ft_putstr_fd("My fabulous prompt > ", 2);
 		get_next_line(0, &command);
-		// printf("user command: %s\n", command);
+		// printf("USER COMMAND: %s\n", command);
 
 // LEXER
-		lexer = ft_lexer(command);
+		// lexer = ft_lexer(command);
+		free(command);
 		// for (int j = 0; lexer[j]; j++)
-		// 	printf("lexer %d %s\n", j, lexer[j]);
+		// 	printf("LEXER %d %s\n", j, lexer[j]);
 
 // PARSER
-		parser = ft_parser(lexer);
+		// parser = ft_parser(lexer);
+		if (!ft_strcmp(command, "exit"))
+		{
+			free_tab_str(my_env);
+			// free_tab_str(lexer);
+			exit (0);
+		}
 		free_tab_str(lexer);
 		// i = 0;
 		// while (lexer[i]) // execute every command
@@ -216,10 +204,10 @@ int		main(int argc, char **argv, char **env)
 		// 	i++;
 		// }
 // EXECUTOR
-		// ast_exec(); // call with t_struct *entry
-		free_ast(parser);
+		// ast_exec(parser); // call with t_struct *entry
+		// free_ast(parser);
 // FREE LEXER
-	// free(command);
 // FREE PARSER
+
 	}
 }

@@ -30,11 +30,11 @@ void	free_ast(t_struct *entry)
 			if (entry->right)
 				free_ast(entry->right);
 	}
-	if (entry->type == COMAND)
+	if (entry->type == COMMAND)
 	{
 		free(entry->command);
 		free_tab_str(entry->options);
 	}
 	free(entry);
-
+	return ;
 }

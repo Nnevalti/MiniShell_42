@@ -30,10 +30,6 @@
 
 int				EXIT_CODE;
 
-char			*my_prompt;
-
-
-
 typedef int		t_bool;
 
 
@@ -98,7 +94,8 @@ void			reset_redirections(t_redirection **redirections);
 int 			*init_pipes(char **tokens);
 void			pipe_io(int *pipes, int index);
 void			close_pipes(int *pipes);
-void			ast_exec(void);
+void			ast_exec(t_struct *entry);
+void			free_ast(t_struct *entry);
 t_struct		*ft_parser(char **commands);
 
 #endif

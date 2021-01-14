@@ -1,19 +1,5 @@
 #include "../include/minishell.h"
 
-t_struct	*init_struct(void)
-{
-	t_struct	*test;
-
-	test = malloc(sizeof(t_struct));
-	test->type = DEFAULT;
-	test->command = NULL;
-	test->options = NULL;
-	test->left = NULL;
-	test->right = NULL;
-
-	return(test);
-}
-
 t_struct	*set_struct(t_struct *test, t_type type, char *command, char **options, void *left, void *right)
 {
 	test->type = type;
@@ -23,28 +9,6 @@ t_struct	*set_struct(t_struct *test, t_type type, char *command, char **options,
 	test->right = right;
 
 	return(test);
-}
-
-t_struct 	*test(void) {
-	t_struct	*entry = init_struct();
-	t_struct	*pipe = init_struct();
-	t_struct	*command_ls2 = init_struct();
-	t_struct	*command_ls = init_struct();
-	t_struct	*command_sort = init_struct();
-
-	char **options_ls;
-	options_ls = malloc(sizeof(char **) * 2);
-	*options_ls = malloc(sizeof(char*) * 3);
-	options_ls[0] = "-l";
-	options_ls[1] = "\0";
-
-	entry = set_struct(entry, AND, NULL, NULL, pipe, command_ls2);
-	pipe = set_struct(pipe, PIPE, NULL, NULL, command_ls, command_sort);
-	command_ls2 = set_struct(command_ls2, COMMAND, "ls", NULL, NULL, NULL);
-	command_ls = set_struct(command_ls, COMMAND, "ls", options_ls, NULL, NULL);
-	command_sort = set_struct(command_sort, COMMAND, "sort", NULL, NULL, NULL);
-
-	return (entry);
 }
 
 void	analyze_struct(t_struct *ptr)
@@ -125,12 +89,9 @@ void recursive(t_struct *ptr)
 	return ;
 }
 
-void ast_exec(void) // devra prendre un t_struct *entry en paramètre
+void ast_exec(t_struct *entry) // devra prendre un t_struct *entry en paramètre
 {
-	t_struct *entry;
-
 	printf("\nIN AST_EXEC\n");
-	entry = test();
 	recursive(entry); // deviendra ast_exec par la suite
 	printf("WE LEAVE AST_EXEC\n\n");
 }

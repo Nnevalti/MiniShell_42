@@ -27,6 +27,7 @@ int		ft_return(char **str, char **line)
 		tmp = NULL;
 	free(*str);
 	*str = tmp;
+	free(tmp);
 	if (!*str)
 		return (0);
 	return (1);
