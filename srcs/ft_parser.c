@@ -1,21 +1,19 @@
 #include "../include/minishell.h"
 
-int ft_length(char *str)
+t_struct	*ft_init_struct(void)
 {
-	int i;
-	i = 0;
-	while(str[i])
-		i++;
-	return(i);
+	t_struct	*test;
+
+	test = malloc(sizeof(t_struct));
+	test->type = DEFAULT;
+	test->command = NULL;
+	test->options = NULL;
+	test->left = NULL;
+	test->right = NULL;
+
+	return(test);
 }
 
-t_struct *ft_init_struct(char *command)
-{
-	t_struct	*structure;
-
-	structure = malloc(sizeof(t_struct));
-	return(structure);
-}
 int	ft_priority(char **commands, t_type *priotype)
 {
 	int i;
@@ -45,33 +43,34 @@ int	ft_priority(char **commands, t_type *priotype)
 	}
 	return(priority);
 }
-void	*ft_parser(char **commands)
+t_struct	*ft_parser(char **commands)
 {
 	int i;
 	int priority;
 	t_type priotype;
 	t_struct	*test;
 	char **left;
+	char **right;
 
 	priotype = DEFAULT;
+	test = ft_init_struct();
 	priority = ft_priority(commands,&priotype);
 	printf("priority %d\n",priority);
 	printf("priotype : %d\n", priotype);
 	printf("priocommand: %s\n",commands[priority]);
 
-	test = ft_init_struct(commands[priority]);
 	test->type = priotype;
 	if (priotype == COMMAND)
+	{
 		test->command  = commands[priority];
-	else
-		test->command = NULL;
+	}
 
 	if (!(left = (char **)malloc((priority + 1) * sizeof(char *))))
 		return(NULL);
 	i = 0;
 	while(i < priority)
 	{
-		left[i] = ft_substr(commands[i],0, ft_length(commands[i]));
+		left[i] = ft_substr(commands[i],0, ft_strlen(commands[i]));
 		i++;
 	}
 	i = 0;
@@ -85,8 +84,6 @@ void	*ft_parser(char **commands)
 	{
 		test->left = ft_parser(left);
 		// printf("pointeur %d\n", test->left->type);
-
 	}
-
 	return(test);
 }

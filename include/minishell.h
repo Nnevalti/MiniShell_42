@@ -100,6 +100,6 @@ int 			*init_pipes(char **tokens);
 void			pipe_io(int *pipes, int index);
 void			close_pipes(int *pipes);
 void			ast_exec(void);
-void			*ft_parser(char **commands);
+t_struct		*ft_parser(char **commands);
 
 #endif
