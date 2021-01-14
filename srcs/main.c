@@ -217,7 +217,7 @@ int		main(int argc, char **argv, char **env)
 		// }
 // EXECUTOR
 		// ast_exec(); // call with t_struct *entry
-
+		free_ast(parser);
 // FREE LEXER
 	// free(command);
 // FREE PARSER
