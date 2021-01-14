@@ -56,7 +56,6 @@ typedef struct		s_struct
 	t_type		type; //		&&			|
 	char 		*command; //	NULL		NULL
 	char		**options; //	NULL		NULL
-	void		(*pf)(int, int); // pipe_create / redirection etc...
 	void		*left; //		|			ls -l
 	void		*right; //		ls			sort
 }					t_struct;
