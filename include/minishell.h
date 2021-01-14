@@ -31,7 +31,7 @@
 int				EXIT_CODE;
 
 char			*my_prompt;
-pid_t			g_signal_receiver_pid = 0;
+
 
 
 typedef int		t_bool;
@@ -100,6 +100,6 @@ int 			*init_pipes(char **tokens);
 void			pipe_io(int *pipes, int index);
 void			close_pipes(int *pipes);
 void			ast_exec(void);
-int				ft_parser(char **commands);
+void			*ft_parser(char **commands);
 
 #endif

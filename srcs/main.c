@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+pid_t			g_signal_receiver_pid = 0;
 
 void	prompt(void)
 {
