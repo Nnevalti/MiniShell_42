@@ -189,6 +189,7 @@ int		main(int argc, char **argv, char **env)
 	char	**my_env;
 	char	*command;
 	char	**lexer;
+	t_struct *parser;
 
 	my_env = get_env(env);
 	while (42)
@@ -205,8 +206,9 @@ int		main(int argc, char **argv, char **env)
 		// 	printf("lexer %d %s\n", j, lexer[j]);
 
 // PARSER
-		ft_parser(lexer);
-		i = 0;
+		parser = ft_parser(lexer);
+		free_tab_str(lexer);
+		// i = 0;
 		// while (lexer[i]) // execute every command
 		// {
 		// 	printf("lexer[%d] = %s\n", i, lexer[i]);

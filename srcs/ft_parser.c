@@ -4,7 +4,8 @@ t_struct	*ft_init_struct(void)
 {
 	t_struct	*test;
 
-	test = malloc(sizeof(t_struct));
+	if (!(test = malloc(sizeof(t_struct *))))
+		return(NULL);
 	test->type = DEFAULT;
 	test->command = NULL;
 	test->options = NULL;
@@ -19,14 +20,15 @@ char		**ft_substr_array_left(char **array, int index)
 	int		i;
 	char	**new_array;
 
-	new_array = malloc(sizeof(char *) * index);
+	if (!(new_array = malloc(sizeof(char *) * index)))
+		return(NULL);
 	i = 0;
-	while (i > index)
+	while (i < index)
 	{
 			new_array[i] = ft_strdup(array[i]);
 			i++;
 	}
-	new_array[i] = "\0";
+	new_array[i] = NULL;
 	return (new_array);
 }
 
@@ -39,14 +41,15 @@ char		**ft_substr_array_right(char **array, int index)
 	len = 0;
 	while (array[index + len])
 		len++;
-	new_array = malloc(sizeof(char *) * len + 1);
+	if (!(new_array = malloc(sizeof(char *) * len)))
+		return(NULL);
 	i = 0;
-	while (array[index + i])
+	while (array[index + 1 + i])
 	{
-			new_array[i] = ft_strdup(array[index + i]);
+			new_array[i] = ft_strdup(array[index + 1 + i]);
 			i++;
 	}
-	new_array[i] = "\0";
+	new_array[i] = NULL;
 	return (new_array);
 }
 
@@ -54,26 +57,31 @@ int	ft_priority(char **commands, t_type *priotype)
 {
 	int i;
 	int priority;
-	printf("ft priotype : %d\n", *priotype);
+
 	i = 0;
 	priority = 0;
 	while(commands[i])
 	{
-		printf("commande %d: %s\n",i,commands[i]);
+		printf("token %d: %s\n",i,commands[i]);
 		if (!ft_strcmp(commands[i], ";"))
 		{
 			priority = i;
 			*priotype = SEMI_COLON;
 		}
-		if (!ft_strcmp(commands[i], "&&") && *priotype >= AND)
+		else if (!ft_strcmp(commands[i], "&&") && *priotype >= AND)
 		{
 			priority = i;
 			*priotype = AND;
 		}
-		if (!ft_strcmp(commands[i], "|") && *priotype >= PIPE)
+		else if (!ft_strcmp(commands[i], "|") && *priotype >= PIPE)
 		{
 			priority = i;
 			*priotype = PIPE;
+		}
+		else if ( *priotype >= COMMAND)
+		{
+			priority = 0;
+			*priotype = COMMAND;
 		}
 		i++;
 	}
@@ -91,35 +99,53 @@ t_struct	*ft_parser(char **commands)
 	priotype = DEFAULT;
 	test = ft_init_struct();
 	priority = ft_priority(commands,&priotype);
-	printf("priority %d\n",priority);
-	printf("priotype : %d\n", priotype);
-	printf("priocommand: %s\n",commands[priority]);
+	printf("priority %d | priotype: %d | priocommand: %s\n",priority,
+		priotype,commands[priority]);
+
 
 	test->type = priotype;
 	if (priotype == COMMAND)
 	{
-		test->command  = commands[priority];
+		test->command  = ft_strdup(commands[priority]);
+		test->options = ft_substr_array_right(commands, priority);
+	}
+	else
+	{
+		left = ft_substr_array_left(commands, priority);
+		right = ft_substr_array_right(commands, priority);
 	}
 
-	if (!(left = (char **)malloc((priority + 1) * sizeof(char *))))
-		return(NULL);
 	i = 0;
-	while(i < priority)
-	{
-		left[i] = ft_substr(commands[i],0, ft_strlen(commands[i]));
-		i++;
-	}
-	i = 0;
-	while(left[i] && priority)
+	while(priority && left[i])
 	{
 		printf("leeft %d: %s\n",i,left[i]);
 		i++;
 	}
-	// printf("wut priority %d\n",priority);
+	i = 0;
+	while(priority && right[i])
+	{
+		printf("riight %d: %s\n",i,right[i]);
+		i++;
+	}
+
 	if (priority != 0)
 	{
 		test->left = ft_parser(left);
 		// printf("pointeur %d\n", test->left->type);
+	}
+	if (!(test->type == COMMAND))
+		test->right = ft_parser(right);
+
+	while(test->type == COMMAND && test->options[i])
+	{
+		printf("opt %d: %s\n",i,test->options[i]);
+		i++;
+	}
+
+	if (!(test->type == COMMAND))
+	{
+		free_tab_str(left);
+		free_tab_str(right);
 	}
 	return(test);
 }
