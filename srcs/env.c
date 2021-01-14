@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// Create an array for env var
 char	**get_env(char **env)
 {
 	int		nb_vars;
@@ -33,6 +34,7 @@ char	**get_env(char **env)
 	return (my_env);
 }
 
+// Get an env var using it's name
 char 	*get_env_var(char **env, char *name)
 {
 	int		i;
@@ -49,6 +51,7 @@ char 	*get_env_var(char **env, char *name)
 	return (NULL);
 }
 
+// Create a new env var in the array (called in export)
 t_bool	set_env_var(char **env, char *name, char *variable)
 {
 	int		i;

@@ -12,18 +12,17 @@
 
 #include "../include/minishell.h"
 
-void	prompt(char **env)
+void	prompt(void)
 {
 	char	buffer[MAX_PATH_LENGTH];
 
 	getcwd(buffer, MAX_PATH_LENGTH);
-	write(1, "\e[1m\e[32m", 9);
-	write(1, get_env_var(env, "USER"), ft_strlen(get_env_var(env, "USER")));
-	write(1, "@minishell:", 11);
-	write(1, "\e[94m", 5);
-	write(1, buffer, ft_strlen(buffer));
-	write(1, "\e[39m$> \e[0m", 12);
-
+	ft_putstr_fd("\e[1m\e[32m", 2);
+	ft_putstr_fd(my_prompt, 2);
+	ft_putstr_fd("@minishell:", 2);
+	ft_putstr_fd("\e[94m", 2);
+	ft_putstr_fd(buffer, 2);
+	ft_putstr_fd( "\e[39m$> \e[0m", 2);
 }
 
 void	handle_exit(int signo)
@@ -159,6 +158,30 @@ int		run_command(char *command, char ***env)
 	return (TRUE);
 }
 
+void	signal_handler(int code)
+{
+	if (g_signal_receiver_pid == 0)
+	{
+		if (code == SIGQUIT)
+			ft_putstr_fd("\b\b  \b\b", 2);
+		else
+		{
+			EXIT_CODE = 130;
+			ft_putstr_fd("\n", 2);
+			prompt();
+		}
+	}
+	else
+		kill(g_signal_receiver_pid, code);
+	g_signal_receiver_pid = 0;
+}
+
+void	init_signal_handler(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
+}
+
 int		main(int argc, char **argv, char **env)
 {
 	int		i;
@@ -167,33 +190,33 @@ int		main(int argc, char **argv, char **env)
 	char	**lexer;
 
 	my_env = get_env(env);
-	signal(SIGINT, &handle_exit);
 	while (42)
 	{
-		prompt(env);
+		my_prompt = get_env_var(my_env, "USER");
+		// init_signal_handler();
+		prompt();
 		get_next_line(0, &command);
 		// printf("user command: %s\n", command);
 
 // LEXER
 		lexer = ft_lexer(command);
-		// for (int j = 0; commands[j]; j++)
-		// 	printf("commands %d %s\n", j, commands[j]);
+		// for (int j = 0; lexer[j]; j++)
+		// 	printf("lexer %d %s\n", j, lexer[j]);
 
 // PARSER
-		ft_parser(commands);
-		// i = 0;
-		// while (commands[i]) // execute every command
+		ft_parser(lexer);
+		i = 0;
+		// while (lexer[i]) // execute every command
 		// {
-		// 	printf("commands[%d] = %s\n", i, commands[i]);
-		// 	run_command(commands[i], &my_env);
+		// 	printf("lexer[%d] = %s\n", i, lexer[i]);
+		// 	run_command(lexer[i], &my_env);
 		// 	i++;
 		// }
 // EXECUTOR
-		ast_exec(); // call with t_struct *entry
+		// ast_exec(); // call with t_struct *entry
 
 // FREE LEXER
 	// free(command);
-	// free_tab_str(commands);
 // FREE PARSER
 	}
 }

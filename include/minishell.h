@@ -10,30 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-typedef enum	e_type
-{
-	DEFAULT,
-	SEMI_COLON,
-	AND,
-	PIPE,
-	REDIR_STDOUT,
-	APP_STDOUT,
-	REDIR_STDIN,
-	COMMAND,
-	FILE_R,
-	ENV_VAR
-}				t_type;
-
-typedef struct		s_struct
-{
-	t_type		type; //		&&			|
-	char 		*command; //	NULL		NULL
-	char		**options; //	NULL		NULL
-	void		(*pf)(int, int); // pipe_create / redirection etc...
-	void		*left; //		|			ls -l
-	void		*right; //		ls			sort
-}					t_struct;
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -54,7 +30,36 @@ typedef struct		s_struct
 
 int				EXIT_CODE;
 
+char			*my_prompt;
+pid_t			g_signal_receiver_pid = 0;
+
+
 typedef int		t_bool;
+
+
+typedef enum	e_type
+{
+	SEMI_COLON,
+	AND,
+	PIPE,
+	REDIR_STDOUT,
+	APP_STDOUT,
+	REDIR_STDIN,
+	COMMAND,
+	FILE_R,
+	ENV_VAR,
+	DEFAULT
+}				t_type;
+
+typedef struct		s_struct
+{
+	t_type		type; //		&&			|
+	char 		*command; //	NULL		NULL
+	char		**options; //	NULL		NULL
+	void		(*pf)(int, int); // pipe_create / redirection etc...
+	void		*left; //		|			ls -l
+	void		*right; //		ls			sort
+}					t_struct;
 
 typedef enum	e_redir_type
 {
