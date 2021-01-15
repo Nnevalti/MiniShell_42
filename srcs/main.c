@@ -178,14 +178,14 @@ int		main(int argc, char **argv, char **env)
 		// init_signal_handler();
 		prompt(get_env_var(my_env, "USER"));
 		get_next_line(0, &command);
-		// printf("USER COMMAND: %s\n", command);
+		printf("USER COMMAND: %s\n", command);
 
 // LEXER
-		// tokens = ft_lexer(command);
-		// printf("\nLEXER :\n");
-		// for (int j = 0; tokens[j]; j++)
-		// 	printf("TOKEN %d %s\n", j, tokens[j]);
-		// 	printf("\n");
+		tokens = ft_lexer(command);
+		printf("\nLEXER :\n");
+		for (int j = 0; tokens[j]; j++)
+			printf("TOKEN %d %s\n", j, tokens[j]);
+		printf("\n");
 
 // PARSER
 		// parser = ft_parser(tokens);
@@ -193,12 +193,12 @@ int		main(int argc, char **argv, char **env)
 		{
 			free(command);
 			free_tab_str(my_env);
-			// free_tab_str(tokens);
+			free_tab_str(tokens);
 			exit (0);
 		}
 		free(command);
-
-		// free_tab_str(tokens);
+		free_tab_str(tokens);
+		
 		// i = 0;
 		// while (tokens[i]) // execute every command
 		// {
