@@ -169,38 +169,40 @@ int		main(int argc, char **argv, char **env)
 	int		i;
 	char	**my_env;
 	char	*command;
-	char	**lexer;
+	char	**tokens;
 	t_struct *parser;
 
 	my_env = get_env(env);
 	while (42)
 	{
 		// init_signal_handler();
-		// prompt(get_env_var(my_env, "USER"));
-		ft_putstr_fd("My fabulous prompt > ", 2);
+		prompt(get_env_var(my_env, "USER"));
 		get_next_line(0, &command);
 		// printf("USER COMMAND: %s\n", command);
 
 // LEXER
-		// lexer = ft_lexer(command);
-		free(command);
-		// for (int j = 0; lexer[j]; j++)
-		// 	printf("LEXER %d %s\n", j, lexer[j]);
+		// tokens = ft_lexer(command);
+		// printf("\nLEXER :\n");
+		// for (int j = 0; tokens[j]; j++)
+		// 	printf("TOKEN %d %s\n", j, tokens[j]);
+		// 	printf("\n");
 
 // PARSER
-		// parser = ft_parser(lexer);
+		// parser = ft_parser(tokens);
 		if (!ft_strcmp(command, "exit"))
 		{
+			free(command);
 			free_tab_str(my_env);
-			// free_tab_str(lexer);
+			// free_tab_str(tokens);
 			exit (0);
 		}
-		free_tab_str(lexer);
+		free(command);
+
+		// free_tab_str(tokens);
 		// i = 0;
-		// while (lexer[i]) // execute every command
+		// while (tokens[i]) // execute every command
 		// {
-		// 	printf("lexer[%d] = %s\n", i, lexer[i]);
-		// 	run_command(lexer[i], &my_env);
+		// 	run_command(tokens[i], &my_env);
 		// 	i++;
 		// }
 // EXECUTOR

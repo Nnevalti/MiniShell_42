@@ -27,9 +27,9 @@ int		ft_return(char **str, char **line)
 		tmp = NULL;
 	free(*str);
 	*str = tmp;
-	free(tmp);
 	if (!*str)
 		return (0);
+	free(tmp);
 	return (1);
 }
 
@@ -44,7 +44,6 @@ int		readline(int fd, char **str, char **buff)
 		if (!*str || !**str)
 		{
 			tmp = ft_strdup(*buff);
-			free(*str);
 			*str = tmp;
 		}
 		else
