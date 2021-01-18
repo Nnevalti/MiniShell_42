@@ -2,18 +2,19 @@
 
 t_tree	*ft_init_struct(void)
 {
-	t_tree	*test;
+	t_tree	*tree;
 
-	if (!(test = (t_tree *)malloc(sizeof(t_tree))))
+	if (!(tree = (t_tree *)malloc(sizeof(t_tree))))
 		return(NULL);
-	test->type = DEFAULT;
-	test->command = NULL;
-	test->options = NULL;
-	test->file = NULL;
-	test->left = NULL;
-	test->right = NULL;
+	tree->type = DEFAULT;
+	tree->command = NULL;
+	tree->options = NULL;
+	tree->redir_type = NONE;
+	tree->file = NULL;
+	tree->left = NULL;
+	tree->right = NULL;
 
-	return(test);
+	return(tree);
 }
 
 char		**ft_substr_array_left(char **array, int index)
@@ -54,132 +55,138 @@ char		**ft_substr_array_right(char **array, int index)
 	return (new_array);
 }
 
-int	ft_priority(char **commands, t_type *priotype)
+int	ft_priority(char **tokens, t_tree *tree)
 {
 	int i;
 	int priority;
 
 	i = 0;
 	priority = 0;
-	while(commands[i])
+	while(tokens[i])
 	{
-		printf("token %d: %s\n",i,commands[i]);
-		if (!ft_strcmp(commands[i], ";"))
+		if (!ft_strcmp(tokens[i], ";"))
 		{
 			priority = i;
-			*priotype = SEMI_COLON;
+			tree->type = SEMI_COLON;
 		}
-		// else if (!ft_strcmp(commands[i], "&&") && *priotype >= AND)
-		// {
-		// 	priority = i;
-		// 	*priotype = AND;
-		// }
-		else if (!ft_strcmp(commands[i], "|") && *priotype >= PIPE && (i <= priority
-	|| *priotype == COMMAND))
+		else if (!ft_strcmp(tokens[i], "|") && tree->type >= PIPE)
 		{
 			priority = i;
-			*priotype = PIPE;
+			tree->type = PIPE;
 		}
-		else if (!ft_strcmp(commands[i], ">") && *priotype >= PIPE && (i <= priority
-	|| *priotype == COMMAND))
+		else if (!ft_strcmp(tokens[i], ">") && tree->type >= REDIR)
 		{
 			priority = i;
-			*priotype = REDIR_STDOUT;
+			tree->type = REDIR;
+			tree->redir_type = REDIRECT_STDOUT;
+
 		}
-		else if (!ft_strcmp(commands[i], ">>") && *priotype >= PIPE && (i <= priority
-	|| *priotype == COMMAND))
+		else if (!ft_strcmp(tokens[i], ">>") && tree->type >= REDIR)
 		{
 			priority = i;
-			*priotype = APP_STDOUT;
+			tree->type = REDIR;
+			tree->redir_type = APPEND_STDOUT;
+
 		}
-		else if (!ft_strcmp(commands[i], "<") && *priotype >= PIPE && (i <= priority
-	|| *priotype == COMMAND))
+		else if (!ft_strcmp(tokens[i], "<") && tree->type >= REDIR)
 		{
 			priority = i;
-			*priotype = REDIR_STDIN;
+			tree->type = REDIR;
+			tree->redir_type = REDIRECT_STDIN;
+
 		}
-		else if ( *priotype >= COMMAND)
+		else if ( tree->type >= COMMAND)
 		{
 			priority = 0;
-			*priotype = COMMAND;
+			tree->type = COMMAND;
 		}
 		i++;
 	}
 	return(priority);
 }
-t_tree	*ft_parser(char **commands)
+
+t_tree		*ft_parser(char **tokens)
 {
-	int i;
-	int priority;
-	t_type priotype;
-	t_tree	*test;
-	char **left;
-	char **right;
+	int		i;
+	int		priority;
+	t_tree	*tree;
+	char	**left;
+	char	**right;
 
-	priotype = DEFAULT;
-	test = ft_init_struct();
-	priority = ft_priority(commands,&priotype);
-	printf("priority %d | priotype: %d | priocommand: %s\n",priority,
-		priotype,commands[priority]);
+	tree = ft_init_struct();
+	priority = ft_priority(tokens, tree); // rename priority : define type ?
 
-	test->type = priotype;
-	if (priotype == COMMAND)
+	printf("Priority case: %d | Value: %s | Type: %d \n",priority,
+		tokens[priority], tree->type);
+
+	if(tree->type == SEMI_COLON || tree->type == PIPE)
 	{
-		test->command  = ft_strdup(commands[priority]);
-		if (commands[priority + 1])
-			test->options = ft_substr_array_right(commands, priority);
+		left = ft_substr_array_left(tokens, priority);
+		right = ft_substr_array_right(tokens, priority);
 	}
-	else if (priotype == REDIR_STDOUT || priotype == APP_STDOUT
-		|| priotype == REDIR_STDIN)
+	else if (tree->type == REDIR)
 	{
-		printf("REDIR\n");
-		left = ft_substr_array_left(commands, priority);
-		test->file = ft_strdup(commands[priority + 1]);
-		if (commands[priority + 2])
-			right = ft_substr_array_right(commands, priority + 1);
-		else
+		if (tree->redir_type == REDIRECT_STDOUT
+			|| tree->redir_type == APPEND_STDOUT)
+		{
+			left = ft_substr_array_left(tokens, priority);
 			right = NULL;
+			tree->file = ft_strdup(tokens[priority + 1]);
+		}
+		else if (tree->redir_type == REDIRECT_STDIN)
+		{
+			right = ft_substr_array_right(tokens, priority);
+			left = NULL;
+			tree->file = ft_strdup(tokens[priority + 1]);
+		}
 	}
-	else
+	else if (tree->type == COMMAND)
 	{
-		printf("tamereelse\n");
-		if (priority)
-			left = ft_substr_array_left(commands, priority);
-		right = ft_substr_array_right(commands, priority);
+		left = NULL;
+		right = NULL;
+		tree->command  = ft_strdup(tokens[priority]);
+		if (tokens[priority + 1] != NULL)
+			tree->options = ft_substr_array_right(tokens, priority);
 	}
-	i = 0;
-	// while(priority && left[i])
-	// {
-	// 	printf("leeft %d: %s\n",i,left[i]);
-	// 	i++;
-	// }
-	// i = 0;
-	// while(right[i])
-	// {
-	// 	printf("riight %d: %s\n",i,right[i]);
-	// 	i++;
-	// }
+	if (left != NULL)
+	{
+		i = 0;
+		while(priority && left[i])
+		{
+			printf("Left %d: %s\n",i,left[i]);
+			i++;
+		}
+		if (right != NULL)
+		{
+			i = 0;
+			while(right[i])
+			{
+				printf("Right %d: %s\n",i,right[i]);
+				i++;
+			}
+		}
+	}
 
-	if (!(test->type == COMMAND))
+	if (tree->type == COMMAND && tree->options)
 	{
-		if (priority)
-			test->left = ft_parser(left);
-		// printf("pointeur %d\n", test->left->type);
-		if (right)
-			test->right = ft_parser(right);
+		i = 0;
+		printf("I'm here ! %s \n", tree->command);
+		while(tree->options[i])
+		{
+			printf("opt %d: %s\n",i,tree->options[i]);
+			i++;
+		}
 	}
 
-	while(test->type == COMMAND && test->options[i])
+	if (left != NULL)
 	{
-		printf("opt %d: %s\n",i,test->options[i]);
-		i++;
-	}
-
-	if (!(test->type == COMMAND))
-	{
+		tree->left = ft_parser(left);
 		free_tab_str(left);
-		if (!(test->type >= REDIR_STDOUT))
+		if (right != NULL)
+		{
+			tree->right = ft_parser(right);
 			free_tab_str(right);
+		}
 	}
-	return(test);
+	return(tree);
 }

@@ -36,32 +36,30 @@ typedef int		t_bool;
 typedef enum	e_type
 {
 	SEMI_COLON,
-	// AND,
 	PIPE,
-	REDIR_STDOUT,
-	APP_STDOUT,
-	REDIR_STDIN,
+	REDIR,
 	COMMAND,
 	DEFAULT
 }				t_type;
-
-typedef struct		s_tree
-{
-	t_type		type; //		&&			|
-	char 		*command; //	NULL		NULL
-	char		**options; //	NULL		NULL
-	char		*file;
-	void		*left; //		|			ls -l
-	void		*right; //		ls			sort
-}					t_tree;
 
 typedef enum	e_redir_type
 {
 	NONE,
 	REDIRECT_STDOUT,
 	APPEND_STDOUT,
-	REDIRECT_STDIN,
+	REDIRECT_STDIN
 }				t_redir_type;
+
+typedef struct		s_tree
+{
+	t_type			type; //		&&			|
+	char 			*command; //	NULL		NULL
+	char			**options; //	NULL		NULL
+	t_redir_type	redir_type;
+	char			*file;
+	void			*left; //		|			ls -l
+	void			*right; //		ls			sort
+}					t_tree;
 
 typedef	struct	s_redirection
 {

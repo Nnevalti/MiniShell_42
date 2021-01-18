@@ -33,8 +33,11 @@ void	free_ast(t_tree *entry)
 	if (entry->type == COMMAND)
 	{
 		free(entry->command);
-		free_tab_str(entry->options);
+		if (entry->options != NULL)
+			free_tab_str(entry->options);
 	}
+	else if (entry->type == REDIR)
+		free(entry->file);
 	free(entry);
 	return ;
 }

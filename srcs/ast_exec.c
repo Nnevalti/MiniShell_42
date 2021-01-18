@@ -21,17 +21,14 @@ void	analyze_struct(t_tree *ptr)
 	{
 		printf("execve de la commande\n");
 	}
-	if (ptr->type == REDIR_STDOUT)
+	if (ptr->type == REDIR)
 	{
-		printf("REDIR_STDOUT: %s\n", ptr->file);
-	}
-	if (ptr->type == APP_STDOUT)
-	{
-		printf("APP_STDOUT: %s\n", ptr->file);
-	}
-	if (ptr->type == REDIR_STDIN)
-	{
-		printf("REDIR_STDIN: %s\n", ptr->file);
+		if (ptr->redir_type == REDIRECT_STDOUT)
+			printf("REDIR_STDOUT: %s\n", ptr->file);
+		else if (ptr->redir_type == APPEND_STDOUT)
+			printf("APP_STDOUT: %s\n", ptr->file);
+		else if (ptr->redir_type == REDIRECT_STDIN)
+			printf("REDIR_STDIN: %s\n", ptr->file);
 	}
 	return ;
 }
@@ -42,17 +39,14 @@ void	analyze_end_struct(t_tree *ptr)
 	{
 		printf("fermeture du chemin de disucssion entre left et right\n");
 	}
-	if (ptr->type == REDIR_STDOUT)
+	if (ptr->type == REDIR)
 	{
-		printf("REDIR_STDOUT close\n");
-	}
-	if (ptr->type == APP_STDOUT)
-	{
-		printf("APP_STDOUT close\n");
-	}
-	if (ptr->type == REDIR_STDIN)
-	{
-		printf("REDIR_STDIN close\n");
+		if (ptr->redir_type == REDIRECT_STDOUT)
+			printf("REDIR_STDOUT close\n");
+		else if (ptr->redir_type == APPEND_STDOUT)
+			printf("APP_STDOUT close\n");
+		else if (ptr->redir_type == REDIRECT_STDIN)
+			printf("REDIR_STDIN close\n");
 	}
 	return ;
 }

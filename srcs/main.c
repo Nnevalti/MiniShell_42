@@ -170,7 +170,7 @@ int		main(int argc, char **argv, char **env)
 	char	**my_env;
 	char	*command;
 	char	**tokens;
-	t_tree *parser;
+	t_tree	*parser;
 
 	my_env = get_env(env);
 	while (42)
@@ -179,37 +179,34 @@ int		main(int argc, char **argv, char **env)
 		prompt(get_env_var(my_env, "USER"));
 		get_next_line(0, &command);
 		printf("USER COMMAND: %s\n", command);
-
-// LEXER
+		// LEXER
 		tokens = ft_lexer(command);
 		printf("\nLEXER :\n");
 		for (int j = 0; tokens[j]; j++)
 			printf("TOKEN %d %s\n", j, tokens[j]);
 		printf("\n");
 
-// PARSER
+		// FREE COMMAND
+		// free(command);
+
+		// PARSER
 		parser = ft_parser(tokens);
+
+		// FREE LEXER
+		free_tab_str(tokens);
+
+		// EXECUTOR
+		ast_exec(parser);
+
+		// FREE PARSER
+		free_ast(parser);
+
 		if (!ft_strcmp(command, "exit"))
 		{
 			free(command);
 			free_tab_str(my_env);
-			free_tab_str(tokens);
 			exit (0);
 		}
 		free(command);
-		free_tab_str(tokens);
-
-		// i = 0;
-		// while (tokens[i]) // execute every command
-		// {
-		// 	run_command(tokens[i], &my_env);
-		// 	i++;
-		// }
-// EXECUTOR
-		ast_exec(parser); // call with t_tree *entry
-		free_ast(parser);
-// FREE LEXER
-// FREE PARSER
-
 	}
 }
