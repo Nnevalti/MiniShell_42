@@ -22,7 +22,7 @@ void	free_tab_str(char **tab)
 	free(tab);
 }
 
-void	free_ast(t_struct *entry)
+void	free_ast(t_tree *entry)
 {
 	if (entry->left)
 	{

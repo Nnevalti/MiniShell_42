@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-t_struct	*set_struct(t_struct *test, t_type type, char *command, char **options, void *left, void *right)
+t_tree	*set_struct(t_tree *test, t_type type, char *command, char **options, void *left, void *right)
 {
 	test->type = type;
 	test->command = command;
@@ -11,7 +11,7 @@ t_struct	*set_struct(t_struct *test, t_type type, char *command, char **options,
 	return(test);
 }
 
-void	analyze_struct(t_struct *ptr)
+void	analyze_struct(t_tree *ptr)
 {
 	if (ptr->type == PIPE)
 	{
@@ -23,20 +23,20 @@ void	analyze_struct(t_struct *ptr)
 	}
 	if (ptr->type == REDIR_STDOUT)
 	{
-		printf("REDIR_STDOUT\n");
+		printf("REDIR_STDOUT: %s\n", ptr->file);
 	}
 	if (ptr->type == APP_STDOUT)
 	{
-		printf("APP_STDOUT\n");
+		printf("APP_STDOUT: %s\n", ptr->file);
 	}
 	if (ptr->type == REDIR_STDIN)
 	{
-		printf("REDIR_STDIN\n");
+		printf("REDIR_STDIN: %s\n", ptr->file);
 	}
 	return ;
 }
 
-void	analyze_end_struct(t_struct *ptr)
+void	analyze_end_struct(t_tree *ptr)
 {
 	if (ptr->type == PIPE)
 	{
@@ -57,7 +57,7 @@ void	analyze_end_struct(t_struct *ptr)
 	return ;
 }
 
-void recursive(t_struct *ptr)
+void recursive(t_tree *ptr)
 {
 	int		i;
 
@@ -89,7 +89,7 @@ void recursive(t_struct *ptr)
 	return ;
 }
 
-void ast_exec(t_struct *entry) // devra prendre un t_struct *entry en paramètre
+void ast_exec(t_tree *entry) // devra prendre un t_tree *entry en paramètre
 {
 	printf("\nIN AST_EXEC\n");
 	recursive(entry); // deviendra ast_exec par la suite

@@ -170,7 +170,7 @@ int		main(int argc, char **argv, char **env)
 	char	**my_env;
 	char	*command;
 	char	**tokens;
-	t_struct *parser;
+	t_tree *parser;
 
 	my_env = get_env(env);
 	while (42)
@@ -188,7 +188,7 @@ int		main(int argc, char **argv, char **env)
 		printf("\n");
 
 // PARSER
-		// parser = ft_parser(tokens);
+		parser = ft_parser(tokens);
 		if (!ft_strcmp(command, "exit"))
 		{
 			free(command);
@@ -198,7 +198,7 @@ int		main(int argc, char **argv, char **env)
 		}
 		free(command);
 		free_tab_str(tokens);
-		
+
 		// i = 0;
 		// while (tokens[i]) // execute every command
 		// {
@@ -206,8 +206,8 @@ int		main(int argc, char **argv, char **env)
 		// 	i++;
 		// }
 // EXECUTOR
-		// ast_exec(parser); // call with t_struct *entry
-		// free_ast(parser);
+		ast_exec(parser); // call with t_tree *entry
+		free_ast(parser);
 // FREE LEXER
 // FREE PARSER
 

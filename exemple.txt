@@ -39,3 +39,12 @@
 // | = ouvrir un pipe entre ls et sort
 // left ls -l = programme cherche ls dans les dossiers path
 // right sort executer sort dans les dossiers paths
+
+
+// PRIORITES
+ls -l > hello.txt | sort
+ls -l | sort > hello.txt
+
+priorite 1 : && ;
+priorite 2 : | > >> <
+priorite 3 : commandes

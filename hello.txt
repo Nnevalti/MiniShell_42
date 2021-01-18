@@ -1,0 +1,19 @@
+total 1272
+-rw-rw-r-- 1 hvernhes hvernhes    1108 janv. 18 16:37 exemple.txt
+-rw-rw-r-- 1 hvernhes hvernhes 1275460 janv. 18 14:34 fr.subject.pdf
+-rw-rw-r-- 1 hvernhes hvernhes       0 janv. 18 17:32 hello.txt
+drwxrwxr-x 2 hvernhes hvernhes    4096 janv. 18 14:34 include
+drwxrwxr-x 5 hvernhes hvernhes    4096 janv. 18 17:03 libft
+-rw-rw-r-- 1 hvernhes hvernhes     899 janv. 18 14:34 Makefile
+-rw-rw-r-- 1 hvernhes hvernhes     244 janv. 18 14:34 README.md
+drwxrwxr-x 2 hvernhes hvernhes    4096 janv. 18 14:34 srcs
+total 36
+drwxrwxr-x  3 hvernhes hvernhes 4096 déc.  16 15:46 42Libasm
+drwxrwxr-x  3 hvernhes hvernhes 4096 déc.  23 10:32 libasm
+drwxrwxr-x  2 hvernhes hvernhes 4096 déc.  16 15:52 libasm2
+drwxrwxr-x  3 hvernhes hvernhes 4096 déc.  18 11:25 libasmcorrupt
+drwxrwxr-x  3 hvernhes hvernhes 4096 déc.  16 15:44 libasmtom
+drwxrwxr-x  3 hvernhes hvernhes 4096 déc.  16 17:49 libasmval
+drwxrwxr-x  6 hvernhes hvernhes 4096 janv. 18 17:03 MiniShell_42
+drwxrwxr-x  6 hvernhes hvernhes 4096 janv. 11 15:47 minishell_v0
+drwxrwsr-x 24 hvernhes hvernhes 4096 déc.  15 16:30 nasm-2.15.05

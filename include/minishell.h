@@ -36,25 +36,24 @@ typedef int		t_bool;
 typedef enum	e_type
 {
 	SEMI_COLON,
-	AND,
+	// AND,
 	PIPE,
 	REDIR_STDOUT,
 	APP_STDOUT,
 	REDIR_STDIN,
 	COMMAND,
-	FILE_R,
-	ENV_VAR,
 	DEFAULT
 }				t_type;
 
-typedef struct		s_struct
+typedef struct		s_tree
 {
 	t_type		type; //		&&			|
 	char 		*command; //	NULL		NULL
 	char		**options; //	NULL		NULL
+	char		*file;
 	void		*left; //		|			ls -l
 	void		*right; //		ls			sort
-}					t_struct;
+}					t_tree;
 
 typedef enum	e_redir_type
 {
@@ -94,8 +93,8 @@ void			reset_redirections(t_redirection **redirections);
 int 			*init_pipes(char **tokens);
 void			pipe_io(int *pipes, int index);
 void			close_pipes(int *pipes);
-void			ast_exec(t_struct *entry);
-void			free_ast(t_struct *entry);
-t_struct		*ft_parser(char **commands);
+void			ast_exec(t_tree *entry);
+void			free_ast(t_tree *entry);
+t_tree		*ft_parser(char **commands);
 
 #endif

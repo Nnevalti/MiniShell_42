@@ -1,14 +1,15 @@
 #include "../include/minishell.h"
 
-t_struct	*ft_init_struct(void)
+t_tree	*ft_init_struct(void)
 {
-	t_struct	*test;
+	t_tree	*test;
 
-	if (!(test = malloc(sizeof(t_struct *))))
+	if (!(test = (t_tree *)malloc(sizeof(t_tree))))
 		return(NULL);
 	test->type = DEFAULT;
 	test->command = NULL;
 	test->options = NULL;
+	test->file = NULL;
 	test->left = NULL;
 	test->right = NULL;
 
@@ -25,8 +26,8 @@ char		**ft_substr_array_left(char **array, int index)
 	i = 0;
 	while (i < index)
 	{
-			new_array[i] = ft_strdup(array[i]);
-			i++;
+		new_array[i] = ft_strdup(array[i]);
+		i++;
 	}
 	new_array[i] = NULL;
 	return (new_array);
@@ -46,8 +47,8 @@ char		**ft_substr_array_right(char **array, int index)
 	i = 0;
 	while (array[index + 1 + i])
 	{
-			new_array[i] = ft_strdup(array[index + 1 + i]);
-			i++;
+		new_array[i] = ft_strdup(array[index + 1 + i]);
+		i++;
 	}
 	new_array[i] = NULL;
 	return (new_array);
@@ -68,15 +69,34 @@ int	ft_priority(char **commands, t_type *priotype)
 			priority = i;
 			*priotype = SEMI_COLON;
 		}
-		else if (!ft_strcmp(commands[i], "&&") && *priotype >= AND)
-		{
-			priority = i;
-			*priotype = AND;
-		}
-		else if (!ft_strcmp(commands[i], "|") && *priotype >= PIPE)
+		// else if (!ft_strcmp(commands[i], "&&") && *priotype >= AND)
+		// {
+		// 	priority = i;
+		// 	*priotype = AND;
+		// }
+		else if (!ft_strcmp(commands[i], "|") && *priotype >= PIPE && (i <= priority
+	|| *priotype == COMMAND))
 		{
 			priority = i;
 			*priotype = PIPE;
+		}
+		else if (!ft_strcmp(commands[i], ">") && *priotype >= PIPE && (i <= priority
+	|| *priotype == COMMAND))
+		{
+			priority = i;
+			*priotype = REDIR_STDOUT;
+		}
+		else if (!ft_strcmp(commands[i], ">>") && *priotype >= PIPE && (i <= priority
+	|| *priotype == COMMAND))
+		{
+			priority = i;
+			*priotype = APP_STDOUT;
+		}
+		else if (!ft_strcmp(commands[i], "<") && *priotype >= PIPE && (i <= priority
+	|| *priotype == COMMAND))
+		{
+			priority = i;
+			*priotype = REDIR_STDIN;
 		}
 		else if ( *priotype >= COMMAND)
 		{
@@ -87,12 +107,12 @@ int	ft_priority(char **commands, t_type *priotype)
 	}
 	return(priority);
 }
-t_struct	*ft_parser(char **commands)
+t_tree	*ft_parser(char **commands)
 {
 	int i;
 	int priority;
 	t_type priotype;
-	t_struct	*test;
+	t_tree	*test;
 	char **left;
 	char **right;
 
@@ -102,39 +122,52 @@ t_struct	*ft_parser(char **commands)
 	printf("priority %d | priotype: %d | priocommand: %s\n",priority,
 		priotype,commands[priority]);
 
-
 	test->type = priotype;
 	if (priotype == COMMAND)
 	{
 		test->command  = ft_strdup(commands[priority]);
-		test->options = ft_substr_array_right(commands, priority);
+		if (commands[priority + 1])
+			test->options = ft_substr_array_right(commands, priority);
+	}
+	else if (priotype == REDIR_STDOUT || priotype == APP_STDOUT
+		|| priotype == REDIR_STDIN)
+	{
+		printf("REDIR\n");
+		left = ft_substr_array_left(commands, priority);
+		test->file = ft_strdup(commands[priority + 1]);
+		if (commands[priority + 2])
+			right = ft_substr_array_right(commands, priority + 1);
+		else
+			right = NULL;
 	}
 	else
 	{
-		left = ft_substr_array_left(commands, priority);
+		printf("tamereelse\n");
+		if (priority)
+			left = ft_substr_array_left(commands, priority);
 		right = ft_substr_array_right(commands, priority);
 	}
-
 	i = 0;
-	while(priority && left[i])
-	{
-		printf("leeft %d: %s\n",i,left[i]);
-		i++;
-	}
-	i = 0;
-	while(priority && right[i])
-	{
-		printf("riight %d: %s\n",i,right[i]);
-		i++;
-	}
+	// while(priority && left[i])
+	// {
+	// 	printf("leeft %d: %s\n",i,left[i]);
+	// 	i++;
+	// }
+	// i = 0;
+	// while(right[i])
+	// {
+	// 	printf("riight %d: %s\n",i,right[i]);
+	// 	i++;
+	// }
 
-	if (priority != 0)
-	{
-		test->left = ft_parser(left);
-		// printf("pointeur %d\n", test->left->type);
-	}
 	if (!(test->type == COMMAND))
-		test->right = ft_parser(right);
+	{
+		if (priority)
+			test->left = ft_parser(left);
+		// printf("pointeur %d\n", test->left->type);
+		if (right)
+			test->right = ft_parser(right);
+	}
 
 	while(test->type == COMMAND && test->options[i])
 	{
@@ -145,7 +178,8 @@ t_struct	*ft_parser(char **commands)
 	if (!(test->type == COMMAND))
 	{
 		free_tab_str(left);
-		free_tab_str(right);
+		if (!(test->type >= REDIR_STDOUT))
+			free_tab_str(right);
 	}
 	return(test);
 }
