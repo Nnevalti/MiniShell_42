@@ -30,6 +30,7 @@ int					ft_isalpha(int c);
 int					ft_isascii(int c);
 int					ft_isdigit(int c);
 int					ft_isprint(char c);
+int					ft_isspace(char c);
 char				*ft_itoa(int nbr);
 void				*ft_memccpy(void *d, const void *s, int c, size_t n);
 char				*ft_memchr(const void *s, int c, size_t n);

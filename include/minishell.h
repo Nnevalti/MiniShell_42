@@ -76,7 +76,7 @@ void			ft_export(char ***env, char **splitted);
 void			ft_unset(char ***env, char **splitted);
 
 int				ft_indexof(char *str, char c);
-char			**ft_lexer(char const *commands);
+char			**ft_lexer(char const *commands, char **env);
 
 char			**get_env(char **env);
 char 			*get_env_var(char **env, char *name);
@@ -93,6 +93,6 @@ void			pipe_io(int *pipes, int index);
 void			close_pipes(int *pipes);
 void			ast_exec(t_tree *entry);
 void			free_ast(t_tree *entry);
-t_tree		*ft_parser(char **commands);
+t_tree			*ft_parser(char **commands);
 
 #endif
