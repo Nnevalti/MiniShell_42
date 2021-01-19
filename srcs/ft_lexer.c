@@ -42,24 +42,14 @@ static int	ft_nb_tokens(char const *str)
 	return (nb_tokens);
 }
 
-int			string_count(const char *str)
+int			string_count(const char *str, char c)
 {
 	int		i;
 	int		length;
 
 	i = 0;
 	length = 0;
-	if (str[i] == '\"')
-	{
-		while (str[i] && (str[i] != '\"' || (str[i - 1] == '\\' && str[i - 2] != '\\')))
-		{
-			i++;
-			length++;
-		}
-	}
-	else if (str[i] == '\'')
-
-	while (str[i] && str[i] != '\'')
+	while (str[i] && (str[i] != c || (str[i - 1] == '\\' && str[i - 2] != '\\')))
 	{
 		i++;
 		length++;
@@ -80,7 +70,7 @@ int			fill_result(const char *str, char c)
 	{
 		if (str[i] == '"' || str[i] == '\'')
 		{
-			length = string_count(&str[i + 1]);
+			length = string_count(&str[i + 1], str[i]);
 			i += length + 1;
 			return (length);
 		}
@@ -260,6 +250,7 @@ char		**ft_lexer(char const *str, char **env)
 			j++;
 		i++;
 	}
+	printf("new_str %s\n",new_str);
 	free(new_str);
 	result[nb_tokens] = NULL;
 	return (result);

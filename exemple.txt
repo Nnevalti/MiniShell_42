@@ -48,3 +48,6 @@ ls -l | sort > hello.txt
 priorite 1 : && ;
 priorite 2 : | > >> <
 priorite 3 : commandes
+
+
+cho "$TEST" $TEST$LESS $LOL ; echo "bonjour" | ls -l > hello.txt | sort
