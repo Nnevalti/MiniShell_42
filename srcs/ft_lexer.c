@@ -5,14 +5,6 @@ int		ft_isblank(char c)
 	return (c == ' ' || c == '\t');
 }
 
-int		pass_quotes(const char *str, int i)
-{
-	i++;
-	while (str[i] && (str[i] != '"' || str[i - 1] == '\\'))
-		i++;
-	return (i);
-}
-
 int		ft_search(char c, char *str)
 {
 	int i;
@@ -27,119 +19,201 @@ int		ft_search(char c, char *str)
 	return(0);
 }
 
-static int	ft_nb_tokens(char const *str)
+int		handle_quotes(char const *str, int i)
 {
-	int		nb_tokens;
-	int		i;
+	if (str[i] == '\"')
+	{
+		i++;
+		if (str[i] == '\0')
+		{
+			printf("quotes pb\n");
+			exit(0);
+		}
+		while (str[i] && str[i] != '\"')
+		{
+			if (str[i] == '\\' && (str[i + 1] == '\"' || str[i + 1] == '\\'))
+				i += 2;
+			else
+				i++;
+			if (str[i] == '\0')
+			{
+				printf("quotes pb\n");
+				exit(0);
+			}
+		}
+	}
+	else
+	{
+		i++;
+		if (str[i] == '\0')
+		{
+			printf("quotes pb\n");
+			exit(0);
+		}
+		while (str[i] && str[i] != '\'')
+		{
+			i++;
+			if (str[i] == '\0')
+			{
+				printf("quotes pb\n");
+				exit(0);
+			}
+		}
+	}
+	i++;
+	return (i);
+}
+
+int		quotes_length(char const *str, int i)
+{
+	int		length;
+
+	length = 0;
+	if (str[i] == '\"')
+	{
+		i++;
+		while (str[i] && str[i] != '\"')
+		{
+			if (str[i] == '\\' && (str[i + 1] == '\"' || str[i + 1] == '\\'))
+			{
+				length += 2;
+				i += 2;
+			}
+			else
+			{
+				length++;
+				i++;
+			}
+		}
+	}
+	else
+	{
+		i++;
+		while (str[i] && str[i] != '\'')
+		{
+			length++;
+			i++;
+		}
+	}
+	return (length);
+}
+
+int		count_tokens(char const *str)
+{
+	int	i;
+	int	nb_tokens;
 
 	i = 0;
 	nb_tokens = 0;
 	while (str[i])
 	{
-		while (str[i] && (ft_strncmp(&str[i], ">>", 2)
-		&& !(ft_search(str[i],";|<>")) && !(ft_isblank(str[i]))))
+		if (ft_isblank(str[i]))
 		{
-			if (str[i] == '"')
-			{
-				i = pass_quotes(str, i);
-			}
-			if (str[i] == '\'')
-			{
-				while (str[i] && str[i] != '\'')
-					i++;
-			}
-			i++;
+			while (str[i] && ft_isblank(str[i]))
+				i++;
 		}
-		if(ft_search(str[i],";|<>") || !(ft_strncmp(&str[i], ">>", 2)))
+		if (ft_search(str[i],";|<>"))
 		{
-			if(!(ft_strncmp(&str[i], ">>", 2)))
-				i+=2;
+			while (ft_search(str[i],";|<>"))
+				i++;
 			nb_tokens++;
 		}
-		if (str[i])
-			i++;
-		nb_tokens++;
+		if (str[i] == '\\')
+		{
+			i+= 2;
+			nb_tokens++;
+		}
+		else if (str[i] && !(ft_isblank(str[i])) && !(ft_search(str[i],";|<>\'\"")))
+		{
+			while (str[i] && (!(ft_isblank(str[i]))	&& !(ft_search(str[i],";|<>\'\""))))
+				i++;
+			nb_tokens++;
+		}
+		else if (ft_search(str[i],"\"\'"))
+		{
+			i = handle_quotes(str, i);
+			nb_tokens++;
+		}
+		else
+		{
+			while (str[i] && (ft_isblank(str[i])))
+				i++;
+		}
 	}
 	return (nb_tokens);
 }
 
-int			string_count(const char *str, char c)
+char		**fill_tokens(char const *str, int nb_tokens)
 {
 	int		i;
 	int		j;
 	int		length;
+	char	**tokens;
 
 	i = 0;
 	j = 0;
-	length = 0;
-	if (c == '"')
+	if (!(tokens = malloc(sizeof(char *) * nb_tokens + 1)))
+		return (NULL);
+	while (str[i])
 	{
-		while (str[i] && (str[i] != c || (str[i - 1] == '\\' && str[i - 2] != '\\')))
+		if (ft_isblank(str[i]))
 		{
-			i++;
-			length++;
+			while (str[i] && ft_isblank(str[i]))
+				i++;
 		}
-	}
-	else
-	{
-		while(str[i] && str[i] != c)
+		if (ft_search(str[i],";|<>"))
 		{
-			i++;
-			length++;
+			length = 0;
+			while (ft_search(str[i + length],";|<>"))
+				length++;
+			tokens[j] = ft_substr(str, i, length);
+			i += length;
+			j++;
 		}
-	}
-	return(length);
-}
-
-int			fill_result(const char *str)
-{
-	int		i;
-	int		length;
-	char	*result;
-
-	i = 0;
-	length = 0;
-	while (str[i] && (!(ft_search(str[i],";|<>"))
-	&& ft_strncmp(&str[i], ">>", 2) && !(ft_isblank(str[i]))))
-	{
-		if (str[i] == '"' || str[i] == '\'')
+		if (str[i] == '\\')
 		{
-			length = string_count(&str[i + 1], str[i]);
+			tokens[j] = ft_substr(str, i, 2);
+			i+= 2;
+			j++;
+		}
+		else if (str[i] && !(ft_isblank(str[i])) && !(ft_search(str[i],";|<>\'\"")))
+		{
+			length = 0;
+			while (str[i + length] && (!(ft_isblank(str[i + length])) && !(ft_search(str[i + length],";|<>\'\""))))
+				length++;
+			tokens[j] = ft_substr(str, i, length);
+			j++;
+			i += length;
+		}
+		else if (ft_search(str[i],"\"\'"))
+		{
+			length = quotes_length(str, i);
+			i++;
+			tokens[j] = ft_substr(str, i, length);
+			j++;
 			i += length + 1;
-			return (length);
 		}
-		length++;
-		i++;
+		else
+		{
+			while (str[i] && (ft_isblank(str[i])))
+				i++;
+		}
 	}
-	return (length);
+	tokens[j] = NULL;
+	return (tokens);
 }
 
 char		**ft_lexer(char const *str)
 {
-	int		nb_tokens;
-	int		i;
-	int		j;
-	char	**result;
-	int		length;
+	printf("IN LEXER : %s\n", str);
 
-	nb_tokens = ft_nb_tokens(str); // count malloc
-	printf("nb_tokens %d\n",nb_tokens);
-	if (!(result = (char **)malloc((nb_tokens + 1) * sizeof(char *))))
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (i < nb_tokens)
-	{
-		length = fill_result(&str[j]);
-		if (str[j] == '"')
-			j++;
-		result[i] = ft_substr(str, j, length);
-		j += length + 1;
-		if (str[j] == ' ')
-			j++;
-		i++;
-	}
-	printf("str %s\n",str);
-	result[nb_tokens] = NULL;
-	return (result);
+	int		nb_tokens;
+	char	**tokens;
+
+	nb_tokens = count_tokens(str);
+	printf("NB_TOKENS = %d\n", nb_tokens);
+	tokens = fill_tokens(str, nb_tokens);
+	for (int i = 0; tokens[i]; i++)
+		printf("TOKENS[%d] = [%s]\n", i, tokens[i]);
+	return (tokens);
 }

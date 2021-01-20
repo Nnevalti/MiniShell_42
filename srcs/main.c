@@ -183,25 +183,25 @@ int		main(int argc, char **argv, char **env)
 		// LEXER
 		new_command = handle_env(my_env, command);
 		tokens = ft_lexer(new_command);
-		printf("\nLEXER :\n");
-		for (int j = 0; tokens[j]; j++)
-			printf("TOKEN %d %s\n", j, tokens[j]);
-		printf("\n");
+		// printf("\nLEXER :\n");
+		// for (int j = 0; tokens[j]; j++)
+		// 	printf("TOKEN %d %s\n", j, tokens[j]);
+		// printf("\n");
 		free(new_command);
 		// FREE COMMAND
 		// free(command);
 
 		// PARSER
-		parser = ft_parser(tokens);
+		// parser = ft_parser(tokens);
 
 		// FREE LEXER
-		free_tab_str(tokens);
+		// free_tab_str(tokens);
 
 		// EXECUTOR
-		ast_exec(parser);
+		// ast_exec(parser);
 
 		// FREE PARSER
-		free_ast(parser);
+		// free_ast(parser);
 
 // Partie a modifier quand le CTRL-C sera implémenté
 		if (!ft_strcmp(command, "exit"))
