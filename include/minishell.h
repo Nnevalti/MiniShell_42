@@ -123,4 +123,5 @@ void				ast_exec(t_tree *entry);
 void				free_ast(t_tree *entry);
 t_tree				*ft_parser(char **commands);
 
+void 				handle_error(t_data *data);
 #endif

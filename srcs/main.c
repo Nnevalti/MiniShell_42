@@ -182,34 +182,39 @@ int		main(int argc, char **argv, char **env)
 		// LEXER
 		handle_env(data);
 		data->tokens = ft_lexer(data);
-		// printf("\nLEXER :\n");
-		// for (int j = 0; data->tokens[j]; j++)
-		// 	printf("TOKEN %d %s\n", j, data->tokens[j]);
-		// printf("\n");
-		free(data->new_command);
-
-		// FREE COMMAND
-		// free(data->command);
-
-		// PARSER
-		// data->parser = ft_parser(data->tokens);
-
-		// FREE LEXER
-		// free_tab_str(data->tokens);
-
-		// EXECUTOR
-		// ast_exec(data->parser);
-
-		// FREE PARSER
-		// free_ast(data->parser);
-
-// Partie a modifier quand le CTRL-C sera implémenté
-		if (!ft_strcmp(data->command, "exit"))
+		if (data->error->errno)
+			handle_error(data);
+		else
 		{
+			// printf("\nLEXER :\n");
+			// for (int j = 0; data->tokens[j]; j++)
+			// 	printf("TOKEN %d %s\n", j, data->tokens[j]);
+			// printf("\n");
+			free(data->new_command);
+
+			// FREE COMMAND
+			// free(data->command);
+
+			// PARSER
+			data->parser = ft_parser(data->tokens);
+
+			// FREE LEXER
+			free_tab_str(data->tokens);
+
+			// EXECUTOR
+			ast_exec(data->parser);
+
+			// FREE PARSER
+			free_ast(data->parser);
+
+	// Partie a modifier quand le CTRL-C sera implémenté
+			if (!ft_strcmp(data->command, "exit"))
+			{
+				free(data->command);
+				free_tab_str(data->my_env);
+				exit (0);
+			}
 			free(data->command);
-			free_tab_str(data->my_env);
-			exit (0);
 		}
-		free(data->command);
 	}
 }
