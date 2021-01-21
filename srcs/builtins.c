@@ -30,40 +30,48 @@ void	ft_pwd(void)
 	printf("%s\n", buffer);
 }
 
-void	ft_cd(t_tree *ptr)
+void	ft_cd(t_data *data, t_tree *ptr)
 {
-	if (ptr->options[1])
+	if (ptr->options && ptr->options[1])
 	{
-		// handle error ?
+		printf("Erreur ta mère la pute\n");
 		return ;
 	}
-	if (ptr->options[0])
-		chdir(ptr->options[0]);
+	else if (!(ptr->options) || ptr->options[0][0] == '~')
+	{
+		chdir(get_env_var(data->my_env, "HOME"));
+	}
 	else
-		chdir("");
+		chdir(ptr->options[0]);
 }
 
 void	ft_echo(t_tree *ptr)
 {
 	int				i;
-	t_redirection	**redirections;
+	// t_redirection	**redirections;
 
-	printf("in ECHO \n")
+	printf("in ECHO \n\n");
 	// redirections = set_redirections(command);
-	i = 0;
+	if (!(ft_strcmp(ptr->options[0], "-n")))
+		i = 1;
+	else
+		i = 0;
 	while (ptr->options[i])
 	{
-		if (ft_strcmp(ptr->options[i], "$?"))
-		{
-				printf("%d", EXIT_CODE);
 
+		if (!(ft_strcmp(ptr->options[i], "$?")))
+		{
+			printf("%d", EXIT_CODE);
 		}
 		else
-			printf("%s ", ptr->options[i]);
+			printf("%s", ptr->options[i]);
 		i++;
 	}
 	if (ft_strcmp(ptr->options[0], "-n"))
 		printf("\n");
+
+	printf("\nleave ECHO \n");
+
 	// reset_redirections(redirections);
 }
 //

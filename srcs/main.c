@@ -193,7 +193,7 @@ int		main(int argc, char **argv, char **env)
 			free(data->new_command);
 
 			// FREE COMMAND
-			// free(data->command);
+			free(data->command);
 
 			// PARSER
 			data->parser = ft_parser(data->tokens);
@@ -202,19 +202,10 @@ int		main(int argc, char **argv, char **env)
 			free_tab_str(data->tokens);
 
 			// EXECUTOR
-			// ast_exec(data->parser);
+			ast_exec(data);
 
 			// FREE PARSER
 			free_ast(data->parser);
-
-	// Partie a modifier quand le CTRL-C sera implémenté
-			if (!ft_strcmp(data->command, "exit"))
-			{
-				free(data->command);
-				free_tab_str(data->my_env);
-				exit (0);
-			}
-			free(data->command);
 		}
 	}
 }

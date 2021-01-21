@@ -99,7 +99,7 @@ t_data      		*init_data(char **env);
 int					ft_env(char **env);
 void				ft_pwd(void);
 void				ft_echo(t_tree *ptr);
-void				ft_cd(t_tree *ptr);
+void				ft_cd(t_data *data, t_tree *ptr);
 void				ft_export(t_data *data);
 void				ft_unset(char **env);
 
