@@ -43,15 +43,13 @@ void	ft_cd(t_data *data, t_tree *ptr)
 	}
 	else
 		chdir(ptr->options[0]);
+	return ;
 }
 
 void	ft_echo(t_tree *ptr)
 {
 	int				i;
-	// t_redirection	**redirections;
 
-	printf("in ECHO \n\n");
-	// redirections = set_redirections(command);
 	if (!(ft_strcmp(ptr->options[0], "-n")))
 		i = 1;
 	else
@@ -69,83 +67,80 @@ void	ft_echo(t_tree *ptr)
 	}
 	if (ft_strcmp(ptr->options[0], "-n"))
 		printf("\n");
-
-	printf("\nleave ECHO \n");
-
-	// reset_redirections(redirections);
+	return ;
 }
-//
-// void	ft_export(char **env)
-// {
-// 	int		i;
-// 	int		j;
-// 	int		nb_vars;
-// 	char	*name;
-// 	char	**new_env;
-//
-// 	i = 1;
-// 	while (splitted[i])
-// 	{
-// 		if (ft_indexof(splitted[i], '=') < 0)
-// 		{
-// 			i++;
-// 			continue;
-// 		}
-// 		name = ft_substr(splitted[i], 0, ft_indexof(splitted[i], '='));
-// 		if (!set_env_var(*env, name, splitted[i]))
-// 		{
-// 			nb_vars = 0;
-// 			while ((*env)[nb_vars])
-// 				nb_vars++;
-// 			if (!(new_env = malloc((nb_vars + 2) * sizeof(char *))))
-// 				return ;
-// 			j = 0;
-// 			while (j < nb_vars)
-// 			{
-// 				new_env[j] = ft_strdup((*env)[j]);
-// 				j++;
-// 			}
-// 			new_env[j] = ft_strdup(splitted[i]);
-// 			new_env[j + 1] = NULL;
-// 			free_tab_str(*env);
-// 			*env = new_env;
-// 		}
-// 		free(name);
-// 		i++;
-// 	}
-// }
-//
-// void	ft_unset(char **env)
-// {
-// 	int		i;
-// 	int		j;
-// 	int		k;
-// 	int		nb_vars;
-// 	char	**new_env;
-//
-// 	i = 1;
-// 	while (splitted[i])
-// 	{
-// 		if (get_env_var(*env, splitted[i]))
-// 		{
-// 			nb_vars = 0;
-// 			while ((*env)[nb_vars])
-// 				nb_vars++;
-// 			if (!(new_env = malloc(nb_vars * sizeof(char *))))
-// 				return ;
-// 			j = 0;
-// 			k = 0;
-// 			while (j < nb_vars)
-// 			{
-// 				if (ft_strncmp((*env)[j], splitted[i], ft_strlen(splitted[i])) != 0)
-// 					new_env[k++] = ft_strdup((*env)[j]);
-//
-// 				j++;
-// 			}
-// 			new_env[k + 1] = NULL;
-// 			free_tab_str(*env);
-// 			*env = new_env;
-// 		}
-// 		i++;
-// 	}
-// }
+
+void	ft_export(t_data *data, t_tree *ptr)
+{
+	int		i;
+	int		j;
+	int		nb_vars;
+	char	*name;
+	char	**new_env;
+
+	i = 0;
+	while (ptr->options[i])
+	{
+		if (ft_indexof(ptr->options[i], '=') < 0)
+		{
+			i++;
+			continue;
+		}
+		name = ft_substr(ptr->options[i], 0, ft_indexof(ptr->options[i], '='));
+		if (!set_env_var(data->my_env, name, ptr->options[i]))
+		{
+			nb_vars = 0;
+			while (data->my_env[nb_vars])
+				nb_vars++;
+			if (!(new_env = malloc((nb_vars + 2) * sizeof(char *))))
+				return ;
+			j = 0;
+			while (j < nb_vars)
+			{
+				new_env[j] = ft_strdup(data->my_env[j]);
+				j++;
+			}
+			new_env[j] = ft_strdup(ptr->options[i]);
+			new_env[j + 1] = NULL;
+			free_tab_str(data->my_env);
+			data->my_env = new_env;
+		}
+		free(name);
+		i++;
+	}
+	return ;
+}
+
+void	ft_unset(t_data *data, t_tree *ptr)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		nb_vars;
+	char	**new_env;
+
+	i = 0;
+	while (ptr->options[i])
+	{
+		if (get_env_var(data->my_env, ptr->options[i]))
+		{
+			nb_vars = 0;
+			while (data->my_env[nb_vars])
+				nb_vars++;
+			if (!(new_env = malloc(nb_vars * sizeof(char *))))
+				return ;
+			j = 0;
+			k = 0;
+			while (j < nb_vars)
+			{
+				if (ft_strncmp(data->my_env[j], ptr->options[i], ft_strlen(ptr->options[i])) != 0)
+					new_env[k++] = ft_strdup(data->my_env[j]);
+				j++;
+			}
+			new_env[k + 1] = NULL;
+			free_tab_str(data->my_env);
+			data->my_env = new_env;
+		}
+		i++;
+	}
+}
