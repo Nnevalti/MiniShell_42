@@ -166,50 +166,50 @@ void	handle_exit(int signo)
 
 int		main(int argc, char **argv, char **env)
 {
+	t_data	*data;
 	int		i;
-	char	**my_env;
-	char	*command;
-	char	**tokens;
-	t_tree	*parser;
 	char	*new_command;
 
-	my_env = get_env(env);
+	data = init_data(env);
+
 	while (42)
 	{
 		// init_signal_handler();
-		prompt(get_env_var(my_env, "USER"));
-		get_next_line(0, &command);
-		printf("USER COMMAND: %s\n", command);
+		prompt(data->prompt);
+		get_next_line(0, &data->command);
+		printf("USER COMMAND: %s\n", data->command);
+
 		// LEXER
-		new_command = handle_env(my_env, command);
-		tokens = ft_lexer(new_command);
+		data->new_command = handle_env(data->my_env, data->command);
+		data->tokens = ft_lexer(data->new_command);
 		// printf("\nLEXER :\n");
-		// for (int j = 0; tokens[j]; j++)
-		// 	printf("TOKEN %d %s\n", j, tokens[j]);
+		// for (int j = 0; data->tokens[j]; j++)
+		// 	printf("TOKEN %d %s\n", j, data->tokens[j]);
 		// printf("\n");
-		free(new_command);
+		free(data->new_command);
+		
 		// FREE COMMAND
-		// free(command);
+		// free(data->command);
 
 		// PARSER
-		// parser = ft_parser(tokens);
+		// data->parser = ft_parser(data->tokens);
 
 		// FREE LEXER
-		// free_tab_str(tokens);
+		// free_tab_str(data->tokens);
 
 		// EXECUTOR
-		// ast_exec(parser);
+		// ast_exec(data->parser);
 
 		// FREE PARSER
-		// free_ast(parser);
+		// free_ast(data->parser);
 
 // Partie a modifier quand le CTRL-C sera implémenté
-		if (!ft_strcmp(command, "exit"))
+		if (!ft_strcmp(data->command, "exit"))
 		{
-			free(command);
-			free_tab_str(my_env);
+			free(data->command);
+			free_tab_str(data->my_env);
 			exit (0);
 		}
-		free(command);
+		free(data->command);
 	}
 }

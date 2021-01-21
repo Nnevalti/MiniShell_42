@@ -52,12 +52,12 @@ typedef enum		e_redir_type
 
 typedef enum		e_errno
 {
-	NONE,
+	NOERROR,
 	QUOTE,
 	PARSER,
 	MALLOC
 
-}					t_erno;
+}					t_errno;
 
 typedef struct		s_tree
 {
@@ -86,9 +86,15 @@ typedef struct		s_error
 typedef struct		s_data
 {
 	char			**my_env;
-	t_tree			*tree;
+	char			*prompt;
 	char			*command;
+	char			*new_command;
+	char			**tokens;
+	t_tree			*parser;
+	t_error			*error;
 }					t_data;
+
+t_data      		*init_data(char **env);
 
 int					ft_env(char **env);
 void				ft_pwd(void);

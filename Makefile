@@ -21,6 +21,7 @@ SRC			=	main.c \
 				ast_exec.c \
 				ft_parser.c \
 				handle_env.c \
+				init.c \
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
