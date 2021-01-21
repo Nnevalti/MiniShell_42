@@ -43,8 +43,8 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 		}
 		if (str[i] == '$' && str[i + 1] == '?')
 		{
-			env_array[j] = ft_strdup("$? ");
-			*total_len += 3;
+			env_array[j] = ft_strdup(" $? ");
+			*total_len += 4;
 			j++;
 			i += 2;
 		}
