@@ -190,7 +190,7 @@ int		main(int argc, char **argv, char **env)
 			// for (int j = 0; data->tokens[j]; j++)
 			// 	printf("TOKEN %d %s\n", j, data->tokens[j]);
 			// printf("\n");
-			// free(data->new_command);
+			free(data->new_command);
 
 			// FREE COMMAND
 			free(data->command);
