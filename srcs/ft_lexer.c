@@ -127,9 +127,9 @@ int		count_tokens(char const *str, t_data *data)
 			i+= 2;
 			nb_tokens++;
 		}
-		else if (str[i] && !(ft_isblank(str[i])) && !(ft_search(str[i],";|<>\'\"")))
+		else if (str[i] && !(ft_isblank(str[i])) && !(ft_search(str[i],"$;|<>\'\"")))
 		{
-			while (str[i] && (!(ft_isblank(str[i]))	&& !(ft_search(str[i],";|<>\'\""))))
+			while (str[i] && (!(ft_isblank(str[i]))	&& !(ft_search(str[i],"$;|<>\'\""))))
 				i++;
 			nb_tokens++;
 		}
@@ -138,6 +138,16 @@ int		count_tokens(char const *str, t_data *data)
 			i = handle_quotes(str, i, data);
 			if (i == -1)
 				return(-1);
+			nb_tokens++;
+		}
+		else if (str[i] && str[i] == '$')
+		{
+			i++;
+			if (str[i] == '?')
+				i++;
+			else
+				while (str[i] && (!(ft_isblank(str[i]))	&& !(ft_search(str[i],"$;|<>\'\""))))
+					i++;
 			nb_tokens++;
 		}
 		else
@@ -182,10 +192,10 @@ void	fill_tokens(char const *str, int nb_tokens, t_data *data)
 			i+= 2;
 			j++;
 		}
-		else if (str[i] && !(ft_isblank(str[i])) && !(ft_search(str[i],";|<>\'\"")))
+		else if (str[i] && !(ft_isblank(str[i])) && !(ft_search(str[i],"$;|<>\'\"")))
 		{
 			length = 0;
-			while (str[i + length] && (!(ft_isblank(str[i + length])) && !(ft_search(str[i + length],";|<>\'\""))))
+			while (str[i + length] && (!(ft_isblank(str[i + length])) && !(ft_search(str[i + length],"$;|<>\'\""))))
 				length++;
 			data->tokens[j] = ft_substr(str, i, length);
 			j++;
@@ -199,6 +209,24 @@ void	fill_tokens(char const *str, int nb_tokens, t_data *data)
 			j++;
 			i += length + 1;
 		}
+		else if (str[i] && str[i] == '$')
+		{
+			length = 1;
+			if (str[i + 1] == '?')
+			{
+				data->tokens[j] = ft_strdup("$?");
+				j++;
+				i += 2;
+			}
+			else
+			{
+				while (str[i + length] && (!(ft_isblank(str[i + length])) && !(ft_search(str[i + length],"$;|<>\'\""))))
+					length++;
+				data->tokens[j] = ft_substr(str, i, length);
+				j++;
+				i += length;
+			}
+		}
 		else
 		{
 			while (str[i] && (ft_isblank(str[i])))
@@ -210,15 +238,15 @@ void	fill_tokens(char const *str, int nb_tokens, t_data *data)
 
 char		**ft_lexer(t_data *data)
 {
-	printf("IN LEXER : %s\n", data->new_command);
+	printf("IN LEXER : %s\n", data->command);
 
 	int		nb_tokens;
 
-	nb_tokens = count_tokens(data->new_command, data);
+	nb_tokens = count_tokens(data->command, data);
 	printf("NB_TOKENS = %d\n", nb_tokens);
 	if (nb_tokens == -1)
 		return(NULL);
-	fill_tokens(data->new_command, nb_tokens, data);
+	fill_tokens(data->command, nb_tokens, data);
 	for (int i = 0; data->tokens[i]; i++)
 		printf("TOKENS[%d] = [%s]\n", i, data->tokens[i]);
 	return (data->tokens);
