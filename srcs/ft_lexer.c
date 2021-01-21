@@ -203,17 +203,16 @@ char		**fill_tokens(char const *str, int nb_tokens)
 	return (tokens);
 }
 
-char		**ft_lexer(char const *str)
+char		**ft_lexer(t_data *data)
 {
-	printf("IN LEXER : %s\n", str);
+	printf("IN LEXER : %s\n", data->new_command);
 
 	int		nb_tokens;
-	char	**tokens;
 
-	nb_tokens = count_tokens(str);
+	nb_tokens = count_tokens(data->new_command);
 	printf("NB_TOKENS = %d\n", nb_tokens);
-	tokens = fill_tokens(str, nb_tokens);
-	for (int i = 0; tokens[i]; i++)
-		printf("TOKENS[%d] = [%s]\n", i, tokens[i]);
-	return (tokens);
+	data->tokens = fill_tokens(data->new_command, nb_tokens);
+	for (int i = 0; data->tokens[i]; i++)
+		printf("TOKENS[%d] = [%s]\n", i, data->tokens[i]);
+	return (data->tokens);
 }
