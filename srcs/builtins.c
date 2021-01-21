@@ -37,8 +37,8 @@ void	ft_cd(t_tree *ptr)
 		// handle error ?
 		return ;
 	}
-	if (ptr->opt[0])
-		chdir(ptr->opt[0]);
+	if (ptr->options[0])
+		chdir(ptr->options[0]);
 	else
 		chdir("");
 }
@@ -48,6 +48,7 @@ void	ft_echo(t_tree *ptr)
 	int				i;
 	t_redirection	**redirections;
 
+	printf("in ECHO \n")
 	// redirections = set_redirections(command);
 	i = 0;
 	while (ptr->options[i])
@@ -65,78 +66,78 @@ void	ft_echo(t_tree *ptr)
 		printf("\n");
 	// reset_redirections(redirections);
 }
-
-void	ft_export(char ***env, char **splitted)
-{
-	int		i;
-	int		j;
-	int		nb_vars;
-	char	*name;
-	char	**new_env;
-
-	i = 1;
-	while (splitted[i])
-	{
-		if (ft_indexof(splitted[i], '=') < 0)
-		{
-			i++;
-			continue;
-		}
-		name = ft_substr(splitted[i], 0, ft_indexof(splitted[i], '='));
-		if (!set_env_var(*env, name, splitted[i]))
-		{
-			nb_vars = 0;
-			while ((*env)[nb_vars])
-				nb_vars++;
-			if (!(new_env = malloc((nb_vars + 2) * sizeof(char *))))
-				return ;
-			j = 0;
-			while (j < nb_vars)
-			{
-				new_env[j] = ft_strdup((*env)[j]);
-				j++;
-			}
-			new_env[j] = ft_strdup(splitted[i]);
-			new_env[j + 1] = NULL;
-			free_tab_str(*env);
-			*env = new_env;
-		}
-		free(name);
-		i++;
-	}
-}
-
-void	ft_unset(char ***env, char **splitted)
-{
-	int		i;
-	int		j;
-	int		k;
-	int		nb_vars;
-	char	**new_env;
-
-	i = 1;
-	while (splitted[i])
-	{
-		if (get_env_var(*env, splitted[i]))
-		{
-			nb_vars = 0;
-			while ((*env)[nb_vars])
-				nb_vars++;
-			if (!(new_env = malloc(nb_vars * sizeof(char *))))
-				return ;
-			j = 0;
-			k = 0;
-			while (j < nb_vars)
-			{
-				if (ft_strncmp((*env)[j], splitted[i], ft_strlen(splitted[i])) != 0)
-					new_env[k++] = ft_strdup((*env)[j]);
-
-				j++;
-			}
-			new_env[k + 1] = NULL;
-			free_tab_str(*env);
-			*env = new_env;
-		}
-		i++;
-	}
-}
+//
+// void	ft_export(char **env)
+// {
+// 	int		i;
+// 	int		j;
+// 	int		nb_vars;
+// 	char	*name;
+// 	char	**new_env;
+//
+// 	i = 1;
+// 	while (splitted[i])
+// 	{
+// 		if (ft_indexof(splitted[i], '=') < 0)
+// 		{
+// 			i++;
+// 			continue;
+// 		}
+// 		name = ft_substr(splitted[i], 0, ft_indexof(splitted[i], '='));
+// 		if (!set_env_var(*env, name, splitted[i]))
+// 		{
+// 			nb_vars = 0;
+// 			while ((*env)[nb_vars])
+// 				nb_vars++;
+// 			if (!(new_env = malloc((nb_vars + 2) * sizeof(char *))))
+// 				return ;
+// 			j = 0;
+// 			while (j < nb_vars)
+// 			{
+// 				new_env[j] = ft_strdup((*env)[j]);
+// 				j++;
+// 			}
+// 			new_env[j] = ft_strdup(splitted[i]);
+// 			new_env[j + 1] = NULL;
+// 			free_tab_str(*env);
+// 			*env = new_env;
+// 		}
+// 		free(name);
+// 		i++;
+// 	}
+// }
+//
+// void	ft_unset(char **env)
+// {
+// 	int		i;
+// 	int		j;
+// 	int		k;
+// 	int		nb_vars;
+// 	char	**new_env;
+//
+// 	i = 1;
+// 	while (splitted[i])
+// 	{
+// 		if (get_env_var(*env, splitted[i]))
+// 		{
+// 			nb_vars = 0;
+// 			while ((*env)[nb_vars])
+// 				nb_vars++;
+// 			if (!(new_env = malloc(nb_vars * sizeof(char *))))
+// 				return ;
+// 			j = 0;
+// 			k = 0;
+// 			while (j < nb_vars)
+// 			{
+// 				if (ft_strncmp((*env)[j], splitted[i], ft_strlen(splitted[i])) != 0)
+// 					new_env[k++] = ft_strdup((*env)[j]);
+//
+// 				j++;
+// 			}
+// 			new_env[k + 1] = NULL;
+// 			free_tab_str(*env);
+// 			*env = new_env;
+// 		}
+// 		i++;
+// 	}
+// }

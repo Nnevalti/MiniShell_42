@@ -202,7 +202,7 @@ int		main(int argc, char **argv, char **env)
 			free_tab_str(data->tokens);
 
 			// EXECUTOR
-			ast_exec(data->parser);
+			// ast_exec(data->parser);
 
 			// FREE PARSER
 			free_ast(data->parser);
