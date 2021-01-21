@@ -19,15 +19,16 @@ int		ft_search(char c, char *str)
 	return(0);
 }
 
-int		handle_quotes(char const *str, int i)
+int		handle_quotes(char const *str, int i, t_data *data)
 {
 	if (str[i] == '\"')
 	{
 		i++;
 		if (str[i] == '\0')
 		{
-			printf("quotes pb\n");
-			exit(0);
+			data->error->errno = QUOTE;
+			data->error->value = ft_strdup("Quotes error (unclosed)");
+			return(-1);
 		}
 		while (str[i] && str[i] != '\"')
 		{
@@ -37,8 +38,9 @@ int		handle_quotes(char const *str, int i)
 				i++;
 			if (str[i] == '\0')
 			{
-				printf("quotes pb\n");
-				exit(0);
+				data->error->errno = QUOTE;
+				data->error->value = ft_strdup("Quotes error (unclosed)");
+				return(-1);
 			}
 		}
 	}
@@ -47,16 +49,18 @@ int		handle_quotes(char const *str, int i)
 		i++;
 		if (str[i] == '\0')
 		{
-			printf("quotes pb\n");
-			exit(0);
+			data->error->errno = QUOTE;
+			data->error->value = ft_strdup("Quotes error (unclosed)");
+			return(-1);
 		}
 		while (str[i] && str[i] != '\'')
 		{
 			i++;
 			if (str[i] == '\0')
 			{
-				printf("quotes pb\n");
-				exit(0);
+				data->error->errno = QUOTE;
+				data->error->value = ft_strdup("Quotes error (unclosed)");
+				return(-1);
 			}
 		}
 	}
@@ -98,7 +102,7 @@ int		quotes_length(char const *str, int i)
 	return (length);
 }
 
-int		count_tokens(char const *str)
+int		count_tokens(char const *str, t_data *data)
 {
 	int	i;
 	int	nb_tokens;
@@ -131,7 +135,9 @@ int		count_tokens(char const *str)
 		}
 		else if (ft_search(str[i],"\"\'"))
 		{
-			i = handle_quotes(str, i);
+			i = handle_quotes(str, i, data);
+			if (i == -1)
+				return(-1);
 			nb_tokens++;
 		}
 		else
@@ -143,7 +149,7 @@ int		count_tokens(char const *str)
 	return (nb_tokens);
 }
 
-char		**fill_tokens(char const *str, int nb_tokens)
+void	fill_tokens(char const *str, int nb_tokens, t_data *data)
 {
 	int		i;
 	int		j;
@@ -152,8 +158,8 @@ char		**fill_tokens(char const *str, int nb_tokens)
 
 	i = 0;
 	j = 0;
-	if (!(tokens = malloc(sizeof(char *) * nb_tokens + 1)))
-		return (NULL);
+	if (!(data->tokens = malloc(sizeof(char *) * nb_tokens + 1)))
+		return ;
 	while (str[i])
 	{
 		if (ft_isblank(str[i]))
@@ -166,13 +172,13 @@ char		**fill_tokens(char const *str, int nb_tokens)
 			length = 0;
 			while (ft_search(str[i + length],";|<>"))
 				length++;
-			tokens[j] = ft_substr(str, i, length);
+			data->tokens[j] = ft_substr(str, i, length);
 			i += length;
 			j++;
 		}
 		if (str[i] == '\\')
 		{
-			tokens[j] = ft_substr(str, i, 2);
+			data->tokens[j] = ft_substr(str, i, 2);
 			i+= 2;
 			j++;
 		}
@@ -181,7 +187,7 @@ char		**fill_tokens(char const *str, int nb_tokens)
 			length = 0;
 			while (str[i + length] && (!(ft_isblank(str[i + length])) && !(ft_search(str[i + length],";|<>\'\""))))
 				length++;
-			tokens[j] = ft_substr(str, i, length);
+			data->tokens[j] = ft_substr(str, i, length);
 			j++;
 			i += length;
 		}
@@ -189,7 +195,7 @@ char		**fill_tokens(char const *str, int nb_tokens)
 		{
 			length = quotes_length(str, i);
 			i++;
-			tokens[j] = ft_substr(str, i, length);
+			data->tokens[j] = ft_substr(str, i, length);
 			j++;
 			i += length + 1;
 		}
@@ -199,8 +205,7 @@ char		**fill_tokens(char const *str, int nb_tokens)
 				i++;
 		}
 	}
-	tokens[j] = NULL;
-	return (tokens);
+	data->tokens[j] = NULL;
 }
 
 char		**ft_lexer(t_data *data)
@@ -209,9 +214,11 @@ char		**ft_lexer(t_data *data)
 
 	int		nb_tokens;
 
-	nb_tokens = count_tokens(data->new_command);
+	nb_tokens = count_tokens(data->new_command, data);
 	printf("NB_TOKENS = %d\n", nb_tokens);
-	data->tokens = fill_tokens(data->new_command, nb_tokens);
+	if (nb_tokens == -1)
+		return(NULL);
+	fill_tokens(data->new_command, nb_tokens, data);
 	for (int i = 0; data->tokens[i]; i++)
 		printf("TOKENS[%d] = [%s]\n", i, data->tokens[i]);
 	return (data->tokens);
