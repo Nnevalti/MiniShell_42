@@ -12,7 +12,7 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 	j = 0;
 	if (!(env_array = malloc(sizeof(char *) * nb_var + 1)))
 	{
-		data->error->errno = MALLOC;
+		// data->error->errno = MALLOC;
 		return (NULL);
 	}
 	while (str[i] && j < nb_var)

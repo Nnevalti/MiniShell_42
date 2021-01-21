@@ -1,17 +1,113 @@
 #include "../include/minishell.h"
 
-t_tree	*set_struct(t_tree *test, t_type type, char *command, char **options, void *left, void *right)
+void	run_exec(char *command, char **argv, char **env, int *pipes, int index)
 {
-	test->type = type;
-	test->command = command;
-	test->options = options;
-	test->left = left;
-	test->right = right;
+	char	**paths;
+	int		i;
+	int		status;
+	char	*tmp;
+	char	*str;
 
-	return(test);
+	if (!access(command, X_OK))
+	{
+		if (fork() == 0)
+		{
+			printf("pipe(pipes + %d);\n", 2 * index);
+			// pipe(pipes + 2 * index);
+
+			if (index > 0)
+			{
+				printf("dup2(pipes[%d], 0);\n", 2 * (index - 1));
+				dup2(pipes[2 * (index - 1)], 0);
+			}
+
+			if (pipes[index + 1])
+			{
+				printf("dup2(pipes[%d], 1);\n", 1 + 2 * index);
+				dup2(pipes[1 + 2 * index], 1);
+
+			}
+			execve(command, argv, env);
+		}
+		else
+		{
+			signal(SIGINT, SIG_IGN);
+			wait(&status);
+			EXIT_CODE = WEXITSTATUS(status);
+			signal(SIGINT, &handle_exit);
+		}
+
+	}
+	else
+	{
+		paths = ft_split(get_env_var(env, "PATH"), ':');
+		i = 0;
+		while (paths[i])
+		{
+			tmp = ft_strjoin(paths[i], "/");
+			str = ft_strjoin(tmp, command);
+			free(tmp);
+			if (!access(str, X_OK))
+			{
+				if (fork() == 0)
+				{
+					printf("Index: %d\n", index);
+					pipe_io(pipes, index);
+					execve(str, argv, env);
+				}
+				else
+				{
+					// close_pipes(pipes);
+					signal(SIGINT, SIG_IGN);
+					wait(&status);
+					printf("Index %d finished\n", index);
+					EXIT_CODE = WEXITSTATUS(status);
+					// printf("status : %d, %d\n", status, WEXITSTATUS(status));
+					// printf("PARENT: %d\n", EXIT_CODE);
+					signal(SIGINT, &handle_exit);
+				}
+				return ;
+			}
+			else
+				EXIT_CODE = 126;
+			free(str);
+			i++;
+		}
+		printf("command not found: %s\n", command);
+		EXIT_CODE = 127;
+	}
 }
 
-void	analyze_struct(t_tree *ptr)
+int		run_command(t_data *data, t_tree *ptr)
+{
+
+	if (!ft_strcmp(ptr->command, "echo"))
+		ft_echo(data->my_env, tokens[i]);
+	else if (!ft_strcmp(ptr->command, "env"))
+		ft_env(data->my_env);
+	else if (!ft_strcmp(ptr->command, "cd"))
+		ft_cd(ptr);
+	else if (!ft_strcmp(ptr->command, "pwd"))
+		ft_pwd();
+	else if (!ft_strcmp(ptr->command, "export"))
+		ft_export(data);
+	else if (!ft_strcmp(ptr->command, "unset"))
+		ft_unset(env, splitted);
+	else if (!ft_strcmp(ptr->command, "exit"))
+	{
+		free_tab_str(*env);
+		free_tab_str(splitted);
+		free_tab_str(tokens);
+		exit(0);
+	}
+	else
+		run_exec(splitted[0], splitted, *env, pipes, i);
+	free_tab_str(splitted);
+	i++;
+	return (TRUE);
+}
+
+void	analyze_struct(t_data *data, t_tree *ptr)
 {
 	if (ptr->type == PIPE)
 	{
@@ -19,7 +115,7 @@ void	analyze_struct(t_tree *ptr)
 	}
 	if (ptr->type == COMMAND)
 	{
-		printf("execve de la commande\n");
+		run_command(data, ptr);
 	}
 	if (ptr->type == REDIR)
 	{
@@ -51,7 +147,7 @@ void	analyze_end_struct(t_tree *ptr)
 	return ;
 }
 
-void recursive(t_tree *ptr)
+void recursive(t_data *data, t_tree *ptr)
 {
 	int		i;
 
@@ -67,13 +163,13 @@ void recursive(t_tree *ptr)
 	}
 	printf("\n");
 	// start
-	analyze_struct(ptr);
+	analyze_struct(data, ptr);
 	if (ptr->left != NULL)
 	{
-		recursive(ptr->left);
+		recursive(data, ptr->left);
 		if (ptr->right != NULL)
 		{
-			recursive(ptr->right);
+			recursive(data, ptr->right);
 			analyze_end_struct(ptr);
 		}
 	}
@@ -83,9 +179,9 @@ void recursive(t_tree *ptr)
 	return ;
 }
 
-void ast_exec(t_tree *entry) // devra prendre un t_tree *entry en paramètre
+void ast_exec(t_data *data)
 {
 	printf("\nIN AST_EXEC\n");
-	recursive(entry); // deviendra ast_exec par la suite
+	recursive(data, data->parser);
 	printf("WE LEAVE AST_EXEC\n\n");
 }

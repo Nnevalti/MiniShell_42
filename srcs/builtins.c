@@ -30,92 +30,41 @@ void	ft_pwd(void)
 	printf("%s\n", buffer);
 }
 
-void	ft_cd(char *path)
+void	ft_cd(t_tree *ptr)
 {
-	chdir(path);
+	if (ptr->options[1])
+	{
+		// handle error ?
+		return ;
+	}
+	if (ptr->opt[0])
+		chdir(ptr->opt[0]);
+	else
+		chdir("");
 }
 
-void	ft_echo(char **env, char *command)
+void	ft_echo(t_tree *ptr)
 {
-	char			**splitted;
 	int				i;
-	char			*env_var;
-	char			*str;
 	t_redirection	**redirections;
 
-	// NE PAS OUBLIER DE TRIM !
 	// redirections = set_redirections(command);
-	// splitted = ft_split(redirections[0]->str, ' ');
-	splitted = ft_split(command, ' ');
-	i = 1;
-	while (splitted[i])
+	i = 0;
+	while (ptr->options[i])
 	{
-		if ((splitted[i][0] == '"'
-			&& splitted[i][ft_strlen(splitted[i]) - 1] == '"') ||
-			(splitted[i][0] == '\''
-				&& splitted[i][ft_strlen(splitted[i]) - 1] == '\''))
+		if (ft_strcmp(ptr->options[i], "$?"))
 		{
-			str = ft_substr(splitted[i], 1, ft_strlen(splitted[i]) - 2);
-			printf("%s ", str);
-			free(str);
-		}
-		else if (splitted[i][0] == '$') {
-			if (splitted[i][1] == '?')
 				printf("%d", EXIT_CODE);
-			else
-			{
-				env_var = get_env_var(env, splitted[i] + 1);
-				if (env) printf("%s ", env_var);
-			}
 
 		}
-		else if (ft_strcmp(splitted[i], "-n"))
-			printf("%s ", splitted[i]);
+		else
+			printf("%s ", ptr->options[i]);
 		i++;
 	}
-	if (ft_strcmp(splitted[1], "-n"))
+	if (ft_strcmp(ptr->options[0], "-n"))
 		printf("\n");
-	free_tab_str(splitted);
 	// reset_redirections(redirections);
 }
-
-// void	ft_echo(char **env, char *splitted)
-// {
-// 	int		i;
-// 	char	*env_var;
-// 	char	*str;
-//
-// 	// NE PAS OUBLIER DE TRIM !
-//
-// 	i = 1;
-// 	while (splitted[i])
-// 	{
-// 		if ((splitted[i][0] == '"'
-// 			&& splitted[i][ft_strlen(splitted[i]) - 1] == '"') ||
-// 			(splitted[i][0] == '\''
-// 				&& splitted[i][ft_strlen(splitted[i]) - 1] == '\''))
-// 		{
-// 			str = ft_substr(splitted[i], 1, ft_strlen(splitted[i]) - 2);
-// 			printf("%s ", str);
-// 			free(str);
-// 		}
-// 		else if (splitted[i][0] == '$') {
-// 			if (splitted[i][1] == '?')
-// 				printf("%d", EXIT_CODE);
-// 			else
-// 			{
-// 				env_var = get_env_var(env, splitted[i] + 1);
-// 				if (env) printf("%s ", env_var);
-// 			}
-//
-// 		}
-// 		else if (ft_strcmp(splitted[i], "-n"))
-// 			printf("%s ", splitted[i]);
-// 		i++;
-// 	}
-// 	if (ft_strcmp(splitted[1], "-n"))
-// 		printf("\n");
-// }
 
 void	ft_export(char ***env, char **splitted)
 {

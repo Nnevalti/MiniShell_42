@@ -119,7 +119,7 @@ void				reset_redirections(t_redirection **redirections);
 int 				*init_pipes(char **tokens);
 void				pipe_io(int *pipes, int index);
 void				close_pipes(int *pipes);
-void				ast_exec(t_tree *entry);
+void				ast_exec(t_data *data);
 void				free_ast(t_tree *entry);
 t_tree				*ft_parser(char **commands);
 
