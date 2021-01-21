@@ -61,7 +61,6 @@ void	run_exec(t_data *data, t_tree *ptr)
 
 int		run_command(t_data *data, t_tree *ptr)
 {
-
 	if (!ft_strcmp(ptr->command, "echo"))
 		ft_echo(ptr);
 	else if (!ft_strcmp(ptr->command, "env"))
@@ -70,10 +69,10 @@ int		run_command(t_data *data, t_tree *ptr)
 		ft_cd(data, ptr);
 	else if (!ft_strcmp(ptr->command, "pwd"))
 		ft_pwd();
-	// else if (!ft_strcmp(ptr->command, "export"))
-	// 	ft_export(data);
-	// else if (!ft_strcmp(ptr->command, "unset"))
-	// 	ft_unset(data->my_env);
+	else if (!ft_strcmp(ptr->command, "export"))
+		ft_export(data, ptr);
+	else if (!ft_strcmp(ptr->command, "unset"))
+		ft_unset(data, ptr);
 	else if (!ft_strcmp(ptr->command, "exit"))
 	{
 			free_tab_str(data->my_env);
@@ -88,6 +87,7 @@ int		run_command(t_data *data, t_tree *ptr)
 
 void	analyze_struct(t_data *data, t_tree *ptr)
 {
+	// est ce que $ENV_VAR si oui changer par sa valeur sinon vide
 	if (ptr->type == PIPE)
 	{
 		printf("ouverture du chemin de disucssion entre left et right\n");
