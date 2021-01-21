@@ -180,14 +180,14 @@ int		main(int argc, char **argv, char **env)
 		printf("USER COMMAND: %s\n", data->command);
 
 		// LEXER
-		data->new_command = handle_env(data->my_env, data->command);
-		data->tokens = ft_lexer(data->new_command);
+		handle_env(data);
+		data->tokens = ft_lexer(data);
 		// printf("\nLEXER :\n");
 		// for (int j = 0; data->tokens[j]; j++)
 		// 	printf("TOKEN %d %s\n", j, data->tokens[j]);
 		// printf("\n");
 		free(data->new_command);
-		
+
 		// FREE COMMAND
 		// free(data->command);
 

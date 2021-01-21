@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-char		**get_env_array(char const *str, int nb_var, char **env, int *total_len)
+char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 {
 	int		i;
 	int		j;
@@ -11,7 +11,10 @@ char		**get_env_array(char const *str, int nb_var, char **env, int *total_len)
 	i = 0;
 	j = 0;
 	if (!(env_array = malloc(sizeof(char *) * nb_var + 1)))
+	{
+		data->error->errno = MALLOC;
 		return (NULL);
+	}
 	while (str[i] && j < nb_var)
 	{
 		len = 0;
@@ -119,28 +122,29 @@ int			get_nb_var(char const *str)
 	return (nb_var);
 }
 
-char		*handle_env(char **env, char const *str)
+void		handle_env(t_data *data)
 {
 	int		i;
-	int		nb_var;
 	char	**env_array;
-	char	*new_str;
 	int		env_len;
 	int		len;
 
 	i = 0;
-	nb_var = 0;
 	env_len = 0;
 	len = 0;
-	nb_var = get_nb_var(str);
-	env_array = get_env_array(str, nb_var, env, &env_len);
+	env_array = get_env_array(data->command, data->my_env,
+				get_nb_var(data->command), &env_len);
 	while (env_array[i])
 	{
 		len += ft_strlen(env_array[i]);
 		i++;
 	}
-	if (!(new_str = malloc(sizeof(char *) * ft_strlen(str) - env_len + len + 1)))
-		return (NULL);
-	new_str = get_new_str(str, new_str, env_array);
-	return (new_str);
+	if (!(data->new_command = malloc(sizeof(char *) * ft_strlen(data->command)
+		- env_len + len + 1)))
+	{
+		data->error->errno = MALLOC;
+		return ;
+	}
+	data->new_command = get_new_str(data->command, data->new_command, env_array);
+	return ;
 }
