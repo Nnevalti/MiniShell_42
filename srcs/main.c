@@ -180,7 +180,7 @@ int		main(int argc, char **argv, char **env)
 		printf("USER COMMAND: %s\n", data->command);
 
 		// LEXER
-		// handle_env(data);
+		handle_env(data);
 		data->tokens = ft_lexer(data);
 		if (data->error->errno)
 			handle_error(data);

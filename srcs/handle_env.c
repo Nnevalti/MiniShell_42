@@ -41,13 +41,6 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 			j++;
 			*total_len += len + 1;
 		}
-		if (str[i] == '$' && str[i + 1] == '?')
-		{
-			env_array[j] = ft_strdup(" $? ");
-			*total_len += 4;
-			j++;
-			i += 2;
-		}
 		if (str[i] && str[i] != '$')
 			i++;
 	}
@@ -94,18 +87,6 @@ char	*get_new_str(char const *str, char *new_str, char **env_array)
 			}
 			k++;
 		}
-		else if (str[i] == '$' && str[i+1	] == '?')
-		{
-			l = 0;
-			while (env_array[k][l])
-			{
-				new_str[j] = env_array[k][l];
-				j++;
-				l++;
-			}
-			k++;
-			i += 2;
-		}
 		else
 		{
 			new_str[j] = str[i];
@@ -134,8 +115,6 @@ int			get_nb_var(char const *str)
 				i++;
 		}
 		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'))
-			nb_var++;
-		if (str[i] == '$' && str[i + 1] == '?')
 			nb_var++;
 		if (str[i])
 			i++;

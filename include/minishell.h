@@ -90,6 +90,7 @@ typedef struct		s_data
 	char			*command;
 	char			*new_command;
 	char			**tokens;
+	int				*tab_space;
 	t_tree			*parser;
 	t_error			*error;
 }					t_data;
