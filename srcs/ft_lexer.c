@@ -37,8 +37,10 @@ int		count_command(char *cmd)
 			i = skip_quotes(cmd,i);
 		else if (cmd[i] == ';')
 		{
-			nb_cmd++;
-			i++;
+			while (ft_isblank(cmd[i]) || cmd[i] == ';')
+				i++;
+			if (cmd[i])
+				nb_cmd++;
 		}
 		else
 			i++;
@@ -48,9 +50,9 @@ int		count_command(char *cmd)
 
 int		find_start(char *cmd, int i, char *sep)
 {
-	while (ft_search(cmd[i], sep))
+	while (cmd && (ft_search(cmd[i], sep)))
 		i++;
-	while(cmd && ft_isblank(cmd[i]))
+	while (cmd && ft_isblank(cmd[i]))
 		i++;
 	return (i);
 }
@@ -80,7 +82,7 @@ char	**split_command(char *cmd, int nb_cmd)
 	i = 0;
 	j = 0;
 	start = find_start(cmd, i, ";");
-	while (cmd && cmd[i])
+	while (cmd && cmd[i] && j < nb_cmd)
 	{
 		if (cmd[i] == '\\')
 			i += 2;
@@ -97,9 +99,12 @@ char	**split_command(char *cmd, int nb_cmd)
 		else
 			i++;
 	}
-	end = find_end(cmd, i, ";");
-	cmds[j] = ft_substr(cmd, start, end - start);
-	j++;
+	if (j < nb_cmd)
+	{
+		end = find_end(cmd, i, ";");
+		cmds[j] = ft_substr(cmd, start, end - start);
+		j++;
+	}
 	cmds[j] = NULL;
 	return(cmds);
 }
@@ -198,13 +203,12 @@ char		***split_tokens(char **cmds, int nb_cmds)
 	i = 0;
 	if (!(tokens = malloc(sizeof(char **) * nb_cmds + 1)))
 		return (NULL);
-	while (cmds && cmds[i])
+	while (cmds && cmds[i] && i < nb_cmds)
 	{
 		nb_tokens = count_tokens(cmds[i]);
 		tokens[i] = fill_tokens(cmds[i], nb_tokens);
 		i++;
 	}
-	printf("NB_TOKENS = %d\n", nb_tokens);
 	tokens[i] = NULL;
 	return(tokens);
 }

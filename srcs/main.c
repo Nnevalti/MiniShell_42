@@ -55,7 +55,8 @@ int		main(int argc, char **argv, char **env)
 		// LEXER
 		// handle_env(data);
 		data->tokens = ft_lexer(data);
-		
+		printf("TOKENS[0][0] : [%s]\n", data->tokens[0][0]);
+
 		printf("\nLEXER :\n");
 		for(int i = 0; data->tokens[i]; i++)
 			for(int j = 0; data->tokens[i][j]; j++)
