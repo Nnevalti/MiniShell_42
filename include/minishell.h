@@ -88,9 +88,7 @@ typedef struct		s_data
 	char			**my_env;
 	char			*prompt;
 	char			*command;
-	char			*new_command;
-	char			**tokens;
-	int				*tab_space;
+	char			***tokens;
 	t_tree			*parser;
 	t_error			*error;
 }					t_data;
@@ -105,7 +103,7 @@ void				ft_export(t_data *data, t_tree *ptr);
 void				ft_unset(t_data *data, t_tree *ptr);
 
 int					ft_indexof(char *str, char c);
-char				**ft_lexer(t_data *data);
+char				***ft_lexer(t_data *data);
 void				handle_env(t_data *data);
 char				**get_env(char **env);
 char 				*get_env_var(char **env, char *name);

@@ -180,32 +180,41 @@ int		main(int argc, char **argv, char **env)
 		printf("USER COMMAND: %s\n", data->command);
 
 		// LEXER
-		handle_env(data);
+		// handle_env(data);
 		data->tokens = ft_lexer(data);
-		if (data->error->errno)
-			handle_error(data);
-		else
-		{
-			// printf("\nLEXER :\n");
-			// for (int j = 0; data->tokens[j]; j++)
-			// 	printf("TOKEN %d %s\n", j, data->tokens[j]);
-			// printf("\n");
-			free(data->new_command);
-
-			// FREE COMMAND
-			free(data->command);
-
-			// PARSER
-			data->parser = ft_parser(data->tokens);
-
+		for(int i = 0; data->tokens[i]; i++)
+			for(int j = 0; data->tokens[i][j]; j++)
+				printf("TOKENS[%d][%d] : %s\n",i,j,data->tokens[i][j]);
+		// if (data->error->errno)
+		// 	handle_error(data);
+		// else
+		// {
+		// 	// printf("\nLEXER :\n");
+		// 	// for (int j = 0; data->tokens[j]; j++)
+		// 	// 	printf("TOKEN %d %s\n", j, data->tokens[j]);
+		// 	// printf("\n");
+		// 	// free(data->new_command);
+		// 	//
+		// 	// // FREE COMMAND
+		// 	// free(data->command);
+		// 	//
+		// 	// // PARSER
+		// 	// data->parser = ft_parser(data->tokens);
+		// 	//
 			// FREE LEXER
-			free_tab_str(data->tokens);
-
-			// EXECUTOR
-			ast_exec(data);
-
-			// FREE PARSER
-			free_ast(data->parser);
-		}
+				i = 0;
+				while (data->tokens[i])
+				{
+					free_tab_str(data->tokens[i]);
+					i++;
+				}
+				free(data->tokens);
+		// 	//
+		// 	// // EXECUTOR
+		// 	// ast_exec(data);
+		// 	//
+		// 	// // FREE PARSER
+		// 	// free_ast(data->parser);
+		// }
 	}
 }
