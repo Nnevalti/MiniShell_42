@@ -35,7 +35,6 @@ typedef int			t_bool;
 
 typedef enum		e_type
 {
-	SEMI_COLON,
 	PIPE,
 	REDIR,
 	COMMAND,
@@ -63,7 +62,7 @@ typedef struct		s_tree
 {
 	t_type			type; //		&&			|
 	char 			*command; //	NULL		NULL
-	char			**options; //	NULL		NULL
+	char			*options; //	NULL		NULL
 	t_redir_type	redir_type;
 	char			*file;
 	void			*left; //		|			ls -l
@@ -89,7 +88,8 @@ typedef struct		s_data
 	char			*prompt;
 	char			*command;
 	char			***tokens;
-	t_tree			*parser;
+	int				nb_cmds;
+	t_tree			**parser;
 	t_error			*error;
 }					t_data;
 
@@ -111,6 +111,8 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 
 int					tab_str_len(char **tab);
 void				free_tab_str(char **tab);
+void				free_tokens(char ***tokens);
+
 
 t_redirection		**set_redirections(char *command);
 void				reset_redirections(t_redirection **redirections);
@@ -120,7 +122,12 @@ void				pipe_io(int *pipes, int index);
 void				close_pipes(int *pipes);
 void				ast_exec(t_data *data);
 void				free_ast(t_tree *entry);
-t_tree				*ft_parser(char **commands);
+t_tree				**ft_parser(t_data *data, char ***tokens);
+
+int					ft_isblank(char c);
+int					ft_search(char c, char *str);
 
 void 				handle_error(t_data *data);
+int					check_error(t_data *data, char ***tokens);
+
 #endif

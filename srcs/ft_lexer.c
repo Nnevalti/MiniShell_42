@@ -1,24 +1,5 @@
 #include "../include/minishell.h"
 
-int		ft_isblank(char c)
-{
-	return (c == ' ' || c == '\t');
-}
-
-int		ft_search(char c, char *str)
-{
-	int i;
-
-	i = 0;
-	while(str[i])
-	{
-		if (str[i] == c)
-			return(1);
-		i++;
-	}
-	return(0);
-}
-
 int		skip_quotes(char const *str, int i)
 {
 	if (str[i] == '\"')
@@ -171,9 +152,28 @@ char	**fill_tokens(char *cmd, int nb_tokens)// split sep | < > >>
 			i += 2;
 		else if (ft_search(cmd[i],"\"\'"))
 			i = skip_quotes(cmd,i);
-		else if (ft_search(cmd[i], "|<>"))
+		else if (cmd[i] == '>')
 		{
-			end = find_end(cmd, i, "|<>");
+			if (!(ft_strncmp(&cmd[i], ">>", 2)))
+			{
+				end = find_end(cmd, i, ">");
+				tokens[j] = ft_substr(cmd, start, end - start);
+				j++;
+				start = i;
+				i += 2;
+			}
+			else
+			{
+				end = find_end(cmd, i, ">");
+				tokens[j] = ft_substr(cmd, start, end - start);
+				j++;
+				start = i;
+				i++;
+			}
+		}
+		else if (ft_search(cmd[i], "|<"))
+		{
+			end = find_end(cmd, i, "|<");
 			tokens[j] = ft_substr(cmd, start, end - start);
 			j++;
 			start = i;
@@ -204,6 +204,7 @@ char		***split_tokens(char **cmds, int nb_cmds)
 		tokens[i] = fill_tokens(cmds[i], nb_tokens);
 		i++;
 	}
+	printf("NB_TOKENS = %d\n", nb_tokens);
 	tokens[i] = NULL;
 	return(tokens);
 }
@@ -212,13 +213,12 @@ char		***ft_lexer(t_data *data)
 {
 	printf("IN LEXER : %s\n", data->command);
 
-	int		nb_cmds;
 	char	**cmds;
 	char	***tokens;
 
-	nb_cmds = count_command(data->command);
-	cmds = split_command(data->command, nb_cmds);
-	tokens = split_tokens(cmds, nb_cmds);
+	data->nb_cmds = count_command(data->command);
+	cmds = split_command(data->command, data->nb_cmds);
+	tokens = split_tokens(cmds, data->nb_cmds);
 	free_tab_str(cmds);
 	return (tokens);
 }
