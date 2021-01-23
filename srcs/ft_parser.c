@@ -28,7 +28,6 @@ t_command	*ft_create_struct(char *tokens)
 		if (ft_isblank(tokens[i]))
 		{
 			ptr->cmd = ft_substr(tokens,0,i);
-			printf("ptr->cmd : %s\n",ptr->cmd);
 			while(ft_isblank(tokens[i]))
 				i++;
 			if (tokens[i] == '\0')
@@ -36,14 +35,13 @@ t_command	*ft_create_struct(char *tokens)
 			else
 			{
 				ptr->opt = ft_substr(tokens, i, ft_strlen(&tokens[i]));
-				printf("ptr->opt : %s\n",ptr->opt);
 
 				return(ptr);
 			}
 		}
 		i++;
 	}
-	ptr->cmd = ft_substr(tokens,0,i);
+	ptr->cmd = ft_strdup(tokens);
 	return(ptr);
 
 }
@@ -87,6 +85,7 @@ t_command	*ft_parser(t_data *data)
 			//substr command in entry->command
 			//substr opt in entry->opt
 		}
+		printf("entry->cmd = [%s]\nentry->opt = [%s]\n",entry[i]->cmd,entry[i]->opt);
 		i++;
 	}
 	entry[i] = NULL;
