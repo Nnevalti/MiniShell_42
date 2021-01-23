@@ -70,7 +70,7 @@ int		main(int argc, char **argv, char **env)
 			free(data->command);
 			//
 			// // PARSER
-			data->parser = ft_parser(data, data->tokens);
+			data->parser = ft_parser(data);
 			//
 			// FREE LEXER
 				i = 0;

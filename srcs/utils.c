@@ -44,27 +44,27 @@ int		ft_indexof(char *str, char c)
 	return (-1);
 }
 
-t_redirection	**set_redirections(char *command)
+t_redir	**set_redirections(char *command)
 {
 	char	**tokens;
 	int		i;
 	char	*str;
 	int		fd;
-	int		saved_stdout;
-	t_redirection	**redirections;
+	int		saved_fd;
+	t_redir	**redirections;
 
 	tokens = ft_split(command, '>');
 	i = 0;
 	while (tokens[i])
 		i++;
-	if (!(redirections = malloc((i + 1) * sizeof(t_redirection *))))
+	if (!(redirections = malloc((i + 1) * sizeof(t_redir *))))
 		return (NULL);
 	// printf("%s | %s\n", tokens[0], tokens[1]);
 	i = 0;
 	while (tokens[i])
 	{
-		redirections[i] = malloc(sizeof(t_redirection));
-		if (i == 0) redirections[i]->saved_stdout = dup(1);
+		redirections[i] = malloc(sizeof(t_redir));
+		if (i == 0) redirections[i]->saved_fd = dup(1);
 		redirections[i]->str = ft_strtrim(tokens[i], " ");
 		printf("redirections[%d] = %s\n", i, redirections[i]->str);
 		redirections[i]->type = (i == 0) ? NONE : REDIRECT_STDOUT;
@@ -82,15 +82,15 @@ t_redirection	**set_redirections(char *command)
 	return (redirections);
 }
 
-void	reset_redirections(t_redirection **redirections)
+void	reset_redirections(t_redir **redirections)
 {
 	int		i;
 
 	i = 0;
-	printf("%d\n", redirections[0]->saved_stdout);
+	printf("%d\n", redirections[0]->saved_fd);
 
-	dup2(redirections[0]->saved_stdout, 1);
-	close(redirections[0]->saved_stdout);
+	dup2(redirections[0]->saved_fd, 1);
+	close(redirections[0]->saved_fd);
 
 	while (redirections[i])
 	{
