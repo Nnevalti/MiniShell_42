@@ -77,12 +77,12 @@ t_command	*ft_parser(t_data *data)
 		entry[i] = ft_create_struct(data->tokens[i][0]);
 		if (multiple_commands(data->tokens[i])) //verifier si plusieurs commands dans tokens[i]
 		{
-			printf("YES MULTIPLE commands\n");
+			printf("YES MULTIPLE commands IL FAUT OUVRIR DES TRUCS\n");
 			// parse_commands(data->tokens[i]);
 		}
 		else
 		{
-			printf("NO MULTIPLE commands\n");
+			printf("NO MULTIPLE commands IL FAUT PAS OUVRIR DES TRUCS\n");
 			// entry = ft_init_struct();
 			//substr command in entry->command
 			//substr opt in entry->opt
