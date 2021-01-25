@@ -25,31 +25,14 @@
 
 # define 			MAX_PATH_LENGTH 4096
 
-# define 			TRUE 1
-# define 			FALSE 0
-
 int					EXIT_CODE;
 
-typedef int			t_bool;
+typedef enum			e_bool
+{
+	FALSE,
+	TRUE
+}						t_bool;
 
-// typedef enum		e_type
-// {
-// 	PIPE,
-// 	REDIR,
-// 	COMMAND,
-// 	DEFAULT
-// }					t_type;
-
-// typedef struct		s_tree
-// {
-// 	t_type			type; //		&&			|
-// 	char 			*command; //	NULL		NULL
-// 	char			*options; //	NULL		NULL
-// 	t_redir_type	redir_type;
-// 	char			*file;
-// 	void			*left; //		|			ls -l
-// 	void			*right; //		ls			sort
-// }					t_tree;
 typedef enum		e_redir_type
 {
 	NONE,
@@ -68,10 +51,10 @@ typedef	struct		s_redir
 
 typedef struct		s_pipe
 {
-	// IN ? TRUE / FALSE
-	// OUT ? TRUE / FALSE
-	// int STDIN_PIPE[2];
-	// int STDOUT_PIPE[2];
+	t_bool			in;
+	t_bool			out;
+	int				stdin[2];
+	int				stdout[2];
 }					t_pipe;
 
 typedef struct		s_command
