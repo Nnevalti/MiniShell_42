@@ -25,9 +25,15 @@ void	prompt(char *my_prompt)
 	ft_putstr_fd( "\e[39m$> \e[0m", 2);
 }
 
-void	handle_exit(int signo)
+void	handle_exit(t_data *data/*int signo*/)
 {
-	EXIT_CODE = 130;
+
+	// EXIT_CODE = 130;
+	free_parser(data->parser);
+	free_tab_str(data->my_env);
+	free(data->prompt);
+	free(data->error);
+	free(data);
 	exit(1);
 }
 
@@ -41,7 +47,6 @@ int		main(int argc, char **argv, char **env)
 {
 	t_data	*data;
 	int		i;
-	char	*new_command;
 
 	data = init_data(env);
 
@@ -62,12 +67,12 @@ int		main(int argc, char **argv, char **env)
 			for(int j = 0; data->tokens[i][j]; j++)
 				printf("TOKENS[%d][%d] : [%s]\n",i,j,data->tokens[i][j]);
 
+		free(data->command);
 		if (check_error(data, data->tokens) == -1)
 			handle_error(data);
 		else
 		{
 			// FREE COMMAND
-			free(data->command);
 			//
 			// // PARSER
 			data->parser = ft_parser(data);
@@ -80,12 +85,14 @@ int		main(int argc, char **argv, char **env)
 					i++;
 				}
 				free(data->tokens);
+			if (!ft_strcmp(data->parser[0]->cmd,"exit"))
+				handle_exit(data);
 		// 	//
 		// 	// // EXECUTOR
 		// 	// ast_exec(data);
 		// 	//
 		// 	// // FREE PARSER
-		// 	// free_ast(data->parser);
+			// free_ast(data->parser);
 		}
 	}
 }

@@ -31,14 +31,14 @@ int	check_error(t_data *data, char ***tokens)
 void 	handle_error(t_data *data)
 {
 	printf("error %d\n", data->error->errno);
-	if (data->error->errno == QUOTE)
-	{
-		free(data->command);
-	}
+	// if (data->error->errno == QUOTE)
+	// {
+	// 	free(data->command);
+	// }
 	if (data->error->errno == PARSER)
 	{
 		printf("nani the fuck ?\n");
-		free(data->command);
+		// free(data->command);
 		free_tokens(data->tokens);
 	}
 	if (data->error->value)

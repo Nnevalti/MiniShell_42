@@ -36,22 +36,47 @@ void	free_tokens(char ***tokens)
 	free(tokens);
 	return ;
 }
-// void	free_ast(t_tree *entry)
-// {
-// 	if (entry->left)
-// 	{
-// 		free_ast(entry->left);
-// 			if (entry->right)
-// 				free_ast(entry->right);
-// 	}
-// 	if (entry->type == COMMAND)
-// 	{
-// 		free(entry->command);
-// 		if (entry->options != NULL)
-// 			free_tab_str(entry->options);
-// 	}
-// 	else if (entry->type == REDIR)
-// 		free(entry->file);
-// 	free(entry);
-// 	return ;
-// }
+
+void	free_redir(t_redir *redir)
+{
+	if (redir->str)
+		free(redir->str);
+	if (redir->next)
+		free_redir(redir->next);
+	free(redir);
+	return ;
+}
+
+void	free_recursif(t_command *ptr)
+{
+	if (ptr)
+	{
+		if(ptr->cmd)
+			free(ptr->cmd);
+		if(ptr->opt)
+			free(ptr->opt);
+		if(ptr->redir)
+			free_redir(ptr->redir);
+		if (ptr->pipe)
+			free(ptr->pipe);
+	}
+	if (ptr->next)
+		free_recursif(ptr->next);
+	free(ptr);
+	return ;
+}
+
+void	free_parser(t_command **parser)
+{
+	int i;
+	t_command *current;
+
+	i = 0;
+	while(parser[i])
+	{
+		free_recursif(parser[i]);
+		i++;
+	}
+	free(parser);
+	return ;
+}

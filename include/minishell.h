@@ -90,7 +90,7 @@ typedef struct		s_data
 	char			*command;
 	char			***tokens;
 	int				nb_cmds;
-	t_command		*parser;
+	t_command		**parser;
 	t_error			*error;
 }					t_data;
 
@@ -113,6 +113,8 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 int					tab_str_len(char **tab);
 void				free_tab_str(char **tab);
 void				free_tokens(char ***tokens);
+void				free_parser(t_command **parser);
+
 
 
 t_redir				**set_redirections(char *command);
@@ -122,8 +124,7 @@ int 				*init_pipes(char **tokens);
 void				pipe_io(int *pipes, int index);
 void				close_pipes(int *pipes);
 void				ast_exec(t_data *data);
-void				free_ast(t_command *entry);
-t_command			*ft_parser(t_data *data);
+t_command			**ft_parser(t_data *data);
 
 int					ft_isblank(char c);
 int					ft_search(char c, char *str);

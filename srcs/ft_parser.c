@@ -40,7 +40,7 @@ t_pipe		*ft_init_pipe(void)
 		return(NULL);
 	pipe->in = FALSE;
 	pipe->out = FALSE;
-	// ERROR PATCH : 
+	// ERROR PATCH :
 	// pipe->stdin = {};
 	// pipe->stdout = {};
 
@@ -107,15 +107,21 @@ void		ft_set_redir(t_redir *redir, char *token, t_command *ptr, t_redir_type typ
 		i++;
 	if (token[i])
 	{
-		tmp = ft_strjoin(ptr->opt, " ");
-		free(ptr->opt);
-		ptr->opt = tmp;
-		tmp = ft_strjoin(ptr->opt, &token[i]);
-		free(ptr->opt);
-		ptr->opt = tmp;
+		if (ptr->opt)
+		{
+			tmp = ft_strjoin(ptr->opt, " ");
+			free(ptr->opt);
+			ptr->opt = tmp;
+			tmp = ft_strjoin(ptr->opt, &token[i]);
+			free(ptr->opt);
+			ptr->opt = tmp;
+		}
+		else
+			ptr->opt = ft_strdup(&token[i]);
 	}
 	return ;
 }
+//echo < salut file
 
 int			find_redir(char **tokens, t_command *ptr)
 {
@@ -132,11 +138,11 @@ int			find_redir(char **tokens, t_command *ptr)
 			redir->next = ft_init_redir();
 			redir = redir->next;
 		}
-		if (!(ft_strncmp(tokens[0], ">>", 2)))
+		if (!(ft_strncmp(tokens[i], ">>", 2)))
 			ft_set_redir(redir, &tokens[i][2], ptr, APPEND_STDOUT);
-		else if (tokens[0][0] == '>')
+		else if (tokens[i][0] == '>')
 			ft_set_redir(redir, &tokens[i][1], ptr, REDIRECT_STDOUT);
-		else if (tokens[0][0] == '<')
+		else if (tokens[i][0] == '<')
 			ft_set_redir(redir, &tokens[i][1], ptr, REDIRECT_STDIN);
 		if (tokens[i])
 			i++;
@@ -185,7 +191,7 @@ void		parse_commands(char **tokens, t_command *ptr)
 	}
 }
 
-t_command	*ft_parser(t_data *data)
+t_command	**ft_parser(t_data *data)
 {
 	t_command	**entry;
 	int i;
@@ -203,27 +209,27 @@ t_command	*ft_parser(t_data *data)
 
 		}
 		// FOR DEBUGGING
-		// printf("IN PARSE COMMANDS\n");
-		// t_command	*test;
-		// t_redir 	*redir;
-		// test = entry[i];
-		// while (test)
-		// {
-		// 	printf("entry->cmd = [%s]\nentry->opt = [%s]\n",test->cmd, test->opt);
-		// 	redir = test->redir;
-		// 	while (redir)
-		// 	{
-		// 		printf("REDIR : type = %d / file = %s\n", redir->type, redir->str);
-		// 		redir = redir->next;
-		// 	}
-		// 	if (test->pipe)
-		// 		printf("PIPE : in = %d / out = %d\n", test->pipe->in, test->pipe->out);
-		// 	test = test->next;
-		// }
+		printf("IN PARSE COMMANDS\n");
+		t_command	*test;
+		t_redir 	*redir;
+		test = entry[i];
+		while (test)
+		{
+			printf("entry->cmd = [%s]\nentry->opt = [%s]\n",test->cmd, test->opt);
+			redir = test->redir;
+			while (redir)
+			{
+				printf("REDIR : type = %d / file = %s\n", redir->type, redir->str);
+				redir = redir->next;
+			}
+			if (test->pipe)
+				printf("PIPE : in = %d / out = %d\n", test->pipe->in, test->pipe->out);
+			test = test->next;
+		}
 		// END DEBUGGING
 
 		i++;
 	}
 	entry[i] = NULL;
-	return(NULL);
+	return(entry);
 }
