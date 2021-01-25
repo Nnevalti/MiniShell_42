@@ -70,6 +70,7 @@ int		main(int argc, char **argv, char **env)
 		free(data->command);
 		if (check_error(data, data->tokens) == -1)
 			handle_error(data);
+		//CHECK QUOTES ERROR TOO
 		else
 		{
 			// FREE COMMAND
@@ -85,11 +86,13 @@ int		main(int argc, char **argv, char **env)
 					i++;
 				}
 				free(data->tokens);
-			if (!ft_strcmp(data->parser[0]->cmd,"exit"))
-				handle_exit(data);
+
 		// 	//
 		// 	// // EXECUTOR
-		// 	// ast_exec(data);
+			ft_executor(data);
+
+		if (!ft_strcmp(data->parser[0]->cmd,"exit"))
+			handle_exit(data);
 		// 	//
 		// 	// // FREE PARSER
 			// free_ast(data->parser);

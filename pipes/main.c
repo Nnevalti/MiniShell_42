@@ -35,7 +35,7 @@ static void pipeline(char ***cmd)
 			perror("fork");
 			exit(1);
 		}
-		else if (pid == 0)
+		else if (pid == 0) //fork renvoie 0 -> on est donc dans l'enfant
 		{
 			dup2(fdd, 0);
 			if (*(cmd + 1) != NULL)
@@ -46,7 +46,7 @@ static void pipeline(char ***cmd)
 			execvp((*cmd)[0], *cmd);
 			exit(1);
 		}
-		else
+		else // fork renvoie 1 -> on est dans le parent
 		{
 			wait(NULL); 		/* Collect childs */
 			close(fd[1]);
@@ -60,14 +60,18 @@ static void pipeline(char ***cmd)
  * Compute multi-pipeline based
  * on a command list.
  */
-int	main(void)
+int	main(char **env)
 {
-	char *ls[] = {"echo", "test", NULL};
-	char *sort[] = {"sort", NULL};
-	char *cat[] = {"cat", "-e", NULL};
-	char **cmd[] = {ls, sort, cat, NULL};
+	// char **env;
+	char *const argv[] = {"/usr/bin/echo","salut",NULL};;
+	// char *ls[] = {"echo", "test", NULL};
+	// char *sort[] = {"sort", NULL};
+	// char *cat[] = {"cat", "-e", NULL};
+	// char **cmd[] = {ls, sort, cat, NULL};
 
-	pipeline(cmd);
+	// pipeline(cmd);
+	if (execve(argv[0],argv,NULL)==-1)
+		perror("excve");
 	return (0);
 }
 

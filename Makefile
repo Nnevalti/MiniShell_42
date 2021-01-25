@@ -18,11 +18,12 @@ SRC			=	main.c \
 				utils.c \
 				free.c \
 				ft_lexer.c \
-				ast_exec.c \
+				ft_executor.c \
 				ft_parser.c \
 				handle_env.c \
 				init.c \
 				handle_error.c \
+				handle_quotes.c \
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)

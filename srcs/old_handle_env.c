@@ -122,53 +122,29 @@ int			get_nb_var(char const *str)
 	return (nb_var);
 }
 
-char	*handle_cmd_env(char *str, t_data *data)
+void		handle_env(t_data *data)
 {
 	int		i;
 	char	**env_array;
 	int		env_len;
 	int		len;
-	char	*new_str;
 
 	i = 0;
 	env_len = 0;
 	len = 0;
-	env_array = get_env_array(str, data->my_env,
-				get_nb_var(str), &env_len);
+	env_array = get_env_array(data->command, data->my_env,
+				get_nb_var(data->command), &env_len);
 	while (env_array[i])
 	{
 		len += ft_strlen(env_array[i]);
 		i++;
 	}
-	if (!(new_str = malloc(sizeof(char *) * ft_strlen(str)
+	if (!(data->new_command = malloc(sizeof(char *) * ft_strlen(data->command)
 		- env_len + len + 1)))
-		return(NULL);
-	new_str = get_new_str(str, new_str, env_array);
-	return(new_str);
-}
-
-void		handle_env(t_command *current, t_data *data)
-{
-	char *tmp;
-	t_redir *redir_tmp;
-
-	tmp = handle_cmd_env(current->cmd, data);
-	free(current->cmd);
-	current->cmd = tmp;
-	if (current->opt)
 	{
-		tmp = handle_cmd_env(current->opt, data);
-		free(current->opt);
-		current->opt = tmp;
+		data->error->errno = MALLOC;
+		return ;
 	}
-	redir_tmp = current->redir;
-	while(redir_tmp)
-	{
-		tmp = handle_cmd_env(redir_tmp->str, data);
-		free(redir_tmp->str);
-		redir_tmp->str = tmp;
-		printf("current->redir->str %s\n",redir_tmp->str);
-		redir_tmp = redir_tmp->next;
-	}
+	data->new_command = get_new_str(data->command, data->new_command, env_array);
 	return ;
 }

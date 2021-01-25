@@ -60,7 +60,8 @@ typedef struct		s_pipe
 typedef struct		s_command
 {
 	char 			*cmd; // echo
-	char 			*opt; //-n test pute etc...
+	char 			*opt; //-n test pute etc... cest grossier ca
+	char			**opt_tab;
 	t_redir			*redir; // pointeur vers la structure redir
 	t_pipe			*pipe;	// IDK yet but something
 	void			*next; // Next command to process if = NULL -> end
@@ -105,7 +106,8 @@ void				ft_unset(t_data *data, t_command *ptr);
 
 int					ft_indexof(char *str, char c);
 char				***ft_lexer(t_data *data);
-void				handle_env(t_data *data);
+void				handle_env(t_command *current, t_data *data);
+void				handle_quotes(t_command *current, t_data *data);
 char				**get_env(char **env);
 char 				*get_env_var(char **env, char *name);
 t_bool				set_env_var(char **env, char *name, char *variable);
@@ -123,8 +125,9 @@ void				reset_redirections(t_redir **redirections);
 int 				*init_pipes(char **tokens);
 void				pipe_io(int *pipes, int index);
 void				close_pipes(int *pipes);
-void				ast_exec(t_data *data);
 t_command			**ft_parser(t_data *data);
+void				ft_executor(t_data *data);
+
 
 int					ft_isblank(char c);
 int					ft_search(char c, char *str);
