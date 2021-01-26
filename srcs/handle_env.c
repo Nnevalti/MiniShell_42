@@ -70,7 +70,6 @@ int			get_nb_var(char const *str)
 		if (str[i])
 			i++;
 	}
-	printf("nb_var = %d\n", nb_var);
 	return (nb_var);
 }
 

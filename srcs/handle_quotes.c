@@ -7,23 +7,18 @@ int		get_nb_opt(char *opt)
 
 	i = 0;
 	nb_opt = 1;
-	printf("opt : [%s]\n",opt);
 	while (ft_isblank(opt[i]))
 		i++;
 	while(opt[i])
 	{
-		if (opt[i] == '\'' && opt[i + 1] != '\'')
-			i += 2;
-		else if (opt[i] == '\'')
+		if (opt[i] == '\'')
 		{
 			i++;
 			while(opt[i] && opt[i] != '\'')
 				i++;
 			i++;
 		}
-		else if (opt[i] == '\"' && opt[i + 1] != '\"')
-			i += 2;
-		else if (opt[i] == '\"'&& opt[i + 1] != '\"')
+		else if (opt[i] == '\"')
 		{
 			i++;
 			while(opt[i] && opt[i] != '\"')
@@ -66,9 +61,7 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 		i++;
 	while(opt[i])
 	{
-		if (opt[i] == '\'' && opt[i + 1] != '\'')
-			i += 2;
-		else if (opt[i] == '\'')
+		if (opt[i] == '\'')
 		{
 			i++;
 			start = i;
@@ -88,8 +81,6 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 			}
 			i++;
 		}
-		else if (opt[i] == '\"' && opt[i + 1] != '\"')
-			i += 2;
 		else if (opt[i] == '\"')
 		{
 			i++;
@@ -153,15 +144,15 @@ void	handle_quotes(t_command *current, t_data *data)
 
 	i = 0;
 	nb_opt = 0;
-	if (current->opt)
+	if (current->opt && ft_strcmp(current->opt,"\0"))
 		nb_opt = get_nb_opt(current->opt);
 	printf("nb_opt %d\n",nb_opt);
-	if (current->opt)
+	if (current->opt && ft_strcmp(current->opt,"\0"))
 		current->opt_tab = get_opt_tab(current->opt, data, nb_opt);
-	if (current->opt)
+	if (current->opt && ft_strcmp(current->opt,"\0"))
 	{
 		for (int j = 0; current->opt_tab[j]; j++)
-			printf("opt_tab : %s\n", current->opt_tab[j]);
+			printf("opt_tab : [%s]\n", current->opt_tab[j]);
 	}
 	return;
 }

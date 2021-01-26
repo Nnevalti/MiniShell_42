@@ -28,7 +28,8 @@ int		check_quotes_error(t_data *data, char *command)
 			{
 				if (command[i] == '\\' && command[i + 1])
 					i += 2;
-				i++;
+				else
+					i++;
 			}
 			if (command[i] == '\0')
 			{

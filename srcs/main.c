@@ -55,7 +55,7 @@ int		main(int argc, char **argv, char **env)
 		// init_signal_handler();
 		prompt(data->prompt);
 		get_next_line(0, &data->command);
-		printf("USER COMMAND: %s\n", data->command);
+		printf("USER COMMAND: [%s]\n", data->command);
 		if (check_quotes_error(data, data->command) == -1)
 		{
 			handle_error(data);

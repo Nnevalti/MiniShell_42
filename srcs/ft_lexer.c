@@ -215,7 +215,7 @@ char		***split_tokens(char **cmds, int nb_cmds)
 
 char		***ft_lexer(t_data *data)
 {
-	printf("IN LEXER : %s\n", data->command);
+	printf("\nIN LEXER\n");
 
 	char	**cmds;
 	char	***tokens;
