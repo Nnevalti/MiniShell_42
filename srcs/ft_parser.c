@@ -65,7 +65,6 @@ t_command	*ft_create_struct(char *tokens)
 			else
 			{
 				ptr->opt = ft_substr(tokens, i, ft_strlen(&tokens[i]));
-
 				return(ptr);
 			}
 		}

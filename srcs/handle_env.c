@@ -24,6 +24,8 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 			while (str[i] && str[i] != '\'')
 				i++;
 		}
+		if (str[i] == '\\' && str[i + 1])
+			i += 2;
 		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'))
 		{
 			i++;
@@ -72,8 +74,10 @@ char	*get_new_str(char const *str, char *new_str, char **env_array)
 				j++;
 			}
 		}
+		if (str[i] == '\\')
+			i++;
 		if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| str[i + 1] == '_'))
+			|| str[i + 1] == '_') && str[i -1] && str[i - 1] != '\\')
 		{
 			i++;
 			while (ft_isalnum(str[i]) || str[i] == '_')
