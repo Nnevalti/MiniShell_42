@@ -39,7 +39,7 @@ void 	handle_error(t_data *data)
 	{
 		printf("nani the fuck ?\n");
 		// free(data->command);
-		free_tokens(data->tokens);
+		free_lexer(data);
 	}
 	if (data->error->value)
 		printf("%s\n", data->error->value);

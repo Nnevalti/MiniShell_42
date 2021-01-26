@@ -77,7 +77,7 @@ char	**split_command(char *cmd, int nb_cmd)
 	int end;
 	char **cmds;
 
-	if(!(cmds = malloc(sizeof(char *) * nb_cmd + 1)))
+	if(!(cmds = malloc(sizeof(char *) * (nb_cmd + 1))))
 		return(NULL);
 	i = 0;
 	j = 0;
@@ -105,7 +105,7 @@ char	**split_command(char *cmd, int nb_cmd)
 		cmds[j] = ft_substr(cmd, start, end - start);
 		j++;
 	}
-	cmds[j] = NULL;
+	cmds[j] = '\0';
 	return(cmds);
 }
 
@@ -146,7 +146,7 @@ char	**fill_tokens(char *cmd, int nb_tokens)// split sep | < > >>
 	int end;
 	char **tokens;
 
-	if (!(tokens = malloc(sizeof(char *) * nb_tokens + 1)))
+	if (!(tokens = malloc(sizeof(char *) * (nb_tokens + 1))))
 		return (NULL);
 	i = 0;
 	j = 0;
@@ -201,7 +201,7 @@ char		***split_tokens(char **cmds, int nb_cmds)
 	char	***tokens;
 
 	i = 0;
-	if (!(tokens = malloc(sizeof(char **) * nb_cmds + 1)))
+	if (!(tokens = malloc(sizeof(char **) * (nb_cmds + 1))))
 		return (NULL);
 	while (cmds && cmds[i] && i < nb_cmds)
 	{

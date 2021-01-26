@@ -63,8 +63,8 @@ OBJS = 	$(SRCS:.c=.o)
 all: 	$(NAME)
 
 $(NAME):
-		gcc -Wall -Wextra -Werror -c $(addprefix $(DIR), $(SRCS))
-		ar rc $(NAME) $(OBJS)
+		@gcc -Wall -Wextra -Werror -c $(addprefix $(DIR), $(SRCS))
+		@ar rc $(NAME) $(OBJS)
 		@mkdir -p objs
 		@mv $(OBJS) objs
 

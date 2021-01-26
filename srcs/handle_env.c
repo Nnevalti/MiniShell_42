@@ -10,7 +10,7 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 
 	i = 0;
 	j = 0;
-	if (!(env_array = malloc(sizeof(char *) * nb_var + 1)))
+	if (!(env_array = malloc(sizeof(char *) * (nb_var + 1))))
 	{
 		// data->error->errno = MALLOC;
 		return (NULL);
@@ -140,8 +140,8 @@ char	*handle_cmd_env(char *str, t_data *data)
 		len += ft_strlen(env_array[i]);
 		i++;
 	}
-	if (!(new_str = malloc(sizeof(char *) * ft_strlen(str)
-		- env_len + len + 1)))
+	if (!(new_str = malloc(sizeof(char *) * (ft_strlen(str)
+		- env_len + len + 1))))
 		return(NULL);
 	new_str = get_new_str(str, new_str, env_array);
 	return(new_str);

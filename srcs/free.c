@@ -23,18 +23,16 @@ void	free_tab_str(char **tab)
 	return ;
 }
 
-void	free_tokens(char ***tokens)
+void	free_lexer(t_data *data)
 {
-	int i;
-
+	int	i;
 	i = 0;
-	while (tokens[i])
+	while (data->tokens[i])
 	{
-		free_tab_str(tokens[i]);
+		free_tab_str(data->tokens[i]);
 		i++;
 	}
-	free(tokens);
-	return ;
+	free(data->tokens);
 }
 
 void	free_redir(t_redir *redir)

@@ -97,6 +97,15 @@ typedef struct		s_data
 
 t_data      		*init_data(char **env);
 
+// CORE
+char				***ft_lexer(t_data *data);
+t_command			**ft_parser(t_data *data);
+void				ft_executor(t_data *data);
+void				handle_env(t_command *current, t_data *data);
+void				handle_quotes(t_command *current, t_data *data);
+
+
+// BUILTINS
 int					ft_env(char **env);
 void				ft_pwd(void);
 void				ft_echo(t_command *ptr);
@@ -104,35 +113,34 @@ void				ft_cd(t_data *data, t_command *ptr);
 void				ft_export(t_data *data, t_command *ptr);
 void				ft_unset(t_data *data, t_command *ptr);
 
-int					ft_indexof(char *str, char c);
-char				***ft_lexer(t_data *data);
-void				handle_env(t_command *current, t_data *data);
-void				handle_quotes(t_command *current, t_data *data);
+// ENV
 char				**get_env(char **env);
 char 				*get_env_var(char **env, char *name);
 t_bool				set_env_var(char **env, char *name, char *variable);
 
-int					tab_str_len(char **tab);
-void				free_tab_str(char **tab);
-void				free_tokens(char ***tokens);
-void				free_parser(t_command **parser);
-
-
-
+// REDIRECTIONS
 t_redir				**set_redirections(char *command);
 void				reset_redirections(t_redir **redirections);
 
+// PIPES
 int 				*init_pipes(char **tokens);
 void				pipe_io(int *pipes, int index);
 void				close_pipes(int *pipes);
-t_command			**ft_parser(t_data *data);
-void				ft_executor(t_data *data);
 
-
+// UTILS
 int					ft_isblank(char c);
 int					ft_search(char c, char *str);
+int					ft_indexof(char *str, char c);
+int					tab_str_len(char **tab);
 
+// ERROR HANDLING
 void 				handle_error(t_data *data);
 int					check_error(t_data *data, char ***tokens);
+
+// FREE
+void				free_tab_str(char **tab);
+void				free_tokens(char ***tokens);
+void				free_parser(t_command **parser);
+void				free_lexer(t_data *data);
 
 #endif

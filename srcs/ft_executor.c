@@ -21,7 +21,7 @@ void	analyse_parser(t_command *cmd, t_data *data)
 		handle_env(current, data);
 		printf("current->cmd %s\n",current->cmd);
 		printf("current->opt %s\n",current->opt);
-		handle_quotes(current, data);
+		// handle_quotes(current, data);
 		// handle_redir(current);
 		// handle_pipes(current);
 		// execve("/usr/bin/echo",argv,data->my_env);
@@ -30,6 +30,7 @@ void	analyse_parser(t_command *cmd, t_data *data)
 }
 void	ft_executor(t_data *data)
 {
+	printf("\nIN EXECUTOR\n");
 	int i;
 
 	i = 0;
@@ -38,6 +39,5 @@ void	ft_executor(t_data *data)
 		analyse_parser(data->parser[i], data);
 		i++;
 	}
-	printf("\nIN AST_EXEC\n");
-	printf("WE LEAVE AST_EXEC\n\n");
+	printf("WE LEAVE EXECUTOR\n\n");
 }

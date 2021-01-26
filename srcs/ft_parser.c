@@ -196,7 +196,7 @@ t_command	**ft_parser(t_data *data)
 	t_command	**entry;
 	int i;
 
-	if (!(entry = malloc(sizeof(t_command *) * data->nb_cmds + 1)))
+	if (!(entry = malloc(sizeof(t_command *) * (data->nb_cmds + 1))))
 		return(NULL);
 	i = 0;
 	while(data->tokens[i])

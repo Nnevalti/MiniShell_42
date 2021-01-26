@@ -43,17 +43,17 @@ $(LIBFT)	:
 				@make -C $(FT_DIR)
 
 $(NAME)		:
-				$(CC) $(CFLAGS) $(INC) \
+				$(CC) -g $(CFLAGS) $(INC) \
 				$(addprefix $(SRC_DIR)/, $(SRC)) $(LIBFT) -o $(NAME)
 
 clean		:
 				@rm -rf $(OBJS)
-				make clean -C $(FT_DIR)
+				@make clean -C $(FT_DIR)
 
 fclean		:	clean
 				@echo "\nCleaning Directories..."
 				rm -f $(NAME)
-				make fclean -C $(FT_DIR)
+				@make fclean -C $(FT_DIR)
 
 re			:	fclean all
 

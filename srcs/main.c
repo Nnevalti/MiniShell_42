@@ -60,42 +60,37 @@ int		main(int argc, char **argv, char **env)
 		// LEXER
 		// handle_env(data);
 		data->tokens = ft_lexer(data);
-		printf("TOKENS[0][0] : [%s]\n", data->tokens[0][0]);
 
+		// DEBUGGING
 		printf("\nLEXER :\n");
 		for(int i = 0; data->tokens[i]; i++)
 			for(int j = 0; data->tokens[i][j]; j++)
 				printf("TOKENS[%d][%d] : [%s]\n",i,j,data->tokens[i][j]);
+		// END DEBUGGING
 
+		// FREE COMMAND
 		free(data->command);
 		if (check_error(data, data->tokens) == -1)
+		{
 			handle_error(data);
-		//CHECK QUOTES ERROR TOO
+			//CHECK QUOTES ERROR TOO
+		}
 		else
 		{
-			// FREE COMMAND
-			//
-			// // PARSER
+			// PARSER
 			data->parser = ft_parser(data);
 			//
 			// FREE LEXER
-				i = 0;
-				while (data->tokens[i])
-				{
-					free_tab_str(data->tokens[i]);
-					i++;
-				}
-				free(data->tokens);
+			free_lexer(data);
 
-		// 	//
-		// 	// // EXECUTOR
+			// EXECUTOR
 			ft_executor(data);
 
-		if (!ft_strcmp(data->parser[0]->cmd,"exit"))
-			handle_exit(data);
-		// 	//
-		// 	// // FREE PARSER
-			// free_ast(data->parser);
+			printf("FREE LEXER\n");
+			// FREE PARSER
+			if (!ft_strcmp(data->parser[0]->cmd, "exit"))
+				handle_exit(data);
+			free_parser(data->parser);
 		}
 	}
 }
