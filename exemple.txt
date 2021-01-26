@@ -51,3 +51,5 @@ priorite 3 : commandes
 
 
 cho "$TEST" $TEST$LESS $LOL ; echo "bonjour" | ls -l > hello.txt | sort
+
+test ssh
