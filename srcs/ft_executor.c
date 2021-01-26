@@ -10,8 +10,8 @@
 
 void	analyse_parser(t_command *cmd, t_data *data)
 {
-	t_command *current;
-	char *path;
+	t_command	*current;
+	char		*path;
 	// char *const argv[]={"echo","lol","lol",NULL};
 	// const char *pathname = "/usr/bin/echo";
 
@@ -28,12 +28,13 @@ void	analyse_parser(t_command *cmd, t_data *data)
 		current = current->next;
 	}
 }
+
 void	ft_executor(t_data *data)
 {
-	printf("\nIN EXECUTOR\n");
 	int i;
 
 	i = 0;
+	printf("\nIN EXECUTOR\n");
 	while(data->parser[i])
 	{
 		analyse_parser(data->parser[i], data);

@@ -23,9 +23,7 @@
 # include "../libft/include/libft.h"
 # include "../libft/include/get_next_line.h"
 
-# define 			MAX_PATH_LENGTH 4096
-
-int					EXIT_CODE;
+# define MAX_PATH_LENGTH 4096
 
 typedef enum			e_bool
 {
@@ -43,10 +41,10 @@ typedef enum		e_redir_type
 
 typedef	struct		s_redir
 {
-	char			*str; // File name
-	t_redir_type	type; // redirection type [>, <, >>]
-	int				saved_fd; // saved fd from the open(file)
-	void			*next; // next redirection to do if = NULL -> end
+	char			*str;
+	t_redir_type	type;
+	int				saved_fd;
+	void			*next;
 }					t_redir;
 
 typedef struct		s_pipe
@@ -59,12 +57,12 @@ typedef struct		s_pipe
 
 typedef struct		s_command
 {
-	char 			*cmd; // echo
-	char 			*opt; //-n test pute etc... cest grossier ca
+	char			*cmd;
+	char			*opt;
 	char			**opt_tab;
-	t_redir			*redir; // pointeur vers la structure redir
-	t_pipe			*pipe;	// IDK yet but something
-	void			*next; // Next command to process if = NULL -> end
+	t_redir			*redir;
+	t_pipe			*pipe;
+	void			*next;
 	void			*previous;
 
 }					t_command;
@@ -95,50 +93,58 @@ typedef struct		s_data
 	t_error			*error;
 }					t_data;
 
-t_data      		*init_data(char **env);
+t_data				*init_data(char **env);
 
-// CORE
+/*
+**		CORE
+*/
 char				***ft_lexer(t_data *data);
 t_command			**ft_parser(t_data *data);
 void				ft_executor(t_data *data);
 void				handle_env(t_command *current, t_data *data);
 void				handle_quotes(t_command *current, t_data *data);
-
-
-// BUILTINS
+/*
+**		BUILTINS
+*/
 int					ft_env(char **env);
 void				ft_pwd(void);
 void				ft_echo(t_command *ptr);
 void				ft_cd(t_data *data, t_command *ptr);
 void				ft_export(t_data *data, t_command *ptr);
 void				ft_unset(t_data *data, t_command *ptr);
-
-// ENV
+/*
+**		ENV
+*/
 char				**get_env(char **env);
-char 				*get_env_var(char **env, char *name);
+char				*get_env_var(char **env, char *name);
 t_bool				set_env_var(char **env, char *name, char *variable);
-
-// REDIRECTIONS
+/*
+**		REDIRECTIONS
+*/
 t_redir				**set_redirections(char *command);
 void				reset_redirections(t_redir **redirections);
-
-// PIPES
-int 				*init_pipes(char **tokens);
+/*
+**		PIPES
+*/
+int					*init_pipes(char **tokens);
 void				pipe_io(int *pipes, int index);
 void				close_pipes(int *pipes);
-
-// UTILS
+/*
+**		UTILS
+*/
 int					ft_isblank(char c);
 int					ft_search(char c, char *str);
 int					ft_indexof(char *str, char c);
 int					tab_str_len(char **tab);
-
-// ERROR HANDLING
-void 				handle_error(t_data *data);
+/*
+**		ERROR HANDLING
+*/
+void				handle_error(t_data *data);
 int					check_quotes_error(t_data *data, char *command);
 int					check_error(t_data *data, char ***tokens);
-
-// FREE
+/*
+**		FREE
+*/
 void				free_tab_str(char **tab);
 void				free_tokens(char ***tokens);
 void				free_parser(t_command **parser);

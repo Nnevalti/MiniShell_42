@@ -14,7 +14,7 @@
 
 void	free_tab_str(char **tab)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
@@ -26,6 +26,7 @@ void	free_tab_str(char **tab)
 void	free_lexer(t_data *data)
 {
 	int	i;
+
 	i = 0;
 	while (data->tokens[i])
 	{
@@ -49,13 +50,13 @@ void	free_recursif(t_command *ptr)
 {
 	if (ptr)
 	{
-		if(ptr->cmd)
+		if (ptr->cmd)
 			free(ptr->cmd);
-		if(ptr->opt)
+		if (ptr->opt)
 			free(ptr->opt);
-		if(ptr->opt_tab)
+		if (ptr->opt_tab)
 			free_tab_str(ptr->opt_tab);
-		if(ptr->redir)
+		if (ptr->redir)
 			free_redir(ptr->redir);
 		if (ptr->pipe)
 			free(ptr->pipe);
@@ -68,11 +69,11 @@ void	free_recursif(t_command *ptr)
 
 void	free_parser(t_command **parser)
 {
-	int i;
-	t_command *current;
+	int			i;
+	t_command	*current;
 
 	i = 0;
-	while(parser[i])
+	while (parser[i])
 	{
 		free_recursif(parser[i]);
 		i++;

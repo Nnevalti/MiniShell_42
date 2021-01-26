@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 int		ft_isblank(char c)
 {
 	return (c == ' ' || c == '\t');
@@ -21,13 +22,13 @@ int		ft_search(char c, char *str)
 	int i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] == c)
-			return(1);
+			return (1);
 		i++;
 	}
-	return(0);
+	return (0);
 }
 
 int		ft_indexof(char *str, char c)
@@ -42,63 +43,6 @@ int		ft_indexof(char *str, char c)
 		i++;
 	}
 	return (-1);
-}
-
-t_redir	**set_redirections(char *command)
-{
-	char	**tokens;
-	int		i;
-	char	*str;
-	int		fd;
-	int		saved_fd;
-	t_redir	**redirections;
-
-	tokens = ft_split(command, '>');
-	i = 0;
-	while (tokens[i])
-		i++;
-	if (!(redirections = malloc((i + 1) * sizeof(t_redir *))))
-		return (NULL);
-	// printf("%s | %s\n", tokens[0], tokens[1]);
-	i = 0;
-	while (tokens[i])
-	{
-		redirections[i] = malloc(sizeof(t_redir));
-		if (i == 0) redirections[i]->saved_fd = dup(1);
-		redirections[i]->str = ft_strtrim(tokens[i], " ");
-		printf("redirections[%d] = %s\n", i, redirections[i]->str);
-		redirections[i]->type = (i == 0) ? NONE : REDIRECT_STDOUT;
-
-		if (redirections[i]->type == REDIRECT_STDOUT)
-		{
-			fd = open(str, O_WRONLY | O_CREAT, 0777);
-			dup2(fd, 1);
-		}
-		close(fd);
-		i++;
-	}
-	redirections[i] = NULL;
-	free_tab_str(tokens);
-	return (redirections);
-}
-
-void	reset_redirections(t_redir **redirections)
-{
-	int		i;
-
-	i = 0;
-	printf("%d\n", redirections[0]->saved_fd);
-
-	dup2(redirections[0]->saved_fd, 1);
-	close(redirections[0]->saved_fd);
-
-	while (redirections[i])
-	{
-		free(redirections[i]->str);
-		free(redirections[i]);
-		i++;
-	}
-	free(redirections);
 }
 
 int		tab_str_len(char **tab)

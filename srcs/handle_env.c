@@ -73,7 +73,7 @@ int			get_nb_var(char const *str)
 	return (nb_var);
 }
 
-char	*get_new_str(char const *str, char *new_str, char **env_array)
+char		*get_new_str(char const *str, char *new_str, char **env_array)
 {
 	int		i;
 	int		j;
@@ -131,7 +131,7 @@ char	*get_new_str(char const *str, char *new_str, char **env_array)
 	return (new_str);
 }
 
-char	*handle_cmd_env(char *str, t_data *data)
+char		*handle_cmd_env(char *str, t_data *data)
 {
 	int		i;
 	char	**env_array;
@@ -151,15 +151,15 @@ char	*handle_cmd_env(char *str, t_data *data)
 	}
 	if (!(new_str = malloc(sizeof(char *) * (ft_strlen(str)
 		- env_len + len + 1))))
-		return(NULL);
+		return (NULL);
 	new_str = get_new_str(str, new_str, env_array);
-	return(new_str);
+	return (new_str);
 }
 
 void		handle_env(t_command *current, t_data *data)
 {
-	char *tmp;
-	t_redir *redir_tmp;
+	char	*tmp;
+	t_redir	*redir_tmp;
 
 	tmp = handle_cmd_env(current->cmd, data);
 	free(current->cmd);
@@ -171,12 +171,11 @@ void		handle_env(t_command *current, t_data *data)
 		current->opt = tmp;
 	}
 	redir_tmp = current->redir;
-	while(redir_tmp)
+	while (redir_tmp)
 	{
 		tmp = handle_cmd_env(redir_tmp->str, data);
 		free(redir_tmp->str);
 		redir_tmp->str = tmp;
-		// printf("current->redir->str %s\n",redir_tmp->str);
 		redir_tmp = redir_tmp->next;
 	}
 	return ;

@@ -5,7 +5,7 @@ t_command	*ft_init_command(void)
 	t_command	*ptr;
 
 	if (!(ptr = (t_command *)malloc(sizeof(t_command))))
-		return(NULL);
+		return (NULL);
 	ptr->cmd = NULL;
 	ptr->opt = NULL;
 	ptr->opt_tab = NULL;
@@ -13,79 +13,74 @@ t_command	*ft_init_command(void)
 	ptr->pipe = NULL;
 	ptr->next = NULL;
 	ptr->previous = NULL;
-
-	return(ptr);
+	return (ptr);
 }
 
-
-t_redir	*ft_init_redir(void)
+t_redir		*ft_init_redir(void)
 {
 	t_redir	*redir;
 
 	if (!(redir = (t_redir *)malloc(sizeof(t_redir))))
-		return(NULL);
+		return (NULL);
 	redir->str = NULL;
 	redir->type = NONE;
 	redir->saved_fd = 0;
 	redir->next = NULL;
-
 	return (redir);
 }
-
 
 t_pipe		*ft_init_pipe(void)
 {
 	t_pipe	*pipe;
 
 	if (!(pipe = (t_pipe *)malloc(sizeof(t_pipe))))
-		return(NULL);
+		return (NULL);
 	pipe->in = FALSE;
 	pipe->out = FALSE;
 	// ERROR PATCH :
 	// pipe->stdin = {};
 	// pipe->stdout = {};
-
 	return (pipe);
 }
+
 t_command	*ft_create_struct(char *tokens)
 {
 	t_command	*ptr;
-	int i;
+	int			i;
 
 	i = 0;
 	ptr = ft_init_command();
-	while(tokens[i])
+	while (tokens[i])
 	{
 		if (ft_isblank(tokens[i]))
 		{
 			ptr->cmd = ft_substr(tokens, 0, i);
-			while(ft_isblank(tokens[i]))
+			while (ft_isblank(tokens[i]))
 				i++;
 			if (tokens[i] == '\0')
-				return(ptr);
+				return (ptr);
 			else
 			{
 				ptr->opt = ft_substr(tokens, i, ft_strlen(&tokens[i]));
-				return(ptr);
+				return (ptr);
 			}
 		}
 		i++;
 	}
 	ptr->cmd = ft_strdup(tokens);
-	return(ptr);
-
+	return (ptr);
 }
 
-int		multiple_commands(char **tokens)
+int			multiple_commands(char **tokens)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(tokens[i])
+	while (tokens[i])
 		i++;
 	if (i > 1)
-		return(1);
-	return(0);
+		return (1);
+	return (0);
 }
 
 void		ft_set_redir(t_redir *redir, char *token, t_command *ptr, t_redir_type type)
@@ -121,7 +116,6 @@ void		ft_set_redir(t_redir *redir, char *token, t_command *ptr, t_redir_type typ
 	}
 	return ;
 }
-//echo < salut file
 
 int			find_redir(char **tokens, t_command *ptr)
 {
@@ -189,47 +183,43 @@ void		parse_commands(char **tokens, t_command *ptr)
 		if (tokens[i])
 			i++;
 	}
+	return ;
 }
 
 t_command	**ft_parser(t_data *data)
 {
 	t_command	**entry;
-	int i;
+	int			i;
 
+	i = 0;
 	if (!(entry = malloc(sizeof(t_command *) * (data->nb_cmds + 1))))
 		return(NULL);
-	i = 0;
-	while(data->tokens[i])
+	while (data->tokens[i])
 	{
 		entry[i] = ft_create_struct(data->tokens[i][0]);
-		if (multiple_commands(data->tokens[i])) //verifier si plusieurs commands dans tokens[i]
-		{
-			// printf("YES MULTIPLE commands IL FAUT OUVRIR DES TRUCS\n");
+		if (multiple_commands(data->tokens[i]))
 			parse_commands(data->tokens[i], entry[i]);
-
-		}
-		// FOR DEBUGGING
-		printf("IN PARSE COMMANDS\n");
-		t_command	*test;
-		t_redir 	*redir;
-		test = entry[i];
-		while (test)
-		{
-			printf("entry->cmd = [%s]\nentry->opt = [%s]\n",test->cmd, test->opt);
-			redir = test->redir;
-			while (redir)
-			{
-				printf("REDIR : type = %d / file = %s\n", redir->type, redir->str);
-				redir = redir->next;
-			}
-			if (test->pipe)
-				printf("PIPE : in = %d / out = %d\n", test->pipe->in, test->pipe->out);
-			test = test->next;
-		}
+		// // FOR DEBUGGING
+		// printf("IN PARSE COMMANDS\n");
+		// t_command	*test;
+		// t_redir 	*redir;
+		// test = entry[i];
+		// while (test)
+		// {
+		// 	printf("entry->cmd = [%s]\nentry->opt = [%s]\n",test->cmd, test->opt);
+		// 	redir = test->redir;
+		// 	while (redir)
+		// 	{
+		// 		printf("REDIR : type = %d / file = %s\n", redir->type, redir->str);
+		// 		redir = redir->next;
+		// 	}
+		// 	if (test->pipe)
+		// 		printf("PIPE : in = %d / out = %d\n", test->pipe->in, test->pipe->out);
+		// 	test = test->next;
+		// }
 		// END DEBUGGING
-
 		i++;
 	}
 	entry[i] = NULL;
-	return(entry);
+	return (entry);
 }

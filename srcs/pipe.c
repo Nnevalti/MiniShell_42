@@ -13,7 +13,7 @@
 #include "../include/minishell.h"
 
 /*
-http://www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
+** http://www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
 */
 
 int 	*init_pipes(char **tokens)

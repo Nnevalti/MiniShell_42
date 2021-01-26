@@ -33,8 +33,8 @@ int		count_command(char *cmd)
 	{
 		if (cmd[i] == '\\')
 			i += 2;
-		else if (ft_search(cmd[i],"\"\'"))
-			i = skip_quotes(cmd,i);
+		else if (ft_search(cmd[i], "\"\'"))
+			i = skip_quotes(cmd, i);
 		else if (cmd[i] == ';')
 		{
 			while (ft_isblank(cmd[i]) || cmd[i] == ';')
@@ -45,7 +45,7 @@ int		count_command(char *cmd)
 		else
 			i++;
 	}
-	return(nb_cmd);
+	return (nb_cmd);
 }
 
 int		find_start(char *cmd, int i, char *sep)
@@ -64,21 +64,21 @@ int		find_end(char *cmd, int i, char *sep)
 	j = 0;
 	if (ft_search(cmd[i], sep) || cmd[i] == '\0')
 		j++;
-	while(cmd && ft_isblank(cmd[i - j]))
+	while (cmd && ft_isblank(cmd[i - j]))
 		j++;
 	return ((i - j) + 1);
 }
 
 char	**split_command(char *cmd, int nb_cmd)
 {
-	int i;
-	int j;
-	int start;
-	int end;
-	char **cmds;
+	int		i;
+	int		j;
+	int		start;
+	int		end;
+	char	**cmds;
 
-	if(!(cmds = malloc(sizeof(char *) * (nb_cmd + 1))))
-		return(NULL);
+	if (!(cmds = malloc(sizeof(char *) * (nb_cmd + 1))))
+		return (NULL);
 	i = 0;
 	j = 0;
 	start = find_start(cmd, i, ";");
@@ -86,8 +86,8 @@ char	**split_command(char *cmd, int nb_cmd)
 	{
 		if (cmd[i] == '\\')
 			i += 2;
-		else if (ft_search(cmd[i],"\"\'"))
-			i = skip_quotes(cmd,i);
+		else if (ft_search(cmd[i], "\"\'"))
+			i = skip_quotes(cmd, i);
 		else if (cmd[i] == ';')
 		{
 			end = find_end(cmd, i, ";");
@@ -106,15 +106,13 @@ char	**split_command(char *cmd, int nb_cmd)
 		j++;
 	}
 	cmds[j] = '\0';
-	return(cmds);
+	return (cmds);
 }
 
-int		count_tokens(char *cmd)// count sep | < > >>
+int		count_tokens(char *cmd)
 {
 	int	i;
 	int nb_tokens;
-
-	i = 0;
 
 	i = 0;
 	nb_tokens = 1;
@@ -122,8 +120,8 @@ int		count_tokens(char *cmd)// count sep | < > >>
 	{
 		if (cmd[i] == '\\')
 			i += 2;
-		else if (ft_search(cmd[i],"\"\'"))
-			i = skip_quotes(cmd,i);
+		else if (ft_search(cmd[i], "\"\'"))
+			i = skip_quotes(cmd, i);
 		else if (ft_search(cmd[i], "|<>"))
 		{
 			nb_tokens++;
@@ -135,16 +133,16 @@ int		count_tokens(char *cmd)// count sep | < > >>
 		else
 			i++;
 	}
-	return(nb_tokens);
+	return (nb_tokens);
 }
 
-char	**fill_tokens(char *cmd, int nb_tokens)// split sep | < > >>
+char	**fill_tokens(char *cmd, int nb_tokens)
 {
-	int i;
-	int j;
-	int start;
-	int end;
-	char **tokens;
+	int		i;
+	int		j;
+	int		start;
+	int		end;
+	char	**tokens;
 
 	if (!(tokens = malloc(sizeof(char *) * (nb_tokens + 1))))
 		return (NULL);
@@ -155,8 +153,8 @@ char	**fill_tokens(char *cmd, int nb_tokens)// split sep | < > >>
 	{
 		if (cmd[i] == '\\')
 			i += 2;
-		else if (ft_search(cmd[i],"\"\'"))
-			i = skip_quotes(cmd,i);
+		else if (ft_search(cmd[i], "\"\'"))
+			i = skip_quotes(cmd, i);
 		else if (cmd[i] == '>')
 		{
 			if (!(ft_strncmp(&cmd[i], ">>", 2)))
@@ -191,10 +189,10 @@ char	**fill_tokens(char *cmd, int nb_tokens)// split sep | < > >>
 	tokens[j] = ft_substr(cmd, start, end - start);
 	j++;
 	tokens[j] = NULL;
-	return(tokens);
+	return (tokens);
 }
 
-char		***split_tokens(char **cmds, int nb_cmds)
+char	***split_tokens(char **cmds, int nb_cmds)
 {
 	int		i;
 	int		nb_tokens;
@@ -210,16 +208,15 @@ char		***split_tokens(char **cmds, int nb_cmds)
 		i++;
 	}
 	tokens[i] = NULL;
-	return(tokens);
+	return (tokens);
 }
 
-char		***ft_lexer(t_data *data)
+char	***ft_lexer(t_data *data)
 {
-	printf("\nIN LEXER\n");
-
 	char	**cmds;
 	char	***tokens;
 
+	printf("\nIN LEXER\n");
 	data->nb_cmds = count_command(data->command);
 	cmds = split_command(data->command, data->nb_cmds);
 	tokens = split_tokens(cmds, data->nb_cmds);
