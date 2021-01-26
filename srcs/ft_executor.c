@@ -12,19 +12,19 @@ void	analyse_parser(t_command *cmd, t_data *data)
 {
 	t_command	*current;
 	char		*path;
-	char *const argv[]={"echo","lol","lol",NULL};
-	const char *pathname = "/usr/bin/echo";
 
 	current = cmd;
-	while(current)
+	while (current)
 	{
 		handle_env(current, data);
 		printf("current->cmd [%s]\n",current->cmd);
 		printf("current->opt [%s]\n",current->opt);
 		handle_quotes(current, data);
-		// handle_redir(current);
+		// printf("\n REDIR \nstr = [%s]\ntype = [%d]\nsaved_fd = [%d]\nprt = [%p]\n",
+			// current->redir->str,current->redir->type,current->redir->saved_fd,current->redir->next);
+		if (current->redir)
+			handle_redir(current->redir, data);
 		// handle_pipes(current);
-		// execve("/usr/bin/-Recho-R",argv,data->my_env);
 		current = current->next;
 	}
 }
@@ -35,7 +35,7 @@ void	ft_executor(t_data *data)
 
 	i = 0;
 	printf("\nIN EXECUTOR\n");
-	while(data->parser[i])
+	while (data->parser[i])
 	{
 		analyse_parser(data->parser[i], data);
 		i++;

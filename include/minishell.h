@@ -123,6 +123,8 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 */
 t_redir				**set_redirections(char *command);
 void				reset_redirections(t_redir **redirections);
+void				handle_redir(t_redir *redir, t_data *data);
+void				reset_redir(t_redir *redir);
 /*
 **		PIPES
 */

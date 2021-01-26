@@ -90,7 +90,7 @@ int		main(int argc, char **argv, char **env)
 				// EXECUTOR
 				ft_executor(data);
 
-				printf("FREE LEXER\n");
+				// printf("FREE LEXER\n");
 				// FREE PARSER
 				if (!ft_strcmp(data->parser[0]->cmd, "exit"))
 					handle_exit(data);

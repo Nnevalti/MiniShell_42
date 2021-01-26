@@ -24,6 +24,7 @@ SRC			=	main.c \
 				init.c \
 				handle_error.c \
 				handle_quotes.c \
+				handle_redir.c \
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
