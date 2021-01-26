@@ -53,6 +53,8 @@ void	free_recursif(t_command *ptr)
 			free(ptr->cmd);
 		if(ptr->opt)
 			free(ptr->opt);
+		if(ptr->opt_tab)
+			free_tab_str(ptr->opt_tab);
 		if(ptr->redir)
 			free_redir(ptr->redir);
 		if (ptr->pipe)

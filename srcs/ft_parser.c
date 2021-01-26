@@ -8,6 +8,7 @@ t_command	*ft_init_command(void)
 		return(NULL);
 	ptr->cmd = NULL;
 	ptr->opt = NULL;
+	ptr->opt_tab = NULL;
 	ptr->redir = NULL;
 	ptr->pipe = NULL;
 	ptr->next = NULL;
