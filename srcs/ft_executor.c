@@ -12,8 +12,8 @@ void	analyse_parser(t_command *cmd, t_data *data)
 {
 	t_command	*current;
 	char		*path;
-	// char *const argv[]={"echo","lol","lol",NULL};
-	// const char *pathname = "/usr/bin/echo";
+	char *const argv[]={"echo","lol","lol",NULL};
+	const char *pathname = "/usr/bin/echo";
 
 	current = cmd;
 	while(current)
@@ -24,7 +24,7 @@ void	analyse_parser(t_command *cmd, t_data *data)
 		handle_quotes(current, data);
 		// handle_redir(current);
 		// handle_pipes(current);
-		// execve("/usr/bin/echo",argv,data->my_env);
+		// execve("/usr/bin/-Recho-R",argv,data->my_env);
 		current = current->next;
 	}
 }

@@ -138,6 +138,89 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 	return (opt_tab);
 }
 
+char	*handle_cmd_quotes(char *cmd, t_data *data)
+{
+	int		i;
+	int		start;
+	int		len;
+	char	*tmp;
+	char	*tmp2;
+
+	tmp = NULL;
+	i = 0;
+	start = 0;
+	while (ft_isblank(cmd[i]))
+		i++;
+	while (cmd[i])
+	{
+		if (cmd[i] == '\'')
+		{
+			i++;
+			start = i;
+			while (cmd[i] && cmd[i] != '\'')
+				i++;
+			len = i - start;
+			if (!tmp || !*tmp)
+			{
+				tmp = ft_substr(cmd, start, len);
+				tmp2 = tmp;
+			}
+			else
+			{
+				tmp = ft_strnjoin(tmp, &cmd[start], len);
+				free(tmp2);
+				tmp2 = tmp;
+			}
+			i++;
+		}
+		else if (cmd[i] == '\"')
+		{
+			i++;
+			start = i;
+			while (cmd[i] && cmd[i] != '\"')
+			{
+				if (cmd[i] == '\\')
+					i += 2;
+				else
+					i++;
+			}
+			len = i - start;
+			if (!tmp || !*tmp)
+			{
+				tmp = ft_substr(cmd, start, len);
+				tmp2 = tmp;
+			}
+			else
+			{
+				tmp = ft_strnjoin(tmp, &cmd[start], len);
+				free(tmp2);
+				tmp2 = tmp;
+			}
+			i++;
+		}
+		else if (cmd[i])
+		{
+			start = i;
+			while (cmd[i] && cmd[i] != '\'' && cmd[i] != '\"'
+				&& !ft_isblank(cmd[i]))
+				i++;
+			len = i - start;
+			if (!tmp || !*tmp)
+			{
+				tmp = ft_substr(cmd, start, len);
+				tmp2 = tmp;
+			}
+			else
+			{
+				tmp = ft_strnjoin(tmp, &cmd[start], len);
+				free(tmp2);
+				tmp2 = tmp;
+			}
+		}
+	}
+	return (tmp2);
+}
+
 void	handle_quotes(t_command *current, t_data *data)
 {
 	int	i;
@@ -145,12 +228,16 @@ void	handle_quotes(t_command *current, t_data *data)
 
 	i = 0;
 	nb_opt = 0;
+	if(current->cmd && ft_strcmp(current->cmd, "\0"))
+		current->cmd = handle_cmd_quotes(current->cmd,data);
 	if (current->opt && ft_strcmp(current->opt, "\0"))
 		nb_opt = get_nb_opt(current->opt);
 	printf("nb_opt %d\n", nb_opt);
 	if (current->opt && ft_strcmp(current->opt, "\0"))
 		current->opt_tab = get_opt_tab(current->opt, data, nb_opt);
 	// DEBUGGING
+	if(current->cmd && ft_strcmp(current->cmd, "\0"))
+		printf("handle_quotes current->cmd = [%s]\n",current->cmd);
 	if (current->opt && ft_strcmp(current->opt, "\0"))
 	{
 		for (int j = 0; current->opt_tab[j]; j++)
