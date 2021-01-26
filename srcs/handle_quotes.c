@@ -12,14 +12,18 @@ int		get_nb_opt(char *opt)
 		i++;
 	while(opt[i])
 	{
-		if (opt[i] == '\'')
+		if (opt[i] == '\'' && opt[i + 1] != '\'')
+			i += 2;
+		else if (opt[i] == '\'')
 		{
 			i++;
 			while(opt[i] && opt[i] != '\'')
 				i++;
 			i++;
 		}
-		else if (opt[i] == '\"')
+		else if (opt[i] == '\"' && opt[i + 1] != '\"')
+			i += 2;
+		else if (opt[i] == '\"'&& opt[i + 1] != '\"')
 		{
 			i++;
 			while(opt[i] && opt[i] != '\"')
@@ -62,7 +66,9 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 		i++;
 	while(opt[i])
 	{
-		if (opt[i] == '\'')
+		if (opt[i] == '\'' && opt[i + 1] != '\'')
+			i += 2;
+		else if (opt[i] == '\'')
 		{
 			i++;
 			start = i;
@@ -82,6 +88,8 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 			}
 			i++;
 		}
+		else if (opt[i] == '\"' && opt[i + 1] != '\"')
+			i += 2;
 		else if (opt[i] == '\"')
 		{
 			i++;

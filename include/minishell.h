@@ -135,6 +135,7 @@ int					tab_str_len(char **tab);
 
 // ERROR HANDLING
 void 				handle_error(t_data *data);
+int					check_quotes_error(t_data *data, char *command);
 int					check_error(t_data *data, char ***tokens);
 
 // FREE

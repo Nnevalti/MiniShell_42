@@ -11,10 +11,7 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 	i = 0;
 	j = 0;
 	if (!(env_array = malloc(sizeof(char *) * (nb_var + 1))))
-	{
-		// data->error->errno = MALLOC;
 		return (NULL);
-	}
 	while (str[i] && j < nb_var)
 	{
 		len = 0;
@@ -40,6 +37,7 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 			else
 				env_array[j] = ft_strdup(get_env_var(env, env_name));
 			free(env_name);
+			printf("ENV ARRAY [%d] = [%s]\n", j, env_array[j]);
 			j++;
 			*total_len += len + 1;
 		}
@@ -48,6 +46,32 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 	}
 	env_array[j] = NULL;
 	return (env_array);
+}
+
+int			get_nb_var(char const *str)
+{
+	int		i;
+	int		nb_var;
+
+	i = 0;
+	nb_var = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] && str[i] != '\'')
+				i++;
+		}
+		if (str[i] == '\\' && str[i + 1])
+			i += 2;
+		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'))
+			nb_var++;
+		if (str[i])
+			i++;
+	}
+	printf("nb_var = %d\n", nb_var);
+	return (nb_var);
 }
 
 char	*get_new_str(char const *str, char *new_str, char **env_array)
@@ -74,10 +98,15 @@ char	*get_new_str(char const *str, char *new_str, char **env_array)
 				j++;
 			}
 		}
-		if (str[i] == '\\')
-			i++;
+		if (str[i] == '\\' && str[i + 1])
+		{
+			new_str[j] = str[i];
+			new_str[j + 1] = str[i + 1];
+			i += 2;
+			j += 2;
+		}
 		if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| str[i + 1] == '_') && str[i -1] && str[i - 1] != '\\')
+			|| str[i + 1] == '_'))
 		{
 			i++;
 			while (ft_isalnum(str[i]) || str[i] == '_')
@@ -101,29 +130,6 @@ char	*get_new_str(char const *str, char *new_str, char **env_array)
 	free_tab_str(env_array);
 	new_str[j] = '\0';
 	return (new_str);
-}
-
-int			get_nb_var(char const *str)
-{
-	int		i;
-	int		nb_var;
-
-	i = 0;
-	nb_var = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-				i++;
-		}
-		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'))
-			nb_var++;
-		if (str[i])
-			i++;
-	}
-	return (nb_var);
 }
 
 char	*handle_cmd_env(char *str, t_data *data)
@@ -171,7 +177,7 @@ void		handle_env(t_command *current, t_data *data)
 		tmp = handle_cmd_env(redir_tmp->str, data);
 		free(redir_tmp->str);
 		redir_tmp->str = tmp;
-		printf("current->redir->str %s\n",redir_tmp->str);
+		// printf("current->redir->str %s\n",redir_tmp->str);
 		redir_tmp = redir_tmp->next;
 	}
 	return ;

@@ -56,41 +56,46 @@ int		main(int argc, char **argv, char **env)
 		prompt(data->prompt);
 		get_next_line(0, &data->command);
 		printf("USER COMMAND: %s\n", data->command);
-
-		// LEXER
-		// handle_env(data);
-		data->tokens = ft_lexer(data);
-
-		// DEBUGGING
-		printf("\nLEXER :\n");
-		for(int i = 0; data->tokens[i]; i++)
-			for(int j = 0; data->tokens[i][j]; j++)
-				printf("TOKENS[%d][%d] : [%s]\n",i,j,data->tokens[i][j]);
-		// END DEBUGGING
-
-		// FREE COMMAND
-		free(data->command);
-		if (check_error(data, data->tokens) == -1)
+		if (check_quotes_error(data, data->command) == -1)
 		{
 			handle_error(data);
-			//CHECK QUOTES ERROR TOO
 		}
 		else
 		{
-			// PARSER
-			data->parser = ft_parser(data);
-			//
-			// FREE LEXER
-			free_lexer(data);
+			// LEXER
+			// handle_env(data);
+			data->tokens = ft_lexer(data);
 
-			// EXECUTOR
-			ft_executor(data);
+			// DEBUGGING
+			printf("\nLEXER :\n");
+			for(int i = 0; data->tokens[i]; i++)
+				for(int j = 0; data->tokens[i][j]; j++)
+					printf("TOKENS[%d][%d] : [%s]\n",i,j,data->tokens[i][j]);
+			// END DEBUGGING
 
-			printf("FREE LEXER\n");
-			// FREE PARSER
-			if (!ft_strcmp(data->parser[0]->cmd, "exit"))
-				handle_exit(data);
-			free_parser(data->parser);
+			// FREE COMMAND
+			free(data->command);
+			if (check_error(data, data->tokens) == -1)
+			{
+				handle_error(data);
+			}
+			else
+			{
+				// PARSER
+				data->parser = ft_parser(data);
+				//
+				// FREE LEXER
+				free_lexer(data);
+
+				// EXECUTOR
+				ft_executor(data);
+
+				printf("FREE LEXER\n");
+				// FREE PARSER
+				if (!ft_strcmp(data->parser[0]->cmd, "exit"))
+					handle_exit(data);
+				free_parser(data->parser);
+			}
 		}
 	}
 }
