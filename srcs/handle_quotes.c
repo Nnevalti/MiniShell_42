@@ -8,6 +8,8 @@ int		get_nb_opt(char *opt)
 	i = 0;
 	nb_opt = 1;
 	printf("opt : [%s]\n",opt);
+	while (ft_isblank(opt[i]))
+		i++;
 	while(opt[i])
 	{
 		if (opt[i] == '\'')
@@ -50,12 +52,14 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 	char **opt_tab;
 	char *tmp;
 
-	if (!(opt_tab = malloc(sizeof(char *) * nb_opt + 1)))
+	tmp = NULL;
+	if (!(opt_tab = malloc(sizeof(char *) * (nb_opt + 1))))
 		return(NULL);
 	i = 0;
 	j = 0;
 	start = 0;
-	tmp = NULL;
+	while (ft_isblank(opt[i]))
+		i++;
 	while(opt[i])
 	{
 		if (opt[i] == '\'')
@@ -64,16 +68,24 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 			start = i;
 			while(opt[i] && opt[i] != '\'')
 				i++;
-			len = i - start - 1;
-			if (tmp)
-				opt_tab[j] = ft_strnjoin(tmp,&opt[start],len);
+			len = i - start;
+			if (!tmp || !*tmp)
+			{
+				tmp = ft_substr(opt, start, len);
+				opt_tab[j] = tmp;
+			}
 			else
-				tmp = ft_substr(opt,start,len);
+			{
+				tmp = ft_strnjoin(tmp, &opt[start], len);
+				free(opt_tab[j]);
+				opt_tab[j] = tmp;
+			}
 			i++;
 		}
 		else if (opt[i] == '\"')
 		{
 			i++;
+			start = i;
 			while(opt[i] && opt[i] != '\"')
 			{
 				if (opt[i] == '\\')
@@ -81,19 +93,48 @@ char	**get_opt_tab(char *opt, t_data *data, int nb_opt)
 				else
 					i++;
 			}
+			len = i - start;
+			if (!tmp || !*tmp)
+			{
+				tmp = ft_substr(opt, start, len);
+				opt_tab[j] = tmp;
+			}
+			else
+			{
+				tmp = ft_strnjoin(tmp, &opt[start], len);
+				free(opt_tab[j]);
+				opt_tab[j] = tmp;
+			}
 			i++;
 		}
 		else if (ft_isblank(opt[i]))
 		{
 			while(ft_isblank(opt[i]))
 				i++;
+			tmp = NULL;
 			j++;
-			if(tmp)
-				free(tmp);
 		}
 		else if(opt[i])
-			i++;
+		{
+			start = i;
+			while (opt[i] && opt[i] != '\'' && opt[i] != '\"' && !ft_isblank(opt[i]))
+				i++;
+			len = i - start;
+			if (!tmp || !*tmp)
+			{
+				tmp = ft_substr(opt, start, len);
+				opt_tab[j] = tmp;
+			}
+			else
+			{
+				tmp = ft_strnjoin(tmp, &opt[start], len);
+				free(opt_tab[j]);
+				opt_tab[j] = tmp;
+			}
+		}
 	}
+	j++;
+	opt_tab[j] = NULL;
 	return(opt_tab);
 }
 
@@ -106,9 +147,13 @@ void	handle_quotes(t_command *current, t_data *data)
 	nb_opt = 0;
 	if (current->opt)
 		nb_opt = get_nb_opt(current->opt);
-	printf("nb_pot %d\n",nb_opt);
-	// if (!(current->opt_tab = malloc(sizeof(char *) * nb_opt + 1)))
-	// 	return ;
-	// current->opt_tab = get_opt_tab(current->opt, data, nb_opt);
+	printf("nb_opt %d\n",nb_opt);
+	if (current->opt)
+		current->opt_tab = get_opt_tab(current->opt, data, nb_opt);
+	if (current->opt)
+	{
+		for (int j = 0; current->opt_tab[j]; j++)
+			printf("opt_tab : %s\n", current->opt_tab[j]);
+	}
 	return;
 }
