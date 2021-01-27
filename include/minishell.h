@@ -44,6 +44,7 @@ typedef	struct		s_redir
 	char			*str;
 	t_redir_type	type;
 	int				saved_fd;
+	int				fd;
 	void			*next;
 }					t_redir;
 
@@ -125,7 +126,6 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 // t_redir				**set_redirections(char *command);
 // void				reset_redirections(t_redir **redirections);
 void				handle_redir( t_data *data, t_command *cmd, t_redir *redir);
-void				reset_redir(t_redir *redir);
 /*
 **		PIPES
 */
