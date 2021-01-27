@@ -37,11 +37,11 @@ void	handle_exit(t_data *data/*int signo*/)
 	exit(1);
 }
 
-// void	init_signal_handler(void)
-// {
-// 	signal(SIGINT, signal_handler);
-// 	signal(SIGQUIT, signal_handler);
-// }
+void	init_signal_handler(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
+}
 
 int		main(int argc, char **argv, char **env)
 {
@@ -49,10 +49,10 @@ int		main(int argc, char **argv, char **env)
 	int		i;
 
 	data = init_data(env);
-
+	init_signal_handler();
 	while (42)
 	{
-		// init_signal_handler();
+		g_pid = 0;
 		prompt(data->prompt);
 		get_next_line(0, &data->command);
 		printf("USER COMMAND: [%s]\n", data->command);
@@ -63,7 +63,6 @@ int		main(int argc, char **argv, char **env)
 		else
 		{
 			// LEXER
-			// handle_env(data);
 			data->tokens = ft_lexer(data);
 
 			// DEBUGGING
@@ -76,9 +75,7 @@ int		main(int argc, char **argv, char **env)
 			// FREE COMMAND
 			free(data->command);
 			if (check_error(data, data->tokens) == -1)
-			{
 				handle_error(data);
-			}
 			else
 			{
 				// PARSER

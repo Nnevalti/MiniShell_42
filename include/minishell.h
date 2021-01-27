@@ -25,6 +25,8 @@
 
 # define MAX_PATH_LENGTH 4096
 
+pid_t	g_pid;
+
 typedef enum			e_bool
 {
 	FALSE,
@@ -106,6 +108,7 @@ void				handle_env(t_command *current, t_data *data);
 void				handle_quotes(t_command *current, t_data *data);
 void				exec_cmd(t_data *data, t_command *current);
 void				handle_exit(t_data *data);
+void 				signal_handler(int code);
 
 
 /*
