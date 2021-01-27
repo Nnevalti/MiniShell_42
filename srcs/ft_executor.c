@@ -61,8 +61,8 @@ void	analyse_parser(t_command *cmd, t_data *data)
 			handle_redir(data, current, current->redir);
 		if (data->error->errno == NOERROR)
 		{
-			// if (current->pipe)
-				// handle_pipes(current);
+			if (current->pipe)
+				handle_pipes(current);
 			if (!(current->redir) && !(current->pipe))
 			{
 				exec_cmd(data, current);

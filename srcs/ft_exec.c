@@ -50,6 +50,7 @@ void	run_exec(t_data *data, t_command *cmd)
 					// signal(SIGINT, &handle_exit);
 				}
 				free(str);
+				free_tab_str(paths);
 				return ;
 			}
 			// else
@@ -57,6 +58,7 @@ void	run_exec(t_data *data, t_command *cmd)
 			free(str);
 			i++;
 		}
+		free_tab_str(paths);
 		printf("command not found: %s\n", cmd->cmd); // ecrire dans le stderr
 		// EXIT_CODE = 127;
 	}

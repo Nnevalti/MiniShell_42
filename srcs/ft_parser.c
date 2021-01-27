@@ -24,6 +24,7 @@ t_redir		*ft_init_redir(void)
 	redir->str = NULL;
 	redir->type = NONE;
 	redir->saved_fd = 0;
+	redir->fd = 0;
 	redir->next = NULL;
 	return (redir);
 }

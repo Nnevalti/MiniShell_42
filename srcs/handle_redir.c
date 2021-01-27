@@ -29,8 +29,8 @@ void	set_redir(t_data *data, t_redir *stdin, t_redir *stdout)
 {
 	int		fd;
 
-	if (stdout && stdout->type == REDIRECT_STDOUT
-		|| stdout->type == APPEND_STDOUT)
+	if (stdout && (stdout->type == REDIRECT_STDOUT
+		|| stdout->type == APPEND_STDOUT))
 	{
 		stdout->saved_fd = dup(1);
 		dup2(stdout->fd, 1);

@@ -218,6 +218,7 @@ char	*handle_cmd_quotes(char *cmd, t_data *data)
 			}
 		}
 	}
+	free(cmd);
 	return (tmp2);
 }
 
