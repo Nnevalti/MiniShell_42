@@ -49,7 +49,7 @@ int		create_file(t_data *data, t_redir *r)
 {
 	if (r->type == REDIRECT_STDOUT)
 	{
-		if ((r->fd = open(r->str, O_WRONLY | O_CREAT, 0777)) == -1)
+		if ((r->fd = open(r->str, O_WRONLY | O_CREAT | O_TRUNC, 0777)) == -1)
 		{
 			handle_bad_fd(data, r->str);
 			return (-1);

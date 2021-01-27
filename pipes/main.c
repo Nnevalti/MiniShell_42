@@ -64,40 +64,26 @@ static void pipeline(char ***cmd)
  * Compute multi-pipeline based
  * on a command list.
  */
-int	main(void)
-{
-	int test;
-	struct stat buffer;
-	// char **env;
- 	// int stat(const char *pathname, struct stat *statbuf);
-	if (!(test = stat("/bin/cat", &buffer)))
-		printf("FILE EXIST\n");
-	else
-		printf("FILE DOES NOT EXIST\n");
-	// char *const argv[] = {"/usr/bin/echo","salut",NULL};;
-	// char *ls[] = {"echo", "test", NULL};
-	// char *sort[] = {"sort", NULL};
-	// char *cat[] = {"cat", "-e", NULL};
-	// char **cmd[] = {ls, sort, cat, NULL};
-
-	// pipeline(cmd);
-	// if (execve(argv[0],argv,NULL)==-1)
-	// 	perror("excve");
-	return (0);
-}
-
-// void main(void)
+// int	main(void)
 // {
-// 	int nb_pipes = 2;
-// 	int i = 0;
+// 	int test;
+// 	struct stat buffer;
+// 	// char **env;
+//  	// int stat(const char *pathname, struct stat *statbuf);
+// 	if (!(test = stat("/bin/cat", &buffer)))
+// 		printf("FILE EXIST\n");
+// 	else
+// 		printf("FILE DOES NOT EXIST\n");
+// 	// char *const argv[] = {"/usr/bin/echo","salut",NULL};;
+// 	// char *ls[] = {"echo", "test", NULL};
+// 	// char *sort[] = {"sort", NULL};
+// 	// char *cat[] = {"cat", "-e", NULL};
+// 	// char **cmd[] = {ls, sort, cat, NULL};
 //
-// 	int pipes[2 * nb_pipes];
-// 	while(i < nb_pipes)
-// 	{
-// 		pipe(pipes + (2 * i));
-// 		i++;
-// 	}
-//
+// 	// pipeline(cmd);
+// 	// if (execve(argv[0],argv,NULL)==-1)
+// 	// 	perror("excve");
+// 	return (0);
 // }
 
 // void main(void)
@@ -131,4 +117,154 @@ int	main(void)
 // 		execvp("ls", ls_args);
 // 	}
 // 	// return;
+// }
+
+int main(int argc, char **argv)
+{
+  int pipefd[2];
+  int pid;
+
+  char *cat_args[] = {"cat", "scores", NULL};
+  char *grep_args[] = {"grep", "Villanova", NULL};
+
+  // make a pipe (fds go in pipefd[0] and pipefd[1])
+
+  pipe(pipefd);
+
+  pid = fork();
+
+  if (pid == 0)
+    {
+      // child gets here and handles "grep Villanova"
+
+      // replace standard input with input part of pipe
+
+      dup2(pipefd[0], 0);
+
+      // close unused hald of pipe
+
+      close(pipefd[1]);
+
+      // execute grep
+
+      execvp("grep", grep_args);
+    }
+  else
+    {
+      // parent gets here and handles "cat scores"
+
+      // replace standard output with output part of pipe
+
+      dup2(pipefd[1], 1);
+
+      // close unused unput half of pipe
+
+      close(pipefd[0]);
+
+      // execute cat
+
+      execvp("cat", cat_args);
+    }
+}
+//
+// int main(int argc, char **argv)
+// {
+//   int status;
+//   int i;
+//
+//   // arguments for commands; your parser would be responsible for
+//   // setting up arrays like these
+//
+//   char *cat_args[] = {"cat", "scores", NULL};
+//   char *grep_args[] = {"grep", "Villanova", NULL};
+//   char *cut_args[] = {"cut", "-b", "1-10", NULL};
+//
+//   // make 2 pipes (cat to grep and grep to cut); each has 2 fds
+//
+//   int pipes[4];
+//   pipe(pipes); // sets up 1st pipe
+//   pipe(pipes + 2); // sets up 2nd pipe
+//
+//   // we now have 4 fds:
+//   // pipes[0] = read end of cat->grep pipe (read by grep)
+//   // pipes[1] = write end of cat->grep pipe (written by cat)
+//   // pipes[2] = read end of grep->cut pipe (read by cut)
+//   // pipes[3] = write end of grep->cut pipe (written by grep)
+//
+//   // Note that the code in each if is basically identical, so you
+//   // could set up a loop to handle it.  The differences are in the
+//   // indicies into pipes used for the dup2 system call
+//   // and that the 1st and last only deal with the end of one pipe.
+//
+//   // fork the first child (to execute cat)
+//
+//   if (fork() == 0)
+//     {
+//       // replace cat's stdout with write part of 1st pipe
+//
+//       dup2(pipes[1], 1);
+//
+//       // close all pipes (very important!); end we're using was safely copied
+//
+//       close(pipes[0]);
+//       close(pipes[1]);
+//       close(pipes[2]);
+//       close(pipes[3]);
+//
+//       execvp(*cat_args, cat_args);
+//     }
+//   else
+//     {
+//       // fork second child (to execute grep)
+//
+//       if (fork() == 0)
+// 	{
+// 	  // replace grep's stdin with read end of 1st pipe
+//
+// 	  dup2(pipes[0], 0);
+//
+// 	  // replace grep's stdout with write end of 2nd pipe
+//
+// 	  dup2(pipes[3], 1);
+//
+// 	  // close all ends of pipes
+//
+// 	  close(pipes[0]);
+// 	  close(pipes[1]);
+// 	  close(pipes[2]);
+// 	  close(pipes[3]);
+//
+// 	  execvp(*grep_args, grep_args);
+// 	}
+//       else
+// 	{
+// 	  // fork third child (to execute cut)
+//
+// 	  if (fork() == 0)
+// 	    {
+// 	      // replace cut's stdin with input read of 2nd pipe
+//
+// 	      dup2(pipes[2], 0);
+//
+// 	      // close all ends of pipes
+//
+// 	      close(pipes[0]);
+// 	      close(pipes[1]);
+// 	      close(pipes[2]);
+// 	      close(pipes[3]);
+//
+// 	      execvp(*cut_args, cut_args);
+// 	    }
+// 	}
+//     }
+//
+//   // only the parent gets here and waits for 3 children to finish
+//
+//   close(pipes[0]);
+//   close(pipes[1]);
+//   close(pipes[2]);
+//   close(pipes[3]);
+//
+//   for (i = 0; i < 3; i++)
+//     wait(&status);
 // }
