@@ -63,8 +63,6 @@ typedef struct		s_command
 	t_redir			*redir;
 	t_pipe			*pipe;
 	void			*next;
-	void			*previous;
-
 }					t_command;
 
 typedef enum		e_errno
@@ -72,8 +70,7 @@ typedef enum		e_errno
 	NOERROR,
 	QUOTE,
 	PARSER,
-	MALLOC
-
+	FD
 }					t_errno;
 
 typedef struct		s_error
@@ -103,6 +100,10 @@ t_command			**ft_parser(t_data *data);
 void				ft_executor(t_data *data);
 void				handle_env(t_command *current, t_data *data);
 void				handle_quotes(t_command *current, t_data *data);
+void				exec_cmd(t_data *data, t_command *current);
+void				handle_exit(t_data *data);
+
+
 /*
 **		BUILTINS
 */
@@ -121,9 +122,9 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 /*
 **		REDIRECTIONS
 */
-t_redir				**set_redirections(char *command);
-void				reset_redirections(t_redir **redirections);
-void				handle_redir(t_redir *redir, t_data *data);
+// t_redir				**set_redirections(char *command);
+// void				reset_redirections(t_redir **redirections);
+void				handle_redir( t_data *data, t_command *cmd, t_redir *redir);
 void				reset_redir(t_redir *redir);
 /*
 **		PIPES

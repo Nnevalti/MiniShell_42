@@ -10,54 +10,72 @@ void	reset_redir(t_redir *redir)
 	return ;
 }
 
-void	handle_redir(t_redir *redir, t_data *data)
+void	handle_bad_fd(t_data *data, char *str)
+{
+	char *tmp;
+
+	tmp = ft_strdup("Minishell: no such file or directory: ");
+	// free(data->error->value);
+	data->error->value = ft_strjoin(tmp, str);
+	data->error->errno = FD;
+	free(tmp);
+}
+
+void	handle_redir( t_data *data, t_command *cmd, t_redir *redir)
 {
 	int fd;
 	t_redir *current;
-	int pid;
-	int status;
-
-	char *const argv[]={"echo","lol","lol",NULL};
-	const char *pathname = "/usr/bin/echo";
 
 	current = redir;
 	while (current)
 	{
-		// printf("current->str [%s]\n",current->str);
 		if (current->type == REDIRECT_STDOUT)
 		{
 			current->saved_fd = dup(1);
 
-			fd = open(current->str, O_WRONLY | O_CREAT, 0777);
-			dup2(fd,1);
-			close(fd);
+			if ((fd = open(current->str, O_WRONLY | O_CREAT, 0777)) == -1)
+			{
+				handle_bad_fd(data, current->str);
+				return ;
+			}
+			else
+			{
+				dup2(fd,1);
+				close(fd);
+			}
 		}
 		else if (current->type == APPEND_STDOUT)
 		{
 			current->saved_fd = dup(1);
 
-			fd = open(current->str, O_WRONLY | O_CREAT | O_APPEND, 0777);
-			dup2(fd,1);
-			close(fd);
+			if ((fd = open(current->str, O_WRONLY | O_CREAT | O_APPEND, 0777) == -1))
+			{
+				handle_bad_fd(data, current->str);
+				return ;
+			}
+			else
+			{
+				dup2(fd,1);
+				close(fd);
+			}
 		}
 		else if (current->type == REDIRECT_STDIN)
 		{
 			current->saved_fd = dup(0);
 
-			fd = open(current->str, O_RDONLY, 0777);
-			dup2(fd,0);
-			close(fd);
+			if ((fd = open(current->str, O_RDONLY, 0777)) == -1)
+			{
+				handle_bad_fd(data, current->str);
+				return ;
+			}
+			else
+			{
+				dup2(fd,0);
+				close(fd);
+			}
 		}
-		if((pid = fork()) == 0)
-		{
-			execve("/usr/bin/echo",argv,data->my_env);
-			exit(1);
-		}
-		else
-		{
-			wait(&status);
-			reset_redir(current);
-		}
+		exec_cmd(data, cmd);
+		reset_redir(current);
 
 		current = current->next;
 	}

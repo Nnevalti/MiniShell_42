@@ -164,19 +164,19 @@ void		handle_env(t_command *current, t_data *data)
 	tmp = handle_cmd_env(current->cmd, data);
 	free(current->cmd);
 	current->cmd = tmp;
-	if (current->opt)
-	{
-		tmp = handle_cmd_env(current->opt, data);
-		free(current->opt);
-		current->opt = tmp;
-	}
-	redir_tmp = current->redir;
-	while (redir_tmp)
-	{
-		tmp = handle_cmd_env(redir_tmp->str, data);
-		free(redir_tmp->str);
-		redir_tmp->str = tmp;
-		redir_tmp = redir_tmp->next;
-	}
+	// if (current->opt)
+	// {
+	// 	tmp = handle_cmd_env(current->opt, data);
+	// 	free(current->opt);
+	// 	current->opt = tmp;
+	// }
+	// redir_tmp = current->redir;
+	// while (redir_tmp)
+	// {
+	// 	tmp = handle_cmd_env(redir_tmp->str, data);
+	// 	free(redir_tmp->str);
+	// 	redir_tmp->str = tmp;
+	// 	redir_tmp = redir_tmp->next;
+	// }
 	return ;
 }

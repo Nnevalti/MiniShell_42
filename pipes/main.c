@@ -14,8 +14,12 @@
 */
 
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 /*
  * loop over commands by sharing
@@ -60,18 +64,25 @@ static void pipeline(char ***cmd)
  * Compute multi-pipeline based
  * on a command list.
  */
-int	main(char **env)
+int	main(void)
 {
+	int test;
+	struct stat buffer;
 	// char **env;
-	char *const argv[] = {"/usr/bin/echo","salut",NULL};;
+ 	// int stat(const char *pathname, struct stat *statbuf);
+	if (!(test = stat("/bin/cat", &buffer)))
+		printf("FILE EXIST\n");
+	else
+		printf("FILE DOES NOT EXIST\n");
+	// char *const argv[] = {"/usr/bin/echo","salut",NULL};;
 	// char *ls[] = {"echo", "test", NULL};
 	// char *sort[] = {"sort", NULL};
 	// char *cat[] = {"cat", "-e", NULL};
 	// char **cmd[] = {ls, sort, cat, NULL};
 
 	// pipeline(cmd);
-	if (execve(argv[0],argv,NULL)==-1)
-		perror("excve");
+	// if (execve(argv[0],argv,NULL)==-1)
+	// 	perror("excve");
 	return (0);
 }
 

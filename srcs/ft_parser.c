@@ -12,7 +12,6 @@ t_command	*ft_init_command(void)
 	ptr->redir = NULL;
 	ptr->pipe = NULL;
 	ptr->next = NULL;
-	ptr->previous = NULL;
 	return (ptr);
 }
 

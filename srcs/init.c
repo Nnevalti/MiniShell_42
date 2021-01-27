@@ -10,5 +10,6 @@ t_data		*init_data(char **env)
 	data->prompt = ft_strdup(get_env_var(data->my_env, "USER"));
 	if (!(data->error = malloc(sizeof(t_error))))
 		return (NULL);
+	data->error->errno = NOERROR;
 	return (data);
 }

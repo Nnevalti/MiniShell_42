@@ -20,6 +20,7 @@ SRC			=	main.c \
 				ft_lexer.c \
 				ft_executor.c \
 				ft_parser.c \
+				ft_exec.c \
 				handle_env.c \
 				init.c \
 				handle_error.c \

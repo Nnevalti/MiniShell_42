@@ -92,8 +92,8 @@ int		main(int argc, char **argv, char **env)
 
 				// printf("FREE LEXER\n");
 				// FREE PARSER
-				if (!ft_strcmp(data->parser[0]->cmd, "exit"))
-					handle_exit(data);
+				// if (!ft_strcmp(data->parser[0]->cmd, "exit"))
+					// handle_exit(data);
 				free_parser(data->parser);
 			}
 		}

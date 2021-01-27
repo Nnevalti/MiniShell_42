@@ -225,24 +225,25 @@ void	handle_quotes(t_command *current, t_data *data)
 {
 	int	i;
 	int	nb_opt;
+	t_redir *redir;
 
 	i = 0;
 	nb_opt = 0;
 	if(current->cmd && ft_strcmp(current->cmd, "\0"))
-		current->cmd = handle_cmd_quotes(current->cmd,data);
+		current->cmd = handle_cmd_quotes(current->cmd, data);
 	if (current->opt && ft_strcmp(current->opt, "\0"))
 		nb_opt = get_nb_opt(current->opt);
-	printf("nb_opt %d\n", nb_opt);
 	if (current->opt && ft_strcmp(current->opt, "\0"))
 		current->opt_tab = get_opt_tab(current->opt, data, nb_opt);
-	// DEBUGGING
-	if(current->cmd && ft_strcmp(current->cmd, "\0"))
-		printf("handle_quotes current->cmd = [%s]\n",current->cmd);
-	if (current->opt && ft_strcmp(current->opt, "\0"))
+	if (current->redir)
 	{
-		for (int j = 0; current->opt_tab[j]; j++)
-			printf("opt_tab : [%s]\n", current->opt_tab[j]);
+		redir = current->redir;
+		while (redir)
+		{
+			redir->str = handle_cmd_quotes(redir->str, data);
+			redir = redir->next;
+		}
 	}
-	// END DEBUGGING
+	// HANDLE QUOTES FOR FILE NAME
 	return ;
 }
