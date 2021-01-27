@@ -72,20 +72,19 @@ void	run_exec(t_data *data, t_command *cmd)
 
 void	exec_cmd(t_data *data, t_command *cmd)
 {
-	// if (!ft_strcmp(cmd->cmd, "echo"))
-	// 	ft_echo(ptr);
-	// else if (!ft_strcmp(cmd->cmd, "env"))
-	// 	ft_env(data->my_env);
-	// else if (!ft_strcmp(cmd->cmd, "cd"))
-	// 	ft_cd(data, ptr);
-	// else if (!ft_strcmp(cmd->cmd, "pwd"))
-	// 	ft_pwd();
-	// else if (!ft_strcmp(cmd->cmd, "export"))
-	// 	ft_export(data, ptr);
-	// else if (!ft_strcmp(cmd->cmd, "unset"))
-	// 	ft_unset(data, ptr);
-	// else
-	if (!ft_strcmp(cmd->cmd, "exit"))
+	if (!ft_strcmp(cmd->cmd, "echo"))
+		ft_echo(cmd);
+	else if (!ft_strcmp(cmd->cmd, "env"))
+		ft_env(data->my_env);
+	else if (!ft_strcmp(cmd->cmd, "cd"))
+		ft_cd(data, cmd);
+	else if (!ft_strcmp(cmd->cmd, "pwd"))
+		ft_pwd();
+	else if (!ft_strcmp(cmd->cmd, "export"))
+		ft_export(data, cmd);
+	else if (!ft_strcmp(cmd->cmd, "unset"))
+		ft_unset(data, cmd);
+	else if (!ft_strcmp(cmd->cmd, "exit"))
 			handle_exit(data);
 	else
 		run_exec(data, cmd);

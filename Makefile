@@ -26,7 +26,7 @@ SRC			=	main.c \
 				handle_quotes.c \
 				handle_redir.c \
 				handle_pipes.c \
-				signals.c \
+				signal.c \
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)

@@ -12,13 +12,13 @@
 
 #include "../include/minishell.h"
 
-void	prompt(char *my_prompt)
+void	prompt()
 {
 	char	buffer[MAX_PATH_LENGTH];
 
 	getcwd(buffer, MAX_PATH_LENGTH);
 	ft_putstr_fd("\e[1m\e[32m", 2);
-	ft_putstr_fd(my_prompt, 2);
+	ft_putstr_fd(g_prompt, 2);
 	ft_putstr_fd("@minishell:", 2);
 	ft_putstr_fd("\e[94m", 2);
 	ft_putstr_fd(buffer, 2);
@@ -31,7 +31,7 @@ void	handle_exit(t_data *data/*int signo*/)
 	// EXIT_CODE = 130;
 	free_parser(data->parser);
 	free_tab_str(data->my_env);
-	free(data->prompt);
+	free(g_prompt);
 	free(data->error);
 	free(data);
 	exit(1);
@@ -50,10 +50,11 @@ int		main(int argc, char **argv, char **env)
 
 	data = init_data(env);
 	init_signal_handler();
+	g_prompt = ft_strdup(get_env_var(data->my_env, "USER"));
 	while (42)
 	{
 		g_pid = 0;
-		prompt(data->prompt);
+		prompt();
 		get_next_line(0, &data->command);
 		printf("USER COMMAND: [%s]\n", data->command);
 		if (check_quotes_error(data, data->command) == -1)

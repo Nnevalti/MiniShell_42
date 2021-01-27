@@ -73,13 +73,12 @@ int		check_error(t_data *data, char ***tokens)
 
 void	handle_error(t_data *data)
 {
-	printf("error %d\n", data->error->errno);
 	if (data->error->errno == QUOTE)
 		free(data->command);
 	if (data->error->errno == PARSER)
 		free_lexer(data);
 	if (data->error->value)
-		printf("%s\n", data->error->value);
+		ft_putstr_fd(data->error->value, 2);
 	free(data->error->value);
 	data->error->errno = NOERROR;
 }

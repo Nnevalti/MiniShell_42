@@ -26,6 +26,7 @@
 # define MAX_PATH_LENGTH 4096
 
 pid_t	g_pid;
+char	*g_prompt;
 
 typedef enum			e_bool
 {
@@ -88,7 +89,6 @@ typedef struct		s_error
 typedef struct		s_data
 {
 	char			**my_env;
-	char			*prompt;
 	char			*command;
 	char			***tokens;
 	int				nb_cmds;
@@ -96,11 +96,11 @@ typedef struct		s_data
 	t_error			*error;
 }					t_data;
 
-t_data				*init_data(char **env);
-
 /*
 **		CORE
 */
+void				prompt();
+t_data				*init_data(char **env);
 char				***ft_lexer(t_data *data);
 t_command			**ft_parser(t_data *data);
 void				ft_executor(t_data *data);
@@ -109,8 +109,6 @@ void				handle_quotes(t_command *current, t_data *data);
 void				exec_cmd(t_data *data, t_command *current);
 void				handle_exit(t_data *data);
 void 				signal_handler(int code);
-
-
 /*
 **		BUILTINS
 */
@@ -129,16 +127,11 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 /*
 **		REDIRECTIONS
 */
-// t_redir				**set_redirections(char *command);
-// void				reset_redirections(t_redir **redirections);
 void				handle_redir( t_data *data, t_command *cmd, t_redir *redir);
 void				reset_redir(t_redir *stdin, t_redir *stdout);
 /*
 **		PIPES
 */
-// int					*init_pipes(char **tokens);
-// void				pipe_io(int *pipes, int index);
-// void				close_pipes(int *pipes);
 void				handle_pipes(t_data *data, t_command *cmd, t_pipe *pipe);
 /*
 **		UTILS
