@@ -76,29 +76,22 @@ int		create_file(t_data *data, t_redir *r)
 
 void	handle_redir(t_data *data, t_command *cmd, t_redir *redir)
 {
-	t_redir	*last_stdin;
-	t_redir	*last_stdout;
-
-	last_stdin = NULL;
-	last_stdout = NULL;
 	while (redir)
 	{
 		if (redir->type == REDIRECT_STDOUT || redir->type == APPEND_STDOUT)
 		{
 			if (create_file(data, redir) == -1)
 				return ;
-			last_stdout = redir;
+			cmd->last_stdout = redir;
 		}
 		if (redir->type == REDIRECT_STDIN)
 		{
 			if (create_file(data, redir) == -1)
 				return ;
-			last_stdin = redir;
+			cmd->last_stdin = redir;
 		}
 		redir = redir->next;
 	}
-	set_redir(data, last_stdin, last_stdout);
-	exec_cmd(data, cmd);
-	reset_redir(last_stdin, last_stdout);
+	set_redir(data, cmd->last_stdin, cmd->last_stdout);
 	return ;
 }

@@ -62,7 +62,10 @@ typedef struct		s_command
 	char			*opt;
 	char			**opt_tab;
 	t_redir			*redir;
+	t_redir			*last_stdin;
+	t_redir			*last_stdout;
 	t_pipe			*pipe;
+	t_bool			p_handled;
 	void			*next;
 }					t_command;
 
@@ -126,12 +129,14 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 // t_redir				**set_redirections(char *command);
 // void				reset_redirections(t_redir **redirections);
 void				handle_redir( t_data *data, t_command *cmd, t_redir *redir);
+void				reset_redir(t_redir *stdin, t_redir *stdout);
 /*
 **		PIPES
 */
-int					*init_pipes(char **tokens);
-void				pipe_io(int *pipes, int index);
-void				close_pipes(int *pipes);
+// int					*init_pipes(char **tokens);
+// void				pipe_io(int *pipes, int index);
+// void				close_pipes(int *pipes);
+void				handle_pipes(t_data *data, t_command *cmd, t_pipe *pipe);
 /*
 **		UTILS
 */

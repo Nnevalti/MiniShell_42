@@ -10,7 +10,10 @@ t_command	*ft_init_command(void)
 	ptr->opt = NULL;
 	ptr->opt_tab = NULL;
 	ptr->redir = NULL;
+	ptr->last_stdin = NULL;
+	ptr->last_stdout = NULL;
 	ptr->pipe = NULL;
+	ptr->p_handled = FALSE;
 	ptr->next = NULL;
 	return (ptr);
 }

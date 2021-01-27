@@ -46,8 +46,6 @@ void	analyse_parser(t_command *cmd, t_data *data)
 			tmp = prepend_str(current->cmd, current->opt_tab);
 			free_tab_str(current->opt_tab);
 			current->opt_tab = tmp;
-			for (int i = 0; current->opt_tab[i]; i++)
-				printf("NEW OPT TAB = [%s]\n", current->opt_tab[i]);
 		}
 		else
 		{
@@ -59,14 +57,14 @@ void	analyse_parser(t_command *cmd, t_data *data)
 
 		if (current->redir)
 			handle_redir(data, current, current->redir);
+		if (current->pipe)
+			handle_pipes(data, current, current->pipe);
+
 		if (data->error->errno == NOERROR)
 		{
-			if (current->pipe)
-				handle_pipes(current);
-			if (!(current->redir) && !(current->pipe))
-			{
-				exec_cmd(data, current);
-			}
+			exec_cmd(data, current);
+			if (current->redir)
+				reset_redir(current->last_stdin, current->last_stdout);
 		}
 		else
 		{

@@ -14,7 +14,6 @@ SRC_DIR		=	./srcs
 SRC			=	main.c \
 				builtins.c \
 				env.c \
-				pipe.c \
 				utils.c \
 				free.c \
 				ft_lexer.c \
@@ -26,6 +25,7 @@ SRC			=	main.c \
 				handle_error.c \
 				handle_quotes.c \
 				handle_redir.c \
+				handle_pipes.c \
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)

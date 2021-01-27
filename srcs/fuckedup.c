@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-void	fork_exec(t_data *data, t_command *cmd, char *str)
+void	fork_exec(t_command *cmd)
 {
 	int		status;
 	int		pid;
@@ -17,7 +17,7 @@ void	fork_exec(t_data *data, t_command *cmd, char *str)
 			dup2(cmd->pipe->stdout[1], 1);
 			close(cmd->pipe->stdout[0]);
 		}
-		execve(str, cmd->opt_tab, data->my_env);
+		execve(cmd->cmd, cmd->opt_tab, data->my_env);
 		exit(1);
 	}
 	else
@@ -42,7 +42,7 @@ void	run_exec(t_data *data, t_command *cmd)
 	struct stat buffer;
 
 	if (!(stat(cmd->cmd, &buffer)))
-		fork_exec(data, cmd, cmd->cmd);
+		fork_exec(cmd);
 	else
 	{
 		paths = ft_split(get_env_var(data->my_env, "PATH"), ':');
@@ -54,7 +54,7 @@ void	run_exec(t_data *data, t_command *cmd)
 			free(tmp);
 			if (!(stat(str, &buffer)))
 			{
-				fork_exec(data, cmd, str);
+				fork_exec(cmd);
 				free(str);
 				free_tab_str(paths);
 				return ;
