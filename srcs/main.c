@@ -49,7 +49,7 @@ int		main(int argc, char **argv, char **env)
 	int		i;
 
 	data = init_data(env);
-	init_signal_handler();
+	// init_signal_handler();
 	g_prompt = ft_strdup(get_env_var(data->my_env, "USER"));
 	while (42)
 	{

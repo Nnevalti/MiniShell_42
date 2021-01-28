@@ -12,13 +12,13 @@ void	fork_exec(t_data *data, t_command *cmd, char *str)
 			printf("IN FORK opt_tab[%d]: [%s]\n",i, cmd->opt_tab[i]);
 		if (cmd->p_handled && cmd->pipe->in)
 		{
-			dup2(cmd->pipe->stdin[0], 0);
 			close(cmd->pipe->stdin[1]);
+			dup2(cmd->pipe->stdin[0], 0);
 		}
 		if (cmd->p_handled && cmd->pipe->out)
 		{
-			dup2(cmd->pipe->stdout[1], 1);
 			close(cmd->pipe->stdout[0]);
+			dup2(cmd->pipe->stdout[1], 1);
 		}
 		execve(str, cmd->opt_tab, data->my_env);
 		exit(1);
@@ -26,14 +26,20 @@ void	fork_exec(t_data *data, t_command *cmd, char *str)
 	else
 	{
 		// signal(SIGINT, SIG_IGN);
-		wait(&status);
 		if (cmd->p_handled && cmd->pipe->in)
+		{
 			close(cmd->pipe->stdin[0]);
+			close(cmd->pipe->stdin[1]);
+		}
 		if (cmd->p_handled && cmd->pipe->out)
+		{
 			close(cmd->pipe->stdout[1]);
+			close(cmd->pipe->stdout[0]);
+		}
 		// EXIT_CODE = WEXITSTATUS(status);
 		// signal(SIGINT, &handle_exit);
 	}
+	waitpid(pid, NULL, 0);
 }
 
 void	run_exec(t_data *data, t_command *cmd)

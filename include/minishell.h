@@ -107,6 +107,7 @@ void				ft_executor(t_data *data);
 void				handle_env(t_command *current, t_data *data);
 void				handle_quotes(t_command *current, t_data *data);
 void				exec_cmd(t_data *data, t_command *current);
+void				fork_exec(t_data *data, t_command *cmd, char *str);
 void				handle_exit(t_data *data);
 void 				signal_handler(int code);
 /*
