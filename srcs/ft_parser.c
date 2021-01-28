@@ -41,8 +41,10 @@ t_pipe		*ft_init_pipe(void)
 	pipe->in = FALSE;
 	pipe->out = FALSE;
 	// ERROR PATCH :
-	// pipe->stdin = {};
-	// pipe->stdout = {};
+	pipe->stdin[0] = 0;
+	pipe->stdin[1] = 0;
+	pipe->stdout[0] = 0;
+	pipe->stdout[1] = 0;
 	return (pipe);
 }
 

@@ -7,6 +7,9 @@ void	fork_exec(t_data *data, t_command *cmd, char *str)
 
 	if ((pid = fork()) == 0)
 	{
+		printf("IN FORK str [%s]\n",str);
+		for (int i = 0; cmd->opt_tab[i]; i++)
+			printf("IN FORK opt_tab[%d]: [%s]\n",i, cmd->opt_tab[i]);
 		if (cmd->p_handled && cmd->pipe->in)
 		{
 			dup2(cmd->pipe->stdin[0], 0);
