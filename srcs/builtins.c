@@ -81,12 +81,6 @@ void	ft_echo(t_command *ptr)
 		ft_putstr_fd(ptr->opt_tab[i], 1);
 		if (i < (tab_str_len(ptr->opt_tab) - 1))
 			ft_putstr_fd(" ", 1);
-		// printf("i : %d, tab len : %d\n", i, tab_str_len(ptr->opt_tab));
-		// if (!(ft_strcmp(ptr->options[i], "$?")))
-		// {
-		// 	printf("%d", EXIT_CODE);
-		// }
-		// else
 		i++;
 	}
 	if (tab_str_len(ptr->opt_tab) >= 2
@@ -95,6 +89,63 @@ void	ft_echo(t_command *ptr)
 	return ;
 }
 
+void	sort_env_array(char **env_array)
+{
+	int 	i;
+	int		j;
+	char	*tmp;
+
+	i = 0;
+	while (env_array[i])
+	{
+		j = 1;
+		while (env_array[j + i])
+		{
+			if (ft_strcmp(env_array[j + i], env_array[i]) < 0)
+			{
+				tmp = env_array[i];
+				env_array[i] = env_array[i + j];
+				env_array[i + j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+	ft_env(env_array);
+}
+
+void	sort_export(char **env)
+{
+	char	**sort_env;
+	int		i;
+	int		j;
+
+	while (env[i + j])
+	{
+		if (env[i + j][0] == '_')
+			j++;
+		else
+			i++;
+	}
+	if (!(sort_env = malloc(sizeof(char *) * (i + 1))))
+		return ;
+	i = 0;
+	j = 0;
+	while (env[i + j])
+	{
+		if (env[i + j][0] == '_')
+			j++;
+		else
+		{
+			sort_env[i] = ft_strjoin("declare -x ", env[i + j]);
+			i++;
+		}
+	}
+	sort_env[i] = NULL;
+	sort_env_array(sort_env);
+	free_tab_str(sort_env);
+	return ;
+}
 void	ft_export(t_data *data, t_command *ptr)
 {
 	int		i;
@@ -104,6 +155,8 @@ void	ft_export(t_data *data, t_command *ptr)
 	char	**new_env;
 
 	i = 0;
+	if (tab_str_len(ptr->opt_tab) == 1)
+		sort_export(data->my_env);
 	while (ptr->opt_tab[i])
 	{
 		if (ft_indexof(ptr->opt_tab[i], '=') < 0)
