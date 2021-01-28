@@ -40,23 +40,25 @@ void	handle_exit(t_data *data/*int signo*/)
 void	init_signal_handler(void)
 {
 	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
+	signal(SIGQUIT, kill_prg);
 }
 
 int		main(int argc, char **argv, char **env)
 {
 	t_data	*data;
 	int		i;
+	int test;
 
 	data = init_data(env);
-	// init_signal_handler();
+	init_signal_handler();
 	g_prompt = ft_strdup(get_env_var(data->my_env, "USER"));
 	while (42)
 	{
-		g_pid = 0;
+		g_pid[0] = 0;
+		g_pid[1] = 0;
 		prompt();
-		get_next_line(0, &data->command);
-		printf("USER COMMAND: [%s]\n", data->command);
+		test = get_next_line(0, &data->command);
+		printf("GNL = %d\n", test);
 		if (check_quotes_error(data, data->command) == -1)
 		{
 			handle_error(data);
@@ -65,13 +67,6 @@ int		main(int argc, char **argv, char **env)
 		{
 			// LEXER
 			data->tokens = ft_lexer(data);
-
-			// DEBUGGING
-			printf("\nLEXER :\n");
-			for(int i = 0; data->tokens[i]; i++)
-				for(int j = 0; data->tokens[i][j]; j++)
-					printf("TOKENS[%d][%d] : [%s]\n",i,j,data->tokens[i][j]);
-			// END DEBUGGING
 
 			// FREE COMMAND
 			free(data->command);

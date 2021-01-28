@@ -80,11 +80,9 @@ void	ft_executor(t_data *data)
 	int i;
 
 	i = 0;
-	printf("\nIN EXECUTOR\n");
 	while (data->parser[i])
 	{
 		analyse_parser(data->parser[i], data);
 		i++;
 	}
-	printf("WE LEAVE EXECUTOR\n\n");
 }

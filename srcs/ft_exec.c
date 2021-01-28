@@ -7,9 +7,8 @@ void	run_exec(t_data *data, t_command *cmd)
 	char	*tmp;
 	char	*str;
 	struct stat buffer;
-	pid_t		pid;
 
-	if ((pid = fork()) == 0)
+	if ((g_pid[0] = fork()) == 0)
 	{
 		if (!(stat(cmd->cmd, &buffer)))
 			execve(cmd->cmd, cmd->opt_tab, data->my_env);
@@ -43,7 +42,7 @@ void	run_exec(t_data *data, t_command *cmd)
 	}
 	else
 	{
-		waitpid(pid, NULL, 0);
+		waitpid(g_pid[0], NULL, 0);
 	}
 	return ;
 }
@@ -72,9 +71,8 @@ void	what_cmd(t_data *data, t_command *cmd)
 void	fork_exec(t_data *data, t_command *cmd)
 {
 	int		status;
-	int		pid;
 
-	if ((pid = fork()) == 0)
+	if ((g_pid[1] = fork()) == 0)
 	{
 		if (cmd->p_handled && cmd->pipe->in)
 		{
@@ -105,7 +103,7 @@ void	fork_exec(t_data *data, t_command *cmd)
 		// EXIT_CODE = WEXITSTATUS(status);
 		// signal(SIGINT, &handle_exit);
 	}
-	waitpid(pid, NULL, 0);
+	waitpid(g_pid[1], NULL, 0);
 	return ;
 }
 

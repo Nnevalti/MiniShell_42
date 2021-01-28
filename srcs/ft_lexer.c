@@ -216,7 +216,6 @@ char	***ft_lexer(t_data *data)
 	char	**cmds;
 	char	***tokens;
 
-	printf("\nIN LEXER\n");
 	data->nb_cmds = count_command(data->command);
 	cmds = split_command(data->command, data->nb_cmds);
 	tokens = split_tokens(cmds, data->nb_cmds);
