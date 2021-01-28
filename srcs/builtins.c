@@ -79,8 +79,9 @@ void	ft_echo(t_command *ptr)
 	{
 		// handle $? in a function that replace it by its value
 		ft_putstr_fd(ptr->opt_tab[i], 1);
-		if (i > 0 && i < tab_str_len(ptr->opt_tab))
+		if (i < (tab_str_len(ptr->opt_tab) - 1))
 			ft_putstr_fd(" ", 1);
+		// printf("i : %d, tab len : %d\n", i, tab_str_len(ptr->opt_tab));
 		// if (!(ft_strcmp(ptr->options[i], "$?")))
 		// {
 		// 	printf("%d", EXIT_CODE);
