@@ -5,20 +5,23 @@ int		check_semicolons_error(t_data *data, char *command)
 	int i;
 	int j;
 	int start;
+	char	*tmp;
 
 	i = 0;
 	start = 0;
 	while (command[i])
 	{
-		if (command[i] == ';')
+		if (command[i] == ';' || command[i] == '|')
 		{
 			j = i - 1;
 			while (ft_isblank(command[j]) && j > 0)
 				j--;
 			if (j == start)
 			{
-				data->error->value = ft_strdup("syntax error near ;");
-				data->error->errno = SEMICOLON;
+				tmp = ft_strdup("Minishell: syntax error near ");
+				data->error->errno = SYNTAX;
+				data->error->value = ft_strnjoin(tmp, &command[i], 1);
+				free(tmp);
 				return (-1);
 			}
 			start = i;
@@ -99,6 +102,33 @@ int		check_error(t_data *data, char ***tokens)
 	return (0);
 }
 
+int		check_empty_command(t_data *data, char *command)
+{
+	int		i;
+
+	i = 0;
+	while (ft_isblank(command[i]))
+		i++;
+	if (command[i] == '\0')
+		return (-1);
+	return (0);
+}
+
+int		check_syntax_error(t_data *data, char *command)
+{
+	char	*tmp;
+
+	if (command[0] == '|' || command[0] == ';')
+	{
+		tmp = ft_strdup("Minishell: syntax error near ");
+		data->error->errno = SYNTAX;
+		data->error->value = ft_strnjoin(tmp, command, 1);
+		free(tmp);
+		return (-1);
+	}
+	return (0);
+}
+
 void	handle_error(t_data *data)
 {
 	if (data->error->errno == QUOTE)
@@ -109,7 +139,8 @@ void	handle_error(t_data *data)
 	{
 		ft_putstr_fd(data->error->value, 2);
 		ft_putstr_fd("\n", 2);
+		free(data->error->value);
+		data->error->value = NULL;
 	}
-	free(data->error->value);
 	data->error->errno = NOERROR;
 }

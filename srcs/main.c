@@ -60,10 +60,10 @@ int		main(int argc, char **argv, char **env)
 		get_next_line(0, &data->command);
 		// printf("USER COMMAND : [%s]\n", data->command);
 		if (check_quotes_error(data, data->command) == -1
-		|| check_semicolons_error(data, data->command) == -1)
-		{
+		|| check_semicolons_error(data, data->command) == -1
+		|| check_empty_command(data, data->command) == -1
+		|| check_syntax_error(data, data->command) == -1)
 			handle_error(data);
-		}
 		else
 		{
 			// LEXER
