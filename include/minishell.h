@@ -76,6 +76,7 @@ typedef enum		e_errno
 {
 	NOERROR,
 	QUOTE,
+	SEMICOLON,
 	PARSER,
 	FD
 }					t_errno;
@@ -150,6 +151,7 @@ int					tab_str_len(char **tab);
 void				handle_error(t_data *data);
 int					check_quotes_error(t_data *data, char *command);
 int					check_error(t_data *data, char ***tokens);
+int					check_semicolons_error(t_data *data, char *command);
 /*
 **		FREE
 */

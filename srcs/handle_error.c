@@ -1,5 +1,33 @@
 #include "../include/minishell.h"
 
+int		check_semicolons_error(t_data *data, char *command)
+{
+	int i;
+	int j;
+	int start;
+
+	i = 0;
+	start = 0;
+	while (command[i])
+	{
+		if (command[i] == ';')
+		{
+			j = i - 1;
+			while (ft_isblank(command[j]) && j > 0)
+				j--;
+			if (j == start)
+			{
+				data->error->value = ft_strdup("syntax error near ;");
+				data->error->errno = SEMICOLON;
+				return (-1);
+			}
+			start = i;
+		}
+		i++;
+	}
+	return(0);
+}
+
 int		check_quotes_error(t_data *data, char *command)
 {
 	int	i;
@@ -78,7 +106,10 @@ void	handle_error(t_data *data)
 	if (data->error->errno == PARSER)
 		free_lexer(data);
 	if (data->error->value)
+	{
 		ft_putstr_fd(data->error->value, 2);
+		ft_putstr_fd("\n", 2);
+	}
 	free(data->error->value);
 	data->error->errno = NOERROR;
 }

@@ -57,9 +57,10 @@ int		main(int argc, char **argv, char **env)
 		g_pid[0] = 0;
 		g_pid[1] = 0;
 		prompt();
-		test = get_next_line(0, &data->command);
-		printf("GNL = %d\n", test);
-		if (check_quotes_error(data, data->command) == -1)
+		get_next_line(0, &data->command);
+		// printf("USER COMMAND : [%s]\n", data->command);
+		if (check_quotes_error(data, data->command) == -1
+		|| check_semicolons_error(data, data->command) == -1)
 		{
 			handle_error(data);
 		}

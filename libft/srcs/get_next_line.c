@@ -21,7 +21,7 @@ int		ft_return(char **str, char **line)
 	while ((*str)[i] != '\n' && (*str)[i] != '\0')
 		i++;
 	*line = ft_substr(*str, 0, i);
-	if ((*str)[i] == '\n' && (*str)[i + 1] != '\0')
+	if ((*str)[i] == '\n') // && (*str)[i + 1] != '\0')
 		tmp = ft_strdup(&(*str)[i + 1]);
 	else
 		tmp = NULL;

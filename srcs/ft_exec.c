@@ -39,6 +39,7 @@ void	run_exec(t_data *data, t_command *cmd)
 			ft_putstr_fd("\n", 2); // ecrire dans le stderr
 			// EXIT_CODE = 127;
 		}
+		exit(1);
 	}
 	else
 	{
@@ -60,7 +61,10 @@ void	what_cmd(t_data *data, t_command *cmd)
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		ft_unset(data, cmd);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
+	{
+		printf("EXIT NAN\n?");
 		handle_exit(data);
+	}
 	else if (!ft_strcmp(cmd->cmd, "cd"))
 		ft_cd(data, cmd);
 	else
