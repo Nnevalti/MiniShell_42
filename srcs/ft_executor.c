@@ -54,12 +54,10 @@ void	analyse_parser(t_command *cmd, t_data *data)
 			current->opt_tab[0] = ft_strdup(current->cmd);
 			current->opt_tab[1] = NULL;
 		}
-
 		if (current->redir)
 			handle_redir(data, current, current->redir);
 		if (current->pipe)
 			handle_pipes(data, current, current->pipe);
-
 		if (data->error->errno == NOERROR)
 		{
 			exec_cmd(data, current);
@@ -73,6 +71,7 @@ void	analyse_parser(t_command *cmd, t_data *data)
 		}
 		current = current->next;
 	}
+	return ;
 }
 
 void	ft_executor(t_data *data)
