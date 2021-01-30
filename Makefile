@@ -27,6 +27,7 @@ SRC			=	main.c \
 				handle_redir.c \
 				handle_pipes.c \
 				signal.c \
+				handle_backslash.c
 
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)

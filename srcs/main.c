@@ -33,6 +33,7 @@ void	handle_exit(t_data *data/*int signo*/)
 	free(g_prompt);
 	free(data->error);
 	free(data);
+	write(1, "exit\n", 5);
 	exit(1);
 }
 

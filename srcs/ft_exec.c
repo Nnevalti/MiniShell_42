@@ -62,7 +62,6 @@ void	what_cmd(t_data *data, t_command *cmd)
 		ft_unset(data, cmd);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 	{
-		printf("EXIT NAN\n?");
 		free_parser(data->parser);
 		handle_exit(data);
 	}
