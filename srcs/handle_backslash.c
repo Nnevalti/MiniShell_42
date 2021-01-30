@@ -16,7 +16,7 @@ char	*trim_bs(char *str, t_data *data)
 		if (str[i] == '\\')
 		{
 			if (!new_str)
-				new_str = ft_substr(str, start, i - 1)
+				new_str = ft_substr(str, start, i - 1);
 			else
 			{
 				tmp = ft_substr(str, start, i - 1);
