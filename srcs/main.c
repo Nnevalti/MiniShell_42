@@ -29,7 +29,6 @@ void	handle_exit(t_data *data/*int signo*/)
 {
 
 	// EXIT_CODE = 130;
-	free_parser(data->parser);
 	free_tab_str(data->my_env);
 	free(g_prompt);
 	free(data->error);
@@ -57,7 +56,11 @@ int		main(int argc, char **argv, char **env)
 		g_pid[0] = 0;
 		g_pid[1] = 0;
 		prompt();
-		get_next_line(0, &data->command);
+		if (get_next_line(0, &data->command) == 0)
+		{
+			free(data->command);
+			handle_exit(data);
+		}
 		// printf("USER COMMAND : [%s]\n", data->command);
 		if (check_quotes_error(data, data->command) == -1
 		|| check_semicolons_error(data, data->command) == -1

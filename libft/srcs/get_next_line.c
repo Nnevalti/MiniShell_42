@@ -15,19 +15,15 @@
 int		ft_return(char **str, char **line)
 {
 	int		i;
-	char	*tmp;
 
 	i = 0;
 	while ((*str)[i] != '\n' && (*str)[i] != '\0')
 		i++;
 	*line = ft_substr(*str, 0, i);
-	if ((*str)[i] == '\n') // && (*str)[i + 1] != '\0')
-		tmp = ft_strdup(&(*str)[i + 1]);
-	else
-		tmp = NULL;
-	free(*str);
-	*str = tmp;
-	if (!*str)
+	if (*str)
+		free(*str);
+	*str = NULL;
+	if (!*line)
 		return (0);
 	return (1);
 }
@@ -67,6 +63,7 @@ int		get_next_line(int fd, char **line)
 	if (fd < 0 || !line || read(fd, buff, 0) < 0 || BUFFER_SIZE < 1)
 		return (-1);
 	res = readline(fd, &str, &buff);
+	free(buff);
 	if (res < 0)
 		return (-1);
 	if (!str)
@@ -74,6 +71,5 @@ int		get_next_line(int fd, char **line)
 		*line = ft_strdup("");
 		return (0);
 	}
-	free(buff);
 	return (ft_return(&str, line));
 }

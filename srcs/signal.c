@@ -6,7 +6,7 @@ void	kill_prg(int sig)
 
 	if (g_pid[0] != 0 && g_pid[1] == 0)
 	{
-		ft_putstr_fd("Quit: 3\n", 2);
+		ft_putstr_fd("Quit (core dumped)\n", 2);
 		kill(g_pid[0], SIGQUIT);
 	}
 	else if (g_pid[1] != 0)

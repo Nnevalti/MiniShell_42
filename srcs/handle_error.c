@@ -14,7 +14,7 @@ int		check_semicolons_error(t_data *data, char *command)
 		if (command[i] == ';' || command[i] == '|')
 		{
 			j = i - 1;
-			while (ft_isblank(command[j]) && j > 0)
+			while (j > 0 && command[j] && ft_isblank(command[j]))
 				j--;
 			if (j == start)
 			{

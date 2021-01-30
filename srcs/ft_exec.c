@@ -63,6 +63,7 @@ void	what_cmd(t_data *data, t_command *cmd)
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 	{
 		printf("EXIT NAN\n?");
+		free_parser(data->parser);
 		handle_exit(data);
 	}
 	else if (!ft_strcmp(cmd->cmd, "cd"))
