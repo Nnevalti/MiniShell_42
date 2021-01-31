@@ -11,7 +11,10 @@ void	kill_prg(int sig)
 		errno = 131;
 	}
 	else if (g_pid[1] != 0)
+	{
 		kill(g_pid[1], SIGINT);
+		errno = 131;
+	}
 	else
 		ft_putstr_fd("\b \b\b \b", 2);
 }
@@ -31,6 +34,6 @@ void 	signal_handler(int sig)
 		else
 			kill(g_pid[0], SIGINT);
 		write(1, "\n", 1);
-		errno = 130;
 	}
+	errno = 130;
 }

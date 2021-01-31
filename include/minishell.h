@@ -110,7 +110,7 @@ void				handle_env(t_command *current, t_data *data);
 void				create_opt_tab(t_command *current, t_data *data);
 void				handle_bsq(t_command *current, t_data *data);
 void				exec_cmd(t_data *data, t_command *current);
-void				handle_exit(t_data *data);
+void				handle_exit(t_data *data, t_command *cmd);
 void 				signal_handler(int code);
 /*
 **	SIGNAL
@@ -119,7 +119,7 @@ void				kill_prg(int sig);
 /*
 **		BUILTINS
 */
-int					ft_env(char **env);
+int					ft_env(t_command *cmd, char **env);
 void				ft_pwd(void);
 void				ft_echo(t_command *ptr);
 void				ft_cd(t_data *data, t_command *ptr);

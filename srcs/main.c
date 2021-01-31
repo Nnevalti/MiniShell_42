@@ -25,16 +25,84 @@ void	prompt()
 	ft_putstr_fd( "\e[39m$> \e[0m", 2);
 }
 
-void	handle_exit(t_data *data/*int signo*/)
+int		ft_strisdigit(char *str)
 {
+	int		i;
 
-	// EXIT_CODE = 130;
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	ft_error_min_max(t_data *data, t_command *cmd, unsigned long long res)
+{
+	printf("RES %llu\n",res);
+	if (cmd->opt_tab[1][0] == '-')
+	{
+		if (((res * -1) - 1) > 9223372036854775807ULL)
+		{
+			errno = 2;
+			ft_putstr_fd("Minishell: exit: ", 2);
+			ft_putstr_fd(cmd->opt_tab[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+		}
+	}
+	else
+	{
+		if (res > 9223372036854775807ULL)
+		{
+			errno = 2;
+			ft_putstr_fd("Minishell: exit: ", 2);
+			ft_putstr_fd(cmd->opt_tab[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+		}
+	}
+}
+
+
+void	free_before_exit(t_data *data)
+{
+	if (data->parser)
+		free_parser(data->parser);
 	free_tab_str(data->my_env);
 	free(g_prompt);
 	free(data->error);
 	free(data);
-	write(1, "exit\n", 5);
-	exit(1);
+	return ;
+}
+
+void	handle_exit(t_data *data, t_command *cmd)
+{
+	unsigned long long res;
+
+	if (cmd && cmd->opt_tab)
+	{
+		if (cmd->opt_tab[1] && ft_strisdigit(cmd->opt_tab[1]))
+		{
+			if (cmd->opt_tab[2])
+			{
+				ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
+				return ;
+			}
+			res = ft_atoi(cmd->opt_tab[1]);
+			errno = res;
+			ft_error_min_max(data, cmd, res);
+		}
+		else if (cmd->opt_tab[1])
+		{
+			ft_putstr_fd("Minishell: exit: ", 2);
+			ft_putstr_fd(cmd->opt_tab[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+
+		}
+	}
+	free_before_exit(data);
+	exit(errno);
 }
 
 void	init_signal_handler(void)
@@ -60,7 +128,7 @@ int		main(int argc, char **argv, char **env)
 		if (get_next_line(0, &data->command) == 0)
 		{
 			free(data->command);
-			handle_exit(data);
+			handle_exit(data, NULL);
 		}
 		// printf("USER COMMAND : [%s]\n", data->command);
 		if (check_quotes_error(data, data->command) == -1

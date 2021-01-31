@@ -25,11 +25,10 @@ void	run_exec(t_data *data, t_command *cmd)
 				free(tmp);
 				if (!(stat(str, &buffer)))
 				{
-					if(execve(str, cmd->opt_tab, data->my_env) == -1)
-						errno = 127;
+					int test = execve(str, cmd->opt_tab, data->my_env);
 					free(str);
 					free_tab_str(paths);
-					return ;
+					exit(EXIT_SUCCESS);
 				}
 				free(str);
 				i++;
@@ -44,17 +43,21 @@ void	run_exec(t_data *data, t_command *cmd)
 	else
 	{
 		waitpid(g_pid[0], &status, 0);
-		errno = status/256;
+		if(WEXITSTATUS(status) == EXIT_FAILURE)
+			errno = 127;
+		else if (errno != 131 && errno != 130)
+			errno = WEXITSTATUS(status);
 	}
 	return ;
 }
 
 void	what_cmd(t_data *data, t_command *cmd)
 {
+	errno = 0;
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		ft_echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		ft_env(data->my_env);
+		ft_env(cmd, data->my_env);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		ft_pwd();
 	else if (!ft_strcmp(cmd->cmd, "export"))
@@ -62,10 +65,7 @@ void	what_cmd(t_data *data, t_command *cmd)
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		ft_unset(data, cmd);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-	{
-		free_parser(data->parser);
-		handle_exit(data);
-	}
+		handle_exit(data, cmd);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
 		ft_cd(data, cmd);
 	else

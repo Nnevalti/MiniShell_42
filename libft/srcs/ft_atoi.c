@@ -3,32 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vdescham <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/07 13:57:10 by tfevrier          #+#    #+#             */
-/*   Updated: 2019/10/08 11:15:29 by tfevrier         ###   ########.fr       */
+/*   Created: 2019/10/08 16:06:37 by vdescham          #+#    #+#             */
+/*   Updated: 2019/10/22 12:24:20 by vdescham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-int			ft_atoi(const char *str)
+unsigned long long		ft_atoi(const char *str)
 {
-	int		nb;
-	int		neg;
+	int i;
+	int sign;
+	unsigned long long value;
 
-	nb = 0;
-	while (ft_isspace(*str))
-		str++;
-	if (*str == '+' || *str == '-')
+	i = 0;
+	sign = 1;
+	value = 0;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
 	{
-		neg = (*str == '-');
-		str++;
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
 	}
-	while (ft_isdigit(*str))
+	while (ft_isdigit(str[i]))
 	{
-		nb = nb * 10 + (*str - '0');
-		str++;
+		value = value * 10 + (str[i] - '0');
+		i++;
 	}
-	return (neg ? -nb : nb);
+	return (value * sign);
 }

@@ -12,11 +12,16 @@
 
 #include "../include/minishell.h"
 
-int		ft_env(char **env)
+int		ft_env(t_command *cmd, char **env)
 {
 	int		i;
 
 	i = 0;
+	if (cmd && cmd->opt_tab && (tab_str_len(cmd->opt_tab) > 1))
+	{
+		errno = 1;
+		return (1);
+	}
 	while (env[i])
 		printf("%s\n", env[i++]);
 	return (0);
@@ -81,7 +86,7 @@ void	ft_echo(t_command *ptr)
 	int				i;
 	int				j;
 
-	if ((tab_str_len(ptr->opt_tab) > 2)
+	if ((tab_str_len(ptr->opt_tab) >= 2)
 		&& !(ft_strcmp(ptr->opt_tab[1], "-n")))
 		i = 2;
 	else
@@ -94,8 +99,8 @@ void	ft_echo(t_command *ptr)
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
-	if (tab_str_len(ptr->opt_tab) >= 2
-		&& ft_strcmp(ptr->opt_tab[1], "-n"))
+	if ( tab_str_len(ptr->opt_tab) == 1 || (tab_str_len(ptr->opt_tab) >= 2
+		&& ft_strcmp(ptr->opt_tab[1], "-n")))
 		ft_putstr_fd("\n", 1);
 	return ;
 }
@@ -122,7 +127,7 @@ void	sort_env_array(char **env_array)
 		}
 		i++;
 	}
-	ft_env(env_array);
+	ft_env(NULL, env_array);
 }
 
 void	sort_export(char **env)
