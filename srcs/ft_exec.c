@@ -25,10 +25,10 @@ void	run_exec(t_data *data, t_command *cmd)
 				free(tmp);
 				if (!(stat(str, &buffer)))
 				{
-					int test = execve(str, cmd->opt_tab, data->my_env);
+					execve(str, cmd->opt_tab, data->my_env);
 					free(str);
 					free_tab_str(paths);
-					exit(EXIT_SUCCESS);
+					// exit(EXIT_SUCCESS);
 				}
 				free(str);
 				i++;
@@ -37,15 +37,14 @@ void	run_exec(t_data *data, t_command *cmd)
 			ft_putstr_fd("command not found: ", 2);
 			ft_putstr_fd(cmd->cmd, 2);
 			ft_putstr_fd("\n", 2);
+			exit(127);
 		}
-		exit(EXIT_FAILURE);
+		// exit(EXIT_SUCCESS);
 	}
 	else
 	{
 		waitpid(g_pid[0], &status, 0);
-		if(WEXITSTATUS(status) == EXIT_FAILURE)
-			errno = 127;
-		else if (errno != 131 && errno != 130)
+		if (errno != 131 && errno != 130)
 			errno = WEXITSTATUS(status);
 	}
 	return ;

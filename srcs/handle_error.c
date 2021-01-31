@@ -11,6 +11,13 @@ int		check_semicolons_error(t_data *data, char *command)
 	start = 0;
 	while (command[i])
 	{
+		if (command[i] == '\'')
+		{
+			i++;
+			while (command[i] != '\'')
+				i++;
+			i++;
+		}
 		if (command[i] == ';' || command[i] == '|')
 		{
 			j = i - 1;

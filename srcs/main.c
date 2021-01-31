@@ -41,7 +41,6 @@ int		ft_strisdigit(char *str)
 
 void	ft_error_min_max(t_data *data, t_command *cmd, unsigned long long res)
 {
-	printf("RES %llu\n",res);
 	if (cmd->opt_tab[1][0] == '-')
 	{
 		if (((res * -1) - 1) > 9223372036854775807ULL)
@@ -67,8 +66,6 @@ void	ft_error_min_max(t_data *data, t_command *cmd, unsigned long long res)
 
 void	free_before_exit(t_data *data)
 {
-	if (data->parser)
-		free_parser(data->parser);
 	free_tab_str(data->my_env);
 	free(g_prompt);
 	free(data->error);
@@ -100,8 +97,10 @@ void	handle_exit(t_data *data, t_command *cmd)
 			ft_putstr_fd(": numeric argument required\n", 2);
 
 		}
+		free_parser(data->parser);
 	}
 	free_before_exit(data);
+	write(1,"exit\n",5);
 	exit(errno);
 }
 
@@ -125,12 +124,11 @@ int		main(int argc, char **argv, char **env)
 		g_pid[0] = 0;
 		g_pid[1] = 0;
 		prompt();
-		if (get_next_line(0, &data->command) == 0)
+		if ((get_next_line(0, &data->command) == 0))
 		{
 			free(data->command);
 			handle_exit(data, NULL);
 		}
-		// printf("USER COMMAND : [%s]\n", data->command);
 		if (check_quotes_error(data, data->command) == -1
 		|| check_semicolons_error(data, data->command) == -1
 		|| check_empty_command(data, data->command) == -1
