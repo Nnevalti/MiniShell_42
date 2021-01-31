@@ -40,7 +40,7 @@ int		check_quotes_error(t_data *data, char *command)
 	{
 		if (command[i] == '\\' && command[i + 1])
 			i += 2;
-		else if (command[i] == '\'')
+		if (command[i] == '\'')
 		{
 			i++;
 			while (command[i] && command[i] != '\'')

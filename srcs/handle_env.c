@@ -23,7 +23,8 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 		}
 		if (str[i] == '\\' && str[i + 1])
 			i += 2;
-		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'))
+		if (str[i] == '$' && (ft_isalnum(str[i + 1])
+			|| ft_search(str[i+1],"_\'\"")))
 		{
 			i++;
 			while (ft_isalnum(str[i]) || str[i] == '_')
@@ -37,7 +38,6 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 			else
 				env_array[j] = ft_strdup(get_env_var(env, env_name));
 			free(env_name);
-			printf("ENV ARRAY [%d] = [%s]\n", j, env_array[j]);
 			j++;
 			*total_len += len + 1;
 		}
@@ -65,7 +65,8 @@ int			get_nb_var(char const *str)
 		}
 		if (str[i] == '\\' && str[i + 1])
 			i += 2;
-		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'))
+		if (str[i] == '$' && (ft_isalnum(str[i + 1])
+			|| ft_search(str[i+1],"_\'\"")))
 			nb_var++;
 		if (str[i])
 			i++;
@@ -105,10 +106,10 @@ char		*get_new_str(char const *str, char *new_str, char **env_array)
 			j += 2;
 		}
 		if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| str[i + 1] == '_'))
+			|| ft_search(str[i+1],"_\'\"")))
 		{
 			i++;
-			while (ft_isalnum(str[i]) || str[i] == '_')
+			while (ft_isalnum(str[i]) || ft_search(str[i+1],"_\'\""))
 				i++;
 			l = 0;
 			while (env_array[k][l])

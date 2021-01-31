@@ -106,7 +106,8 @@ char				***ft_lexer(t_data *data);
 t_command			**ft_parser(t_data *data);
 void				ft_executor(t_data *data);
 void				handle_env(t_command *current, t_data *data);
-void				handle_quotes(t_command *current, t_data *data);
+void				create_opt_tab(t_command *current, t_data *data);
+void				handle_bsq(t_command *current, t_data *data);
 void				exec_cmd(t_data *data, t_command *current);
 void				handle_exit(t_data *data);
 void 				signal_handler(int code);
@@ -154,7 +155,6 @@ int					check_error(t_data *data, char ***tokens);
 int					check_semicolons_error(t_data *data, char *command);
 int					check_empty_command(t_data *data, char *command);
 int					check_syntax_error(t_data *data, char *command);
-
 /*
 **		FREE
 */

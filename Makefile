@@ -23,12 +23,11 @@ SRC			=	main.c \
 				handle_env.c \
 				init.c \
 				handle_error.c \
-				handle_quotes.c \
 				handle_redir.c \
 				handle_pipes.c \
 				signal.c \
-				handle_backslash.c
-
+				opt_tab.c \
+				handle_bsq.c \
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
 OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))

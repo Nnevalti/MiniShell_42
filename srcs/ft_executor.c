@@ -40,8 +40,11 @@ void	analyse_parser(t_command *cmd, t_data *data)
 	while (current)
 	{
 		handle_env(current, data);
-		handle_quotes(current, data);
+		create_opt_tab(current, data);
+		handle_bsq(current, data);
+		printf("JEANLACHIASSE3\n");
 		// handle_backslash(current, data);
+		// handle_quotes(current, data);
 		if (current->opt_tab)
 		{
 			tmp = prepend_str(current->cmd, current->opt_tab);
