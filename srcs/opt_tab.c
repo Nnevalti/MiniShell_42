@@ -100,10 +100,7 @@ void	create_opt_tab(t_command *current, t_data *data)
 	if (current->opt)
 	{
 		nb_opt = get_nb_opt(current->opt);
-		// printf("NB_OPT [%d]\n",nb_opt);
 		get_opt_tab(current, current->opt, nb_opt);
-		// for(int i = 0;current->opt_tab[i]; i++)
-			// printf("OPT_TAB[%d] = [%s]\n",i,current->opt_tab[i]);
 	}
 	return ;
 }

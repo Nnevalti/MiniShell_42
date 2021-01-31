@@ -131,29 +131,27 @@ void	handle_bsq(t_command *current, t_data *data)
 	int i;
 
 	i = 0;
-	// tmp = trim_bsq(current->cmd);
-	// free(current->cmd);
-	// current->cmd = tmp;
+	tmp = trim_bsq(current->cmd);
+	free(current->cmd);
+	current->cmd = tmp;
 	if (current->opt_tab)
 	{
 		while(current->opt_tab[i])
 		{
-			printf(" wld opt_tab[%d] = [%s]\n",i,current->opt_tab[i]);
 			tmp = trim_bsq(current->opt_tab[i]);
 			free(current->opt_tab[i]);
 			current->opt_tab[i] = tmp;
-			printf(" mew opt_tab[%d] = [%s]\n",i,current->opt_tab[i]);
 			i++;
 		}
 	}
-	// if (current->redir)
-	// {
-	// 	redir = current->redir;
-	// 	while (redir)
-	// 	{
-	// 		redir->str = trim_bsq(redir->str);
-	// 		redir = redir->next;
-	// 	}
-	// }
+	if (current->redir)
+	{
+		redir = current->redir;
+		while (redir)
+		{
+			redir->str = trim_bsq(redir->str);
+			redir = redir->next;
+		}
+	}
 	return ;
 }
