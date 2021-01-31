@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 # include "../libft/include/libft.h"
 # include "../libft/include/get_next_line.h"
@@ -72,18 +73,18 @@ typedef struct		s_command
 	void			*next;
 }					t_command;
 
-typedef enum		e_errno
+typedef enum		e_errtype
 {
 	NOERROR,
 	QUOTE,
 	PARSER,
 	SYNTAX,
 	FD
-}					t_errno;
+}					t_errtype;
 
 typedef struct		s_error
 {
-	t_errno			errno;
+	t_errtype			errtype;
 	char			*value;
 }					t_error;
 

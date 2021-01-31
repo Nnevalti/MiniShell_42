@@ -8,6 +8,7 @@ void	kill_prg(int sig)
 	{
 		ft_putstr_fd("Quit (core dumped)\n", 2);
 		kill(g_pid[0], SIGQUIT);
+		errno = 131;
 	}
 	else if (g_pid[1] != 0)
 		kill(g_pid[1], SIGINT);
@@ -22,7 +23,6 @@ void 	signal_handler(int sig)
 	{
 		ft_putstr_fd("\n", 2);
 		prompt();
-		// errno = 1;
 	}
 	else
 	{
@@ -31,6 +31,6 @@ void 	signal_handler(int sig)
 		else
 			kill(g_pid[0], SIGINT);
 		write(1, "\n", 1);
-		// errno = 130;
+		errno = 130;
 	}
 }

@@ -50,9 +50,11 @@ void	get_opt_tab(t_command *current, char *opt, int nb_opt)
 
 	i = 0;
 	j = 0;
-	start = 0;
 	if (!(current->opt_tab = malloc(sizeof(char *) *(nb_opt + 1))))
 		return ;
+	while (ft_isblank(opt[i]))
+		i++;
+	start = i;
 	while(opt[i])
 	{
 		if (opt[i] == '\"')

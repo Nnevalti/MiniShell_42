@@ -59,7 +59,7 @@ void	analyse_parser(t_command *cmd, t_data *data)
 			handle_redir(data, current, current->redir);
 		if (current->pipe)
 			handle_pipes(data, current, current->pipe);
-		if (data->error->errno == NOERROR)
+		if (data->error->errtype == NOERROR)
 		{
 			exec_cmd(data, current);
 			if (current->redir)

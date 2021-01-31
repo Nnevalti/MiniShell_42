@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
+char		**get_env_array(char const *str, char **env, int nb_var, int *env_len)
 {
 	int		i;
 	int		j;
@@ -39,7 +39,13 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *total_len)
 				env_array[j] = ft_strdup(get_env_var(env, env_name));
 			free(env_name);
 			j++;
-			*total_len += len + 1;
+			*env_len += len + 1;
+		}
+		if (str[i] == '$' && str[i + 1] == '?')
+		{
+			env_array[j] = ft_itoa(errno);
+			*env_len += 2;
+			j++;
 		}
 		if (str[i] && str[i] != '$')
 			i++;
@@ -67,6 +73,8 @@ int			get_nb_var(char const *str)
 			i += 2;
 		if (str[i] == '$' && (ft_isalnum(str[i + 1])
 			|| ft_search(str[i+1],"_\'\"")))
+			nb_var++;
+		if (str[i] == '$' && str[i + 1])
 			nb_var++;
 		if (str[i])
 			i++;
@@ -111,6 +119,18 @@ char		*get_new_str(char const *str, char *new_str, char **env_array)
 			i++;
 			while (ft_isalnum(str[i]) || ft_search(str[i+1],"_\'\""))
 				i++;
+			l = 0;
+			while (env_array[k][l])
+			{
+				new_str[j] = env_array[k][l];
+				j++;
+				l++;
+			}
+			k++;
+		}
+		else if (str[i] == '$' && str[i + 1] == '?')
+		{
+			i += 2;
 			l = 0;
 			while (env_array[k][l])
 			{

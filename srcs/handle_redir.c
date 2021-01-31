@@ -21,7 +21,8 @@ void	handle_bad_fd(t_data *data, char *str)
 
 	tmp = ft_strdup("Minishell: no such file or directory: ");
 	data->error->value = ft_strjoin(tmp, str);
-	data->error->errno = FD;
+	data->error->errtype = FD;
+	errno = 1;
 	free(tmp);
 }
 

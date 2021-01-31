@@ -18,10 +18,11 @@ int		check_semicolons_error(t_data *data, char *command)
 				j--;
 			if (j == start)
 			{
-				tmp = ft_strdup("Minishell: syntax error near ");
-				data->error->errno = SYNTAX;
+				tmp = ft_strdup("Minishell: syntax error near unexpected token ");
+				data->error->errtype = SYNTAX;
 				data->error->value = ft_strnjoin(tmp, &command[i], 1);
 				free(tmp);
+				errno = 2;
 				return (-1);
 			}
 			start = i;
@@ -48,7 +49,8 @@ int		check_quotes_error(t_data *data, char *command)
 			if (command[i] == '\0')
 			{
 				data->error->value = ft_strdup("Minishell: quote error");
-				data->error->errno = QUOTE;
+				data->error->errtype = QUOTE;
+				errno = 2;
 				return (-1);
 			}
 		}
@@ -65,7 +67,8 @@ int		check_quotes_error(t_data *data, char *command)
 			if (command[i] == '\0')
 			{
 				data->error->value = ft_strdup("Minishell: quote error");
-				data->error->errno = QUOTE;
+				data->error->errtype = QUOTE;
+				errno = 2;
 				return (-1);
 			}
 		}
@@ -89,10 +92,11 @@ int		check_error(t_data *data, char ***tokens)
 			if (!ft_strcmp(tokens[i][j], "|") || !ft_strcmp(tokens[i][j], ">>")
 			|| !ft_strcmp(tokens[i][j], ">") || !ft_strcmp(tokens[i][j], "<"))
 			{
-				tmp = ft_strdup("Minishell: parse error near ");
-				data->error->errno = PARSER;
+				tmp = ft_strdup("Minishell: syntax error near unexpected token ");
+				data->error->errtype = PARSER;
 				data->error->value = ft_strjoin(tmp, tokens[i][j]);
 				free(tmp);
+				errno = 2;
 				return (-1);
 			}
 			j++;
@@ -120,10 +124,11 @@ int		check_syntax_error(t_data *data, char *command)
 
 	if (command[0] == '|' || command[0] == ';')
 	{
-		tmp = ft_strdup("Minishell: syntax error near ");
-		data->error->errno = SYNTAX;
+		tmp = ft_strdup("Minishell: syntax error near unexpected token ");
+		data->error->errtype = SYNTAX;
 		data->error->value = ft_strnjoin(tmp, command, 1);
 		free(tmp);
+		errno = 2;
 		return (-1);
 	}
 	return (0);
@@ -131,9 +136,9 @@ int		check_syntax_error(t_data *data, char *command)
 
 void	handle_error(t_data *data)
 {
-	if (data->error->errno == QUOTE)
+	if (data->error->errtype == QUOTE)
 		free(data->command);
-	if (data->error->errno == PARSER)
+	if (data->error->errtype == PARSER)
 		free_lexer(data);
 	if (data->error->value)
 	{
@@ -142,5 +147,5 @@ void	handle_error(t_data *data)
 		free(data->error->value);
 		data->error->value = NULL;
 	}
-	data->error->errno = NOERROR;
+	data->error->errtype = NOERROR;
 }

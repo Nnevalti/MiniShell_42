@@ -33,15 +33,15 @@ void	ft_pwd(void)
 void	ft_cd(t_data *data, t_command *ptr)
 {
 	char	*name;
+	char	*tmp;
 	char	*oldpwd;
 	char	*pwd;
 	char	buffer[MAX_PATH_LENGTH];
 
 	if (ptr->opt_tab && (tab_str_len(ptr->opt_tab) > 2))
 	{
-		ft_putstr_fd("cd: string not in pwd: ", 2);
-		ft_putstr_fd(ptr->opt_tab[1], 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("Minishell: cd: too many arguments\n", 2);
+		errno = 1;
 		return ;
 	}
 	oldpwd = ft_strjoin("OLDPWD=", getcwd(buffer, MAX_PATH_LENGTH));
@@ -56,7 +56,18 @@ void	ft_cd(t_data *data, t_command *ptr)
 		chdir(get_env_var(data->my_env, "OLDPWD"));
 	}
 	else
-		chdir(ptr->opt_tab[1]);
+	{
+		if (chdir(ptr->opt_tab[1]) == -1)
+		{
+			free(oldpwd);
+			tmp = ft_strjoin("Minishell: cd: ", ptr->opt_tab[1]);
+			ft_putstr_fd(tmp, 2);
+			ft_putstr_fd(": Not a directory\n", 2);
+			free(tmp);
+			errno = 1;
+			return ;
+		}
+	}
 	pwd = ft_strjoin("PWD=", getcwd(buffer, MAX_PATH_LENGTH));
 	set_env_var(data->my_env, "PWD", pwd);
 	set_env_var(data->my_env, "OLDPWD", oldpwd);

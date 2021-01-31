@@ -6,8 +6,10 @@ void	run_exec(t_data *data, t_command *cmd)
 	int		i;
 	char	*tmp;
 	char	*str;
+	int		status;
 	struct stat buffer;
 
+	status = 0;
 	if ((g_pid[0] = fork()) == 0)
 	{
 		if (!(stat(cmd->cmd, &buffer)))
@@ -23,27 +25,26 @@ void	run_exec(t_data *data, t_command *cmd)
 				free(tmp);
 				if (!(stat(str, &buffer)))
 				{
-					execve(str, cmd->opt_tab, data->my_env);
+					if(execve(str, cmd->opt_tab, data->my_env) == -1)
+						errno = 127;
 					free(str);
 					free_tab_str(paths);
 					return ;
 				}
-				// else
-				// 	EXIT_CODE = 126;
 				free(str);
 				i++;
 			}
 			free_tab_str(paths);
-			ft_putstr_fd("command not found: ", 2); // ecrire dans le stderr
-			ft_putstr_fd(cmd->cmd, 2); // ecrire dans le stderr
-			ft_putstr_fd("\n", 2); // ecrire dans le stderr
-			// EXIT_CODE = 127;
+			ft_putstr_fd("command not found: ", 2);
+			ft_putstr_fd(cmd->cmd, 2);
+			ft_putstr_fd("\n", 2);
 		}
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		waitpid(g_pid[0], NULL, 0);
+		waitpid(g_pid[0], &status, 0);
+		errno = status/256;
 	}
 	return ;
 }
@@ -107,7 +108,8 @@ void	fork_exec(t_data *data, t_command *cmd)
 		// EXIT_CODE = WEXITSTATUS(status);
 		// signal(SIGINT, &handle_exit);
 	}
-	waitpid(g_pid[1], NULL, 0);
+	waitpid(g_pid[1], &status, 0);
+	errno = status / 256;
 	return ;
 }
 
