@@ -129,9 +129,9 @@ int		main(int argc, char **argv, char **env)
 			free(data->command);
 			handle_exit(data, NULL);
 		}
-		if (check_quotes_error(data, data->command) == -1
+		if (check_empty_command(data, data->command) == -1
+		|| check_quotes_error(data, data->command) == -1
 		|| check_semicolons_error(data, data->command) == -1
-		|| check_empty_command(data, data->command) == -1
 		|| check_syntax_error(data, data->command) == -1)
 			handle_error(data);
 		else

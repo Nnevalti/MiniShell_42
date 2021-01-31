@@ -118,10 +118,13 @@ int		check_empty_command(t_data *data, char *command)
 	int		i;
 
 	i = 0;
-	while (ft_isblank(command[i]))
+	while (command && ft_isblank(command[i]))
 		i++;
 	if (command[i] == '\0')
+	{
+		free(command);
 		return (-1);
+	}
 	return (0);
 }
 
