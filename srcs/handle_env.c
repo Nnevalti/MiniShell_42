@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_env.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vdescham <vdescham@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/01 01:05:05 by vdescham          #+#    #+#             */
+/*   Updated: 2021/02/01 01:05:06 by vdescham         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 char		**get_env_array(char const *str, char **env, int nb_var, int *env_len)
@@ -21,9 +33,9 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *env_len)
 			while (str[i] && str[i] != '\'')
 				i++;
 		}
-		if (str[i] == '\\' && str[i + 1])
+		else if (str[i] == '\\' && str[i + 1])
 			i += 2;
-		if (str[i] == '$' && (ft_isalnum(str[i + 1])
+		else if (str[i] == '$' && (ft_isalnum(str[i + 1])
 			|| ft_search(str[i+1],"_\'\"")))
 		{
 			i++;
@@ -41,13 +53,13 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *env_len)
 			j++;
 			*env_len += len + 1;
 		}
-		if (str[i] == '$' && str[i + 1] == '?')
+		else if (str[i] == '$' && str[i + 1] == '?')
 		{
 			env_array[j] = ft_itoa(errno);
 			*env_len += 2;
 			j++;
 		}
-		if (str[i] && str[i] != '$')
+		else if (str[i])
 			i++;
 	}
 	env_array[j] = NULL;
@@ -69,14 +81,14 @@ int			get_nb_var(char const *str)
 			while (str[i] && str[i] != '\'')
 				i++;
 		}
-		if (str[i] == '\\' && str[i + 1])
+		else if (str[i] == '\\' && str[i + 1])
 			i += 2;
-		if (str[i] == '$' && (ft_isalnum(str[i + 1])
+		else if (str[i] == '$' && (ft_isalnum(str[i + 1])
 			|| ft_search(str[i+1],"_\'\"")))
 			nb_var++;
-		if (str[i] == '$' && str[i + 1])
+		else if (str[i] == '$' && str[i + 1] == '?')
 			nb_var++;
-		if (str[i])
+		else if (str[i])
 			i++;
 	}
 	return (nb_var);
