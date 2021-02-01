@@ -171,6 +171,25 @@ int					multiple_commands(char **tokens);
 int					ft_set_redir_utils(char *token, t_redir *redir,
 						t_redir_type type);
 /*
+**		get_env_array_utils
+*/
+int					skip_env(char const *str, int i);
+int					ft_norme_again(char const *str, int *i, int len);
+char				*fill_env_array_utils(char const *str, char **env,
+						int *env_len, int *i);
+char				*fill_env_array(char const *str, char **env,
+						int *env_len, int *i);
+/*
+**		get_new_str_utils
+*/
+void				skip_newstr(char const *str, char *new_str, int *i,
+						int *j);
+int					skip_env_name(char const *str, int i);
+void				copy_env_value(char *new_str, char **env_array, int *k,
+						int *j);
+int					is_env_name(char const *str, int i);
+void				init_normed_int(int *i, int *j, int *k);
+/*
 **		ERROR HANDLING
 */
 int					check_command(t_data *data);

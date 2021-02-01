@@ -35,7 +35,9 @@ SRC			=	main.c \
 				prompt.c \
 				ft_lexer_utils.c \
 				fill_tokens_utils.c \
-				ft_parser_utils.c
+				ft_parser_utils.c \
+				get_new_str_utils.c \
+				get_env_array_utils.c \
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
 OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))

@@ -12,13 +12,12 @@
 
 #include "../include/minishell.h"
 
-char		**get_env_array(char const *str, char **env, int nb_var, int *env_len)
+char		**get_env_array(char const *str, char **env,
+				int nb_var, int *env_len)
 {
 	int		i;
 	int		j;
-	int		len;
 	char	**env_array;
-	char	*env_name;
 
 	i = 0;
 	j = 0;
@@ -26,41 +25,9 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *env_len)
 		return (NULL);
 	while (str[i] && j < nb_var)
 	{
-		len = 0;
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-				i++;
-		}
-		else if (str[i] == '\\' && str[i + 1])
-			i += 2;
-		else if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| ft_search(str[i + 1], "_\'\"")))
-		{
-			i++;
-			while (ft_isalnum(str[i]) || str[i] == '_')
-			{
-				len++;
-				i++;
-			}
-			env_name = ft_substr(&str[i - len], 0, len);
-			if (get_env_var(env, env_name) == NULL)
-				env_array[j] = ft_strdup("");
-			else
-				env_array[j] = ft_strdup(get_env_var(env, env_name));
-			free(env_name);
+		env_array[j] = fill_env_array(str, env, env_len, &i);
+		if (env_array[j] != NULL)
 			j++;
-			*env_len += len + 1;
-		}
-		else if (str[i] == '$' && str[i + 1] == '?')
-		{
-			env_array[j] = ft_itoa(errno);
-			*env_len += 2;
-			j++;
-		}
-		else if (str[i])
-			i++;
 	}
 	env_array[j] = NULL;
 	return (env_array);
@@ -75,14 +42,8 @@ int			get_nb_var(char const *str)
 	nb_var = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-				i++;
-		}
-		else if (str[i] == '\\' && str[i + 1])
-			i += 2;
+		if (str[i] == '\'' || (str[i] == '\\' && str[i + 1]))
+			i = skip_env(str, i);
 		else if (str[i] == '$' && (ft_isalnum(str[i + 1])
 			|| ft_search(str[i + 1], "_\'\"?")))
 		{
@@ -100,65 +61,24 @@ char		*get_new_str(char const *str, char *new_str, char **env_array)
 	int		i;
 	int		j;
 	int		k;
-	int		l;
 
-	i = 0;
-	j = 0;
-	k = 0;
+	init_normed_int(&i, &j, &k);
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == '\'' || (str[i] == '\\' && str[i + 1]))
+			skip_newstr(str, new_str, &i, &j);
+		if (str[i] == '$' && is_env_name(str, i))
 		{
-			new_str[j] = str[i];
-			i++;
-			j++;
-			while (str[i] && str[i] != '\'')
-			{
-				new_str[j] = str[i];
-				i++;
-				j++;
-			}
-		}
-		if (str[i] == '\\' && str[i + 1])
-		{
-			new_str[j] = str[i];
-			new_str[j + 1] = str[i + 1];
-			i += 2;
-			j += 2;
-		}
-		if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| ft_search(str[i + 1], "_\'\"")))
-		{
-			i++;
-			while (ft_isalnum(str[i]) || ft_search(str[i + 1], "_\'\""))
-				i++;
-			l = 0;
-			while (env_array[k][l])
-			{
-				new_str[j] = env_array[k][l];
-				j++;
-				l++;
-			}
-			k++;
+			i = skip_env_name(str, i);
+			copy_env_value(new_str, env_array, &k, &j);
 		}
 		else if (str[i] == '$' && str[i + 1] == '?')
 		{
 			i += 2;
-			l = 0;
-			while (env_array[k][l])
-			{
-				new_str[j] = env_array[k][l];
-				j++;
-				l++;
-			}
-			k++;
+			copy_env_value(new_str, env_array, &k, &j);
 		}
 		else
-		{
-			new_str[j] = str[i];
-			i++;
-			j++;
-		}
+			new_str[j++] = str[i++];
 	}
 	free_tab_str(env_array);
 	new_str[j] = '\0';
