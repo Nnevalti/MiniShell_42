@@ -149,6 +149,9 @@ void				reset_redir(t_redir *stdin, t_redir *stdout);
 **		PIPES
 */
 void				handle_pipes(t_data *data, t_command *cmd, t_pipe *pipe);
+void				open_pipe(t_command *cmd);
+void				close_pipe(t_command *cmd);
+
 /*
 **		UTILS
 */
