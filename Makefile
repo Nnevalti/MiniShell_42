@@ -23,6 +23,7 @@ SRC			=	main.c \
 				ft_exec.c \
 				handle_env.c \
 				init.c \
+				init_piperedir.c \
 				handle_error.c \
 				handle_redir.c \
 				handle_pipes.c \
@@ -32,6 +33,7 @@ SRC			=	main.c \
 				prompt.c \
 				ft_lexer_utils.c \
 				fill_tokens_utils.c \
+				ft_parser_utils.c
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
 OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))

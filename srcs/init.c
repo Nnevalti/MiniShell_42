@@ -25,3 +25,21 @@ t_data		*init_data(char **env)
 	data->error->errtype = NOERROR;
 	return (data);
 }
+
+t_command	*ft_init_command(void)
+{
+	t_command	*ptr;
+
+	if (!(ptr = (t_command *)malloc(sizeof(t_command))))
+		return (NULL);
+	ptr->cmd = NULL;
+	ptr->opt = NULL;
+	ptr->opt_tab = NULL;
+	ptr->redir = NULL;
+	ptr->last_stdin = NULL;
+	ptr->last_stdout = NULL;
+	ptr->pipe = NULL;
+	ptr->p_handled = FALSE;
+	ptr->next = NULL;
+	return (ptr);
+}

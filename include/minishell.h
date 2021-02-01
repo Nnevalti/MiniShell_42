@@ -99,10 +99,18 @@ typedef struct		s_data
 }					t_data;
 
 /*
+**		INIT
+*/
+t_data				*init_data(char **env);
+t_command			*ft_init_command(void);
+t_redir				*ft_init_redir(void);
+t_pipe				*ft_init_pipe(void);
+void				init_pipe_out(t_command *ptr);
+void				init_pipe_in(t_command *ptr);
+/*
 **		CORE
 */
 void				prompt(void);
-t_data				*init_data(char **env);
 char				***ft_lexer(t_data *data);
 t_command			**ft_parser(t_data *data);
 void				ft_executor(t_data *data);
@@ -158,6 +166,10 @@ int					count_command(char *cmd);
 int					skip_quotes(char const *str, int i);
 char				*fill_tokens_utils_return(char *cmd, int *start, int *i);
 char				*fill_tokens_utils(char *cmd, int *start, int *i);
+t_command			*ft_create_struct(char *tokens);
+int					multiple_commands(char **tokens);
+int					ft_set_redir_utils(char *token, t_redir *redir,
+						t_redir_type type);
 /*
 **		ERROR HANDLING
 */
