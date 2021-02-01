@@ -203,6 +203,7 @@ int					skip_sc_err_q(char *command, int i);
 void				set_sc_error(t_data *data, char *command, int i);
 int					check_missquotes(char *command, int i);
 int					set_q_error(t_data *data);
+char				**prepend_str(char *str, char **array_str);
 /*
 **		FREE
 */

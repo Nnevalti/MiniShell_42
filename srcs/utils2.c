@@ -12,6 +12,28 @@
 
 #include "../include/minishell.h"
 
+char	**prepend_str(char *str, char **array_str)
+{
+	int		i;
+	int		j;
+	char	**new_array;
+
+	i = tab_str_len(array_str);
+	if (!(new_array = malloc(sizeof(char *) * (i + 2))))
+		return (NULL);
+	new_array[0] = ft_strdup(str);
+	i = 1;
+	j = 0;
+	while (array_str[j])
+	{
+		new_array[i] = ft_strdup(array_str[j]);
+		i++;
+		j++;
+	}
+	new_array[i] = NULL;
+	return (new_array);
+}
+
 void	ft_puterror(char *str1, char *str2, char *str3)
 {
 	if (str1)
