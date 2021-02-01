@@ -42,7 +42,7 @@ char	*get_env_var(char **env, char *name)
 	while (env[i])
 	{
 		index = ft_indexof(env[i], '=');
-		if (!ft_strncmp(env[i], name, index))
+		if (ft_strlen(name) == index && !ft_strncmp(env[i], name, index))
 			return (env[i] + index + 1);
 		i++;
 	}
@@ -58,7 +58,7 @@ t_bool	set_env_var(char **env, char *name, char *variable)
 	while (env[i])
 	{
 		index = ft_indexof(env[i], '=');
-		if (ft_strlen(name) == index && !ft_strncmp(env[i], name, index - 1))
+		if (ft_strlen(name) == index && !ft_strncmp(env[i], name, index))
 		{
 			free(env[i]);
 			env[i] = ft_strdup(variable);

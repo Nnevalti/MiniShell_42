@@ -13,6 +13,8 @@ INC			=	-I ./include
 SRC_DIR		=	./srcs
 SRC			=	main.c \
 				builtins.c \
+				builtins2.c \
+				builtins3.c \
 				env.c \
 				utils.c \
 				utils2.c \
