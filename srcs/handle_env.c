@@ -85,9 +85,15 @@ int			get_nb_var(char const *str)
 			i += 2;
 		else if (str[i] == '$' && (ft_isalnum(str[i + 1])
 			|| ft_search(str[i+1],"_\'\"")))
+		{
 			nb_var++;
+			i++;
+		}
 		else if (str[i] == '$' && str[i + 1] == '?')
+		{
 			nb_var++;
+			i++;
+		}
 		else if (str[i])
 			i++;
 	}
