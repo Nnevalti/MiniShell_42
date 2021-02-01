@@ -45,6 +45,20 @@ int		ft_indexof(char *str, char c)
 	return (-1);
 }
 
+int		ft_strisdigit(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int		tab_str_len(char **tab)
 {
 	int		i;

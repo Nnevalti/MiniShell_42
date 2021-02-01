@@ -14,9 +14,9 @@
 
 int		check_semicolons_error(t_data *data, char *command)
 {
-	int i;
-	int j;
-	int start;
+	int		i;
+	int		j;
+	int		start;
 	char	*tmp;
 
 	i = 0;
@@ -48,7 +48,7 @@ int		check_semicolons_error(t_data *data, char *command)
 		}
 		i++;
 	}
-	return(0);
+	return (0);
 }
 
 int		check_quotes_error(t_data *data, char *command)
@@ -111,7 +111,8 @@ int		check_error(t_data *data, char ***tokens)
 			if (!ft_strcmp(tokens[i][j], "|") || !ft_strcmp(tokens[i][j], ">>")
 			|| !ft_strcmp(tokens[i][j], ">") || !ft_strcmp(tokens[i][j], "<"))
 			{
-				tmp = ft_strdup("Minishell: syntax error near unexpected token ");
+				tmp =
+					ft_strdup("Minishell: syntax error near unexpected token ");
 				data->error->errtype = PARSER;
 				data->error->value = ft_strjoin(tmp, tokens[i][j]);
 				free(tmp);
@@ -170,4 +171,14 @@ void	handle_error(t_data *data)
 		data->error->value = NULL;
 	}
 	data->error->errtype = NOERROR;
+}
+
+int		check_command(t_data *data)
+{
+	if (check_empty_command(data, data->command) == -1
+	|| check_quotes_error(data, data->command) == -1
+	|| check_semicolons_error(data, data->command) == -1
+	|| check_syntax_error(data, data->command) == -1)
+		return (-1);
+	return (0);
 }

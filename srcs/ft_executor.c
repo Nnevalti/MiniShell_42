@@ -12,14 +12,6 @@
 
 #include "../include/minishell.h"
 
-// void	run_exec(char *command, char **argv, char **env, , int index)
-
-// void	handle_pipe(t_command *current)
-// {
-// 	if(current->pipe)
-// 		pipe(fd);
-// }
-
 char	**prepend_str(char *str, char **array_str)
 {
 	int		i;
@@ -46,7 +38,7 @@ void	analyse_parser(t_command *cmd, t_data *data)
 {
 	t_command	*current;
 	char		*path;
-	char	**tmp;
+	char		**tmp;
 
 	current = cmd;
 	while (current)

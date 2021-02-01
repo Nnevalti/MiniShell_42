@@ -48,3 +48,9 @@ void	signal_handler(int sig)
 	}
 	errno = 130;
 }
+
+void	init_signal_handler(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, kill_prg);
+}

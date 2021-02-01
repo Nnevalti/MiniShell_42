@@ -93,13 +93,12 @@ void	ft_echo(t_command *ptr)
 		i = 1;
 	while (ptr->opt_tab[i])
 	{
-		// handle $? in a function that replace it by its value
 		ft_putstr_fd(ptr->opt_tab[i], 1);
 		if (i < (tab_str_len(ptr->opt_tab) - 1))
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
-	if ( tab_str_len(ptr->opt_tab) == 1 || (tab_str_len(ptr->opt_tab) >= 2
+	if (tab_str_len(ptr->opt_tab) == 1 || (tab_str_len(ptr->opt_tab) >= 2
 		&& ft_strcmp(ptr->opt_tab[1], "-n")))
 		ft_putstr_fd("\n", 1);
 	return ;
@@ -107,7 +106,7 @@ void	ft_echo(t_command *ptr)
 
 void	sort_env_array(char **env_array)
 {
-	int 	i;
+	int		i;
 	int		j;
 	char	*tmp;
 
@@ -162,6 +161,7 @@ void	sort_export(char **env)
 	free_tab_str(sort_env);
 	return ;
 }
+
 void	ft_export(t_data *data, t_command *ptr)
 {
 	int		i;

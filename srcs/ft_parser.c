@@ -52,7 +52,6 @@ t_pipe		*ft_init_pipe(void)
 		return (NULL);
 	pipe->in = FALSE;
 	pipe->out = FALSE;
-	// ERROR PATCH :
 	pipe->stdin[0] = 0;
 	pipe->stdin[1] = 0;
 	pipe->stdout[0] = 0;
@@ -210,7 +209,7 @@ t_command	**ft_parser(t_data *data)
 
 	i = 0;
 	if (!(entry = malloc(sizeof(t_command *) * (data->nb_cmds + 1))))
-		return(NULL);
+		return (NULL);
 	while (data->tokens[i])
 	{
 		entry[i] = ft_create_struct(data->tokens[i][0]);

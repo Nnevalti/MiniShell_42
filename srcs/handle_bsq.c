@@ -128,9 +128,9 @@ char	*trim_bsq(char *str)
 
 void	handle_bsq(t_command *current, t_data *data)
 {
-	char *tmp;
-	t_redir *redir;
-	int i;
+	char	*tmp;
+	t_redir	*redir;
+	int		i;
 
 	i = 0;
 	tmp = trim_bsq(current->cmd);
@@ -138,7 +138,7 @@ void	handle_bsq(t_command *current, t_data *data)
 	current->cmd = tmp;
 	if (current->opt_tab)
 	{
-		while(current->opt_tab[i])
+		while (current->opt_tab[i])
 		{
 			tmp = trim_bsq(current->opt_tab[i]);
 			free(current->opt_tab[i]);

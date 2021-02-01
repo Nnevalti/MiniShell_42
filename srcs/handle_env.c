@@ -36,7 +36,7 @@ char		**get_env_array(char const *str, char **env, int nb_var, int *env_len)
 		else if (str[i] == '\\' && str[i + 1])
 			i += 2;
 		else if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| ft_search(str[i+1],"_\'\"")))
+			|| ft_search(str[i + 1], "_\'\"")))
 		{
 			i++;
 			while (ft_isalnum(str[i]) || str[i] == '_')
@@ -84,12 +84,7 @@ int			get_nb_var(char const *str)
 		else if (str[i] == '\\' && str[i + 1])
 			i += 2;
 		else if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| ft_search(str[i+1],"_\'\"")))
-		{
-			nb_var++;
-			i++;
-		}
-		else if (str[i] == '$' && str[i + 1] == '?')
+			|| ft_search(str[i + 1], "_\'\"?")))
 		{
 			nb_var++;
 			i++;
@@ -132,10 +127,10 @@ char		*get_new_str(char const *str, char *new_str, char **env_array)
 			j += 2;
 		}
 		if (str[i] == '$' && (ft_isalnum(str[i + 1])
-			|| ft_search(str[i+1],"_\'\"")))
+			|| ft_search(str[i + 1], "_\'\"")))
 		{
 			i++;
-			while (ft_isalnum(str[i]) || ft_search(str[i+1],"_\'\""))
+			while (ft_isalnum(str[i]) || ft_search(str[i + 1], "_\'\""))
 				i++;
 			l = 0;
 			while (env_array[k][l])

@@ -14,12 +14,12 @@
 
 void	run_exec(t_data *data, t_command *cmd)
 {
-	char	**paths;
-	int		i;
-	char	*tmp;
-	char	*str;
-	int		status;
-	struct stat buffer;
+	char		**paths;
+	int			i;
+	char		*tmp;
+	char		*str;
+	int			status;
+	struct stat	buffer;
 
 	status = 0;
 	if ((g_pid[0] = fork()) == 0)
@@ -40,7 +40,6 @@ void	run_exec(t_data *data, t_command *cmd)
 					execve(str, cmd->opt_tab, data->my_env);
 					free(str);
 					free_tab_str(paths);
-					// exit(EXIT_SUCCESS);
 				}
 				free(str);
 				i++;
@@ -51,7 +50,6 @@ void	run_exec(t_data *data, t_command *cmd)
 			ft_putstr_fd("\n", 2);
 			exit(127);
 		}
-		// exit(EXIT_SUCCESS);
 	}
 	else
 	{
@@ -105,7 +103,6 @@ void	fork_exec(t_data *data, t_command *cmd)
 	}
 	else
 	{
-		// signal(SIGINT, SIG_IGN);
 		if (cmd->p_handled && cmd->pipe->in)
 		{
 			close(cmd->pipe->stdin[0]);
@@ -116,8 +113,6 @@ void	fork_exec(t_data *data, t_command *cmd)
 			close(cmd->pipe->stdout[1]);
 			close(cmd->pipe->stdout[0]);
 		}
-		// EXIT_CODE = WEXITSTATUS(status);
-		// signal(SIGINT, &handle_exit);
 	}
 	waitpid(g_pid[1], &status, 0);
 	errno = status / 256;
@@ -130,6 +125,5 @@ void	exec_cmd(t_data *data, t_command *cmd)
 		fork_exec(data, cmd);
 	else
 		what_cmd(data, cmd);
-	// DETECT ERROR COMMAND
 	return ;
 }

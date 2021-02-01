@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_pipes.c                                     :+:      :+:    :+:   */
+/*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdescham <vdescham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/01 01:05:25 by vdescham          #+#    #+#             */
-/*   Updated: 2021/02/01 01:05:27 by vdescham         ###   ########.fr       */
+/*   Created: 2021/02/01 01:13:00 by vdescham          #+#    #+#             */
+/*   Updated: 2021/02/01 01:13:03 by vdescham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	handle_pipes(t_data *data, t_command *cmd, t_pipe *pipes)
+void	prompt(void)
 {
-	t_command *next;
+	char	buffer[MAX_PATH_LENGTH];
 
-	next = cmd->next;
-	if (pipes->out)
-	{
-		pipe(pipes->stdout);
-		next->pipe->stdin[0] = dup(pipes->stdout[0]);
-		next->pipe->stdin[1] = dup(pipes->stdout[1]);
-	}
-	cmd->p_handled = TRUE;
-	return ;
+	getcwd(buffer, MAX_PATH_LENGTH);
+	ft_putstr_fd("\e[1m\e[32m", 2);
+	ft_putstr_fd(g_prompt, 2);
+	ft_putstr_fd("@minishell:", 2);
+	ft_putstr_fd("\e[94m", 2);
+	ft_putstr_fd(buffer, 2);
+	ft_putstr_fd("\e[39m$> \e[0m", 2);
 }

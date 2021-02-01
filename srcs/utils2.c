@@ -12,56 +12,37 @@
 
 #include "../include/minishell.h"
 
-t_redir	**set_redirections(char *command)
+void	ft_puterror(char *str1, char *str2, char *str3)
 {
-	char	**tokens;
-	int		i;
-	char	*str;
-	int		fd;
-	int		saved_fd;
-	t_redir	**redirections;
-
-	tokens = ft_split(command, '>');
-	i = 0;
-	while (tokens[i])
-		i++;
-	if (!(redirections = malloc((i + 1) * sizeof(t_redir *))))
-		return (NULL);
-	i = 0;
-	while (tokens[i])
-	{
-		redirections[i] = malloc(sizeof(t_redir));
-		if (i == 0)
-			redirections[i]->saved_fd = dup(1);
-		redirections[i]->str = ft_strtrim(tokens[i], " ");
-		printf("redirections[%d] = %s\n", i, redirections[i]->str);
-		redirections[i]->type = (i == 0) ? NONE : REDIRECT_STDOUT;
-		if (redirections[i]->type == REDIRECT_STDOUT)
-		{
-			fd = open(str, O_WRONLY | O_CREAT, 0777);
-			dup2(fd, 1);
-		}
-		close(fd);
-		i++;
-	}
-	redirections[i] = NULL;
-	free_tab_str(tokens);
-	return (redirections);
+	if (str1)
+		ft_putstr_fd(str1, 2);
+	if (str2)
+		ft_putstr_fd(str1, 2);
+	if (str3)
+		ft_putstr_fd(str1, 2);
+	return ;
 }
 
-void	reset_redirections(t_redir **redirections)
+void	ft_error_min_max(t_data *data, t_command *cmd, unsigned long long res)
 {
-	int		i;
-
-	i = 0;
-	printf("%d\n", redirections[0]->saved_fd);
-	dup2(redirections[0]->saved_fd, 1);
-	close(redirections[0]->saved_fd);
-	while (redirections[i])
+	if (cmd->opt_tab[1][0] == '-')
 	{
-		free(redirections[i]->str);
-		free(redirections[i]);
-		i++;
+		if (((res * -1) - 1) > 9223372036854775807ULL)
+		{
+			errno = 2;
+			ft_putstr_fd("Minishell: exit: ", 2);
+			ft_putstr_fd(cmd->opt_tab[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+		}
 	}
-	free(redirections);
+	else
+	{
+		if (res > 9223372036854775807ULL)
+		{
+			errno = 2;
+			ft_putstr_fd("Minishell: exit: ", 2);
+			ft_putstr_fd(cmd->opt_tab[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+		}
+	}
 }

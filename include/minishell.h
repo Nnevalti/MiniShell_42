@@ -101,7 +101,7 @@ typedef struct		s_data
 /*
 **		CORE
 */
-void				prompt();
+void				prompt(void);
 t_data				*init_data(char **env);
 char				***ft_lexer(t_data *data);
 t_command			**ft_parser(t_data *data);
@@ -111,11 +111,12 @@ void				create_opt_tab(t_command *current, t_data *data);
 void				handle_bsq(t_command *current, t_data *data);
 void				exec_cmd(t_data *data, t_command *current);
 void				handle_exit(t_data *data, t_command *cmd);
-void 				signal_handler(int code);
 /*
 **	SIGNAL
 */
 void				kill_prg(int sig);
+void 				signal_handler(int code);
+void				init_signal_handler(void);
 /*
 **		BUILTINS
 */
@@ -143,13 +144,19 @@ void				handle_pipes(t_data *data, t_command *cmd, t_pipe *pipe);
 /*
 **		UTILS
 */
+void				ft_puterror(char *str1, char *str2, char *str3);
 int					ft_isblank(char c);
 int					ft_search(char c, char *str);
 int					ft_indexof(char *str, char c);
+int					ft_strisdigit(char *str);
 int					tab_str_len(char **tab);
+void				ft_error_min_max(t_data *data, t_command *cmd,
+						unsigned long long res);
+
 /*
 **		ERROR HANDLING
 */
+int					check_command(t_data *data);
 void				handle_error(t_data *data);
 int					check_quotes_error(t_data *data, char *command);
 int					check_error(t_data *data, char ***tokens);

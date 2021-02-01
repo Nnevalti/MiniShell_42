@@ -19,12 +19,12 @@ int		get_nb_opt(char *opt)
 
 	i = 0;
 	nb_opt = 1;
-	while(opt[i])
+	while (opt[i])
 	{
 		if (opt[i] == '\"')
 		{
 			i++;
-			while(opt[i] != '\"')
+			while (opt[i] != '\"')
 			{
 				if (opt[i] == '\\')
 					i += 2;
@@ -36,24 +36,25 @@ int		get_nb_opt(char *opt)
 		else if (opt[i] == '\'')
 		{
 			i++;
-			while(opt[i] != '\'')
+			while (opt[i] != '\'')
 				i++;
 			i++;
 		}
 		else if (opt[i] == '\\')
-			i+= 2;
+			i += 2;
 		else if (ft_isblank(opt[i]))
 		{
 			i++;
-			while(ft_isblank(opt[i]))
+			while (ft_isblank(opt[i]))
 				i++;
 			nb_opt++;
 		}
 		else
 			i++;
 	}
-	return(nb_opt);
+	return (nb_opt);
 }
+
 void	get_opt_tab(t_command *current, char *opt, int nb_opt)
 {
 	int i;
@@ -62,17 +63,17 @@ void	get_opt_tab(t_command *current, char *opt, int nb_opt)
 
 	i = 0;
 	j = 0;
-	if (!(current->opt_tab = malloc(sizeof(char *) *(nb_opt + 1))))
+	if (!(current->opt_tab = malloc(sizeof(char *) * (nb_opt + 1))))
 		return ;
 	while (ft_isblank(opt[i]))
 		i++;
 	start = i;
-	while(opt[i])
+	while (opt[i])
 	{
 		if (opt[i] == '\"')
 		{
 			i++;
-			while(opt[i] != '\"')
+			while (opt[i] != '\"')
 			{
 				if (opt[i] == '\\')
 					i += 2;
@@ -84,18 +85,18 @@ void	get_opt_tab(t_command *current, char *opt, int nb_opt)
 		else if (opt[i] == '\'')
 		{
 			i++;
-			while(opt[i] != '\'')
+			while (opt[i] != '\'')
 				i++;
 			i++;
 		}
 		else if (opt[i] == '\\')
-			i+= 2;
+			i += 2;
 		else if (ft_isblank(opt[i]))
 		{
 			current->opt_tab[j] = ft_substr(opt, start, i - start);
 			j++;
 			i++;
-			while(ft_isblank(opt[i]))
+			while (ft_isblank(opt[i]))
 				i++;
 			start = i;
 		}
@@ -107,6 +108,7 @@ void	get_opt_tab(t_command *current, char *opt, int nb_opt)
 	current->opt_tab[j] = NULL;
 	return ;
 }
+
 void	create_opt_tab(t_command *current, t_data *data)
 {
 	int nb_opt;
