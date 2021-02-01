@@ -40,11 +40,14 @@ char	*trim_bsq(char *str)
 void	redir_bsq(t_command *current)
 {
 	t_redir	*redir;
+	char	*tmp;
 
 	redir = current->redir;
 	while (redir)
 	{
-		redir->str = trim_bsq(redir->str);
+		tmp = trim_bsq(redir->str);
+		free(redir->str);
+		redir->str = tmp;
 		redir = redir->next;
 	}
 	return ;

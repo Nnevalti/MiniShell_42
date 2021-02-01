@@ -12,13 +12,30 @@
 
 #include "../include/minishell.h"
 
-int		skip_sc_err_q(char *command, int i)
+int		skip_sc_err_sq(char *command, int i)
 {
 	if (command[i] == '\'')
 	{
 		i++;
-		while (command[i] != '\'')
+		while (command[i] && command[i] != '\'')
 			i++;
+		i++;
+	}
+	return (i);
+}
+
+int		skip_sc_err_dq(char *command, int i)
+{
+	if (command[i] == '\"')
+	{
+		i++;
+		while (command[i] && command[i] != '\"')
+		{
+			if (command[i] == '\\' && command[i + 1])
+				i += 2;
+			else
+				i++;
+		}
 		i++;
 	}
 	return (i);

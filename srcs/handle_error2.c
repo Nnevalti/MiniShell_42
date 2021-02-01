@@ -12,6 +12,21 @@
 
 #include "../include/minishell.h"
 
+int		skip_sc_err_bs(char *command, int i)
+{
+	if (command[i] == '\\')
+		i += 2;
+	return (i);
+}
+
+int		skip_sc_bsq(char *command, int i)
+{
+	i = skip_sc_err_sq(command, i);
+	i = skip_sc_err_dq(command, i);
+	i = skip_sc_err_bs(command, i);
+	return (i);
+}
+
 int		check_semicolons_error(t_data *data, char *command)
 {
 	int		i;
@@ -22,7 +37,7 @@ int		check_semicolons_error(t_data *data, char *command)
 	start = 0;
 	while (command[i])
 	{
-		i = skip_sc_err_q(command, i);
+		i = skip_sc_bsq(command, i);
 		if (command[i] == ';' || command[i] == '|')
 		{
 			j = i - 1;
