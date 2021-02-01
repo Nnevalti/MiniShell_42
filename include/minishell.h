@@ -84,7 +84,7 @@ typedef enum		e_errtype
 
 typedef struct		s_error
 {
-	t_errtype			errtype;
+	t_errtype		errtype;
 	char			*value;
 }					t_error;
 
@@ -123,7 +123,7 @@ void				handle_exit(t_data *data, t_command *cmd);
 **	SIGNAL
 */
 void				kill_prg(int sig);
-void 				signal_handler(int code);
+void				signal_handler(int code);
 void				init_signal_handler(void);
 /*
 **		BUILTINS
@@ -143,7 +143,7 @@ t_bool				set_env_var(char **env, char *name, char *variable);
 /*
 **		REDIRECTIONS
 */
-void				handle_redir( t_data *data, t_command *cmd, t_redir *redir);
+void				handle_redir(t_data *data, t_command *cmd, t_redir *redir);
 void				reset_redir(t_redir *stdin, t_redir *stdout);
 /*
 **		PIPES
@@ -157,11 +157,11 @@ void				close_pipe(t_command *cmd);
 char				*copy_bsq2(char *new_str, char *str, int start, int i);
 char				*copy_bsq(char *new_str, char *str, int start, int i);
 char				*bsq_handle_bslash(char *str, char *new_str, int *i,
-	 					int *start);
+						int *start);
 char				*bsq_handle_dquotes(char *str, char *new_str, int *i,
-	 					int *start);
+						int *start);
 char				*bsq_handle_squotes(char *str, char *new_str, int *i,
-	 					int *start);
+						int *start);
 /*
 **		UTILS
 */
