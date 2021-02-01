@@ -40,7 +40,8 @@ SRC			=	main.c \
 				get_new_str_utils.c \
 				get_env_array_utils.c \
 				handle_error_utils.c \
-				ft_exec_utils.c 
+				ft_exec_utils.c  \
+				handle_bsq_utils.c
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
 OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))

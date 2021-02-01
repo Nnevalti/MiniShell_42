@@ -151,7 +151,17 @@ void				reset_redir(t_redir *stdin, t_redir *stdout);
 void				handle_pipes(t_data *data, t_command *cmd, t_pipe *pipe);
 void				open_pipe(t_command *cmd);
 void				close_pipe(t_command *cmd);
-
+/*
+**		BSQutils
+*/
+char				*copy_bsq2(char *new_str, char *str, int start, int i);
+char				*copy_bsq(char *new_str, char *str, int start, int i);
+char				*bsq_handle_bslash(char *str, char *new_str, int *i,
+	 					int *start);
+char				*bsq_handle_dquotes(char *str, char *new_str, int *i,
+	 					int *start);
+char				*bsq_handle_squotes(char *str, char *new_str, int *i,
+	 					int *start);
 /*
 **		UTILS
 */

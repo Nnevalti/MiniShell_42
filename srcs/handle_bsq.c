@@ -25,111 +25,34 @@ char	*trim_bsq(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\\')
-		{
-			if (!new_str)
-				new_str = ft_substr(str, start, i);
-			else
-			{
-				tmp = ft_strnjoin(new_str, &str[start], i - start);
-				free(new_str);
-				new_str = tmp;
-			}
-			i++;
-			start = i;
-			i++;
-		}
+			new_str = bsq_handle_bslash(str, new_str, &i, &start);
 		else if (str[i] == '\"')
-		{
-			if (!new_str)
-				new_str = ft_substr(str, start, i);
-			else
-			{
-				tmp = ft_strnjoin(new_str, &str[start], i - start);
-				free(new_str);
-				new_str = tmp;
-			}
-			i++;
-			start = i;
-			while (str[i] && str[i] != '\"')
-			{
-				if (str[i] == '\\')
-				{
-					if (ft_search(str[i + 1], "\\$\""))
-					{
-						if (!new_str)
-							new_str = ft_substr(str, start, i);
-						else
-						{
-							tmp = ft_strnjoin(new_str, &str[start], i - start);
-							free(new_str);
-							new_str = tmp;
-						}
-						i++;
-						start = i;
-						i++;
-					}
-					else
-						i += 2;
-				}
-				else
-					i++;
-			}
-			if (!new_str)
-				new_str = ft_substr(str, start, i - start);
-			else
-			{
-				tmp = ft_strnjoin(new_str, &str[start], i - start);
-				free(new_str);
-				new_str = tmp;
-			}
-			i++;
-			start = i;
-		}
+			new_str = bsq_handle_dquotes(str, new_str, &i, &start);
 		else if (str[i] == '\'')
-		{
-			if (!new_str)
-				new_str = ft_substr(str, start, i);
-			else
-			{
-				tmp = ft_strnjoin(new_str, &str[start], i - start);
-				free(new_str);
-				new_str = tmp;
-			}
-			i++;
-			start = i;
-			while (str[i] != '\'')
-				i++;
-			if (!new_str)
-				new_str = ft_substr(str, start, i);
-			else
-			{
-				tmp = ft_strnjoin(new_str, &str[start], i - start);
-				free(new_str);
-				new_str = tmp;
-			}
-			i++;
-			start = i;
-		}
+			new_str = bsq_handle_squotes(str, new_str, &i, &start);
 		else
 			i++;
 	}
-	if (!new_str)
-	{
-		new_str = ft_substr(str, start, i);
-	}
-	else
-	{
-		tmp = ft_strnjoin(new_str, &str[start], i - start);
-		free(new_str);
-		new_str = tmp;
-	}
+	new_str = copy_bsq(new_str, str, start, i);
 	return (new_str);
+}
+
+void	redir_bsq(t_command *current)
+{
+	t_redir	*redir;
+
+	redir = current->redir;
+	while (redir)
+	{
+		redir->str = trim_bsq(redir->str);
+		redir = redir->next;
+	}
+	return ;
 }
 
 void	handle_bsq(t_command *current, t_data *data)
 {
 	char	*tmp;
-	t_redir	*redir;
 	int		i;
 
 	i = 0;
@@ -147,13 +70,6 @@ void	handle_bsq(t_command *current, t_data *data)
 		}
 	}
 	if (current->redir)
-	{
-		redir = current->redir;
-		while (redir)
-		{
-			redir->str = trim_bsq(redir->str);
-			redir = redir->next;
-		}
-	}
+		redir_bsq(current);
 	return ;
 }
