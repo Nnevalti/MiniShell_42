@@ -15,7 +15,6 @@
 void	kill_prg(int sig)
 {
 	(void)sig;
-
 	if (g_pid[0] != 0 && g_pid[1] == 0)
 	{
 		ft_putstr_fd("Quit (core dumped)\n", 2);
@@ -31,7 +30,7 @@ void	kill_prg(int sig)
 		ft_putstr_fd("\b \b\b \b", 2);
 }
 
-void 	signal_handler(int sig)
+void	signal_handler(int sig)
 {
 	(void)sig;
 	if (g_pid[0] == 0 && g_pid[1] == 0)
