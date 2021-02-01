@@ -152,7 +152,12 @@ int					ft_strisdigit(char *str);
 int					tab_str_len(char **tab);
 void				ft_error_min_max(t_data *data, t_command *cmd,
 						unsigned long long res);
-
+int					find_end(char *cmd, int i, char *sep);
+int					find_start(char *cmd, int i, char *sep);
+int					count_command(char *cmd);
+int					skip_quotes(char const *str, int i);
+char				*fill_tokens_utils_return(char *cmd, int *start, int *i);
+char				*fill_tokens_utils(char *cmd, int *start, int *i);
 /*
 **		ERROR HANDLING
 */

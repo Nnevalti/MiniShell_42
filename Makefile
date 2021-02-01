@@ -29,7 +29,9 @@ SRC			=	main.c \
 				signal.c \
 				opt_tab.c \
 				handle_bsq.c \
-				prompt.c
+				prompt.c \
+				ft_lexer_utils.c \
+				fill_tokens_utils.c \
 # OBJETS
 OBJS_NAME	=	$(SRC:.c=.o)
 OBJS		=	$(addprefix $(SRC_DIR)/, $(OBJS_NAME))
